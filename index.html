@@ -1,0 +1,4032 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蜉蝣哲学：活不过一天也要搅局</title>
+<meta name="description" content="一只寿命24小时的蜉蝣，体验现代打工人荒诞日常。活不过一天也要搅局！">
+<meta property="og:title" content="蜉蝣哲学：活不过一天也要搅局">
+<meta property="og:description" content="极短生命，极限生活。刚出生就下班，死前才开始摸鱼。">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&family=ZCOOL+KuaiLe&family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+/* ========== 设计Token ========== */
+:root {
+  --bg-void: #0a0a0f;
+  --bg-office: #111118;
+  --bg-desk: #1a1a24;
+  --bg-sticky: #2a2a35;
+  --neon-pink: #ff2d78;
+  --neon-cyan: #00f5d4;
+  --neon-yellow: #fee440;
+  --neon-purple: #b537f2;
+  --neon-green: #39ff14;
+  --neon-orange: #ff6b35;
+  --fluorescent: #c4cfc4;
+  --paper-white: #f0f0e8;
+  --postit-yellow: #fff3b0;
+  --postit-pink: #ffb3ba;
+  --postit-green: #baffc9;
+  --postit-blue: #bae1ff;
+  --stat-spirit: #00f5d4;
+  --stat-social: #b537f2;
+  --stat-health: #39ff14;
+  --stat-anxiety: #ff2d78;
+  --font-title: 'ZCOOL QingKe HuangYou', cursive;
+  --font-body: 'ZCOOL KuaiLe', cursive;
+  --font-pixel: 'Press Start 2P', monospace;
+}
+
+/* ========== 基础样式 ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg-void);
+  color: var(--paper-white);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* CRT扫描线 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.screen {
+  min-height: 100vh;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.screen.active { display: flex; }
+
+/* ========== 漂浮文字背景 ========== */
+.floating-glyph {
+  position: fixed;
+  font-size: 2rem;
+  opacity: 0.04;
+  color: var(--neon-cyan);
+  animation: floatUp 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  font-family: var(--font-title);
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.04; }
+  90% { opacity: 0.04; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
+
+/* ========== 标题屏 ========== */
+.title-main {
+  font-family: var(--font-title);
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan), 0 0 40px rgba(0,245,212,0.3);
+  letter-spacing: 0.1em;
+  position: relative;
+}
+.title-main.glitching {
+  animation: glitch 0.3s ease-in-out;
+}
+.title-sub {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: var(--neon-pink);
+  margin-top: 12px;
+  opacity: 0.9;
+}
+.title-slogan {
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  color: var(--fluorescent);
+  opacity: 0.5;
+  margin-top: 8px;
+  font-style: italic;
+}
+@keyframes glitch {
+  0%, 100% { text-shadow: 2px 0 var(--neon-pink), -2px 0 var(--neon-cyan); transform: translate(0); }
+  20% { text-shadow: -2px 2px var(--neon-pink), 2px -2px var(--neon-cyan); transform: translate(-2px, 1px); }
+  40% { text-shadow: 2px -1px var(--neon-purple), -2px 1px var(--neon-green); transform: translate(1px, -1px); }
+  60% { text-shadow: -1px 2px var(--neon-pink), 1px -2px var(--neon-cyan); transform: translate(-1px, 2px); }
+  80% { text-shadow: 1px -2px var(--neon-purple), -1px 2px var(--neon-green); transform: translate(2px, -2px); }
+}
+
+.btn-neon {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  padding: 14px 40px;
+  border: 2px solid var(--neon-cyan);
+  background: transparent;
+  color: var(--neon-cyan);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  margin-top: 40px;
+  letter-spacing: 0.15em;
+}
+.btn-neon:hover {
+  background: var(--neon-cyan);
+  color: var(--bg-void);
+  box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px rgba(0,245,212,0.3);
+}
+.btn-neon:focus-visible,
+.char-card:focus-visible,
+.intent-card:focus-visible,
+.activity-btn:focus-visible,
+.event-card .ev-close:focus-visible,
+.event-card .ev-response:focus-visible {
+  outline: 3px solid var(--neon-yellow);
+  outline-offset: 3px;
+}
+.btn-neon.pink {
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+}
+.btn-neon.pink:hover {
+  background: var(--neon-pink);
+  color: var(--bg-void);
+  box-shadow: 0 0 20px var(--neon-pink);
+}
+.title-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+}
+.title-actions .btn-neon {
+  margin-top: 0;
+}
+
+/* ========== 角色选择 ========== */
+.char-card {
+  background: var(--postit-yellow);
+  color: #333;
+  padding: 20px;
+  width: 260px;
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  box-shadow: 3px 4px 12px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.05);
+}
+.char-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: rgba(0,0,0,0.06);
+}
+.char-card:nth-child(1) { transform: rotate(-1.5deg); }
+.char-card:nth-child(2) { transform: rotate(1deg); background: var(--postit-pink); }
+.char-card:hover {
+  transform: rotate(0deg) scale(1.05) !important;
+  box-shadow: 0 0 20px rgba(0,245,212,0.3), 3px 4px 12px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+.char-card .emoji { font-size: 3rem; }
+.char-card .name { font-family: var(--font-title); font-size: 1.5rem; margin-top: 8px; }
+.char-card .subtitle { font-size: 0.85rem; opacity: 0.7; margin-top: 4px; }
+.char-card .desc { font-size: 0.8rem; margin-top: 8px; line-height: 1.4; }
+.char-card .stats-preview { margin-top: 10px; font-size: 0.75rem; display: flex; gap: 6px; flex-wrap: wrap; }
+.char-card .stats-preview span { background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 2px; }
+.char-card.locked {
+  filter: grayscale(0.8) brightness(0.6);
+  cursor: not-allowed;
+}
+.char-card:disabled {
+  color: #333;
+}
+.char-card.locked::after {
+  content: '🔒 首次通关后解锁';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  color: var(--paper-white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+/* ========== 本局目标选择 ========== */
+.intent-shell {
+  width: min(920px, calc(100vw - 28px));
+  display: grid;
+  gap: 16px;
+}
+.intent-head {
+  text-align: center;
+}
+.intent-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.35rem, 4vw, 2rem);
+  color: var(--neon-yellow);
+}
+.intent-sub {
+  margin-top: 8px;
+  color: var(--paper-white);
+  opacity: 0.72;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.intent-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.intent-card {
+  min-height: 245px;
+  border: 1px solid rgba(254,228,64,0.28);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(254,228,64,0.08), rgba(0,0,0,0.35));
+  color: var(--paper-white);
+  padding: 14px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: transform 0.18s, border-color 0.18s, background 0.18s;
+}
+.intent-card:hover,
+.intent-card.recommended {
+  transform: translateY(-3px);
+  border-color: var(--neon-yellow);
+  background: linear-gradient(180deg, rgba(254,228,64,0.14), rgba(0,0,0,0.38));
+}
+.intent-card.recommended {
+  box-shadow: 0 0 24px rgba(254,228,64,0.12);
+}
+.intent-emoji {
+  font-size: 2rem;
+}
+.intent-name {
+  margin-top: 10px;
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 1rem;
+  line-height: 1.25;
+}
+.intent-hook {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+.intent-risk {
+  margin-top: 10px;
+  color: var(--neon-pink);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+.intent-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 6px;
+  border: 1px solid rgba(0,245,212,0.38);
+  color: var(--neon-cyan);
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+}
+.intent-actions {
+  display: flex;
+  justify-content: center;
+}
+
+/* ========== 游戏主界面 ========== */
+#screen-game {
+  justify-content: flex-start;
+  padding-top: 16px;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.hud-bar {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg-office);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+.hud-label {
+  color: var(--fluorescent);
+  font-size: 0.6rem;
+  opacity: 0.58;
+  margin-bottom: 3px;
+}
+.hud-time {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  color: var(--neon-yellow);
+  text-shadow: 0 0 8px rgba(254,228,64,0.4);
+}
+.hud-turn {
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  color: var(--fluorescent);
+  opacity: 0.6;
+}
+
+.phase-panel,
+.objective-panel,
+.world-glitch-panel,
+.route-panel,
+.npc-panel,
+.rescue-panel,
+.target-tracker-panel,
+.goals-panel,
+.consequence-panel,
+.turn-feed {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(17,17,24,0.88);
+  border: 1px solid rgba(254,228,64,0.18);
+  border-radius: 4px;
+}
+.phase-panel {
+  padding: 10px 12px;
+}
+.phase-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.phase-kicker,
+.goals-kicker {
+  color: var(--neon-yellow);
+  font-size: 0.64rem;
+  opacity: 0.78;
+}
+.phase-title {
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+}
+.phase-desc {
+  margin-top: 4px;
+  color: var(--fluorescent);
+  font-size: 0.74rem;
+  line-height: 1.45;
+  opacity: 0.72;
+}
+.phase-track {
+  height: 6px;
+  margin-top: 8px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  border-radius: 2px;
+}
+.phase-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-yellow), var(--neon-pink));
+  transition: width 0.5s ease;
+}
+.objective-panel {
+  padding: 9px 10px;
+  border-color: rgba(254,228,64,0.24);
+  background: rgba(254,228,64,0.06);
+}
+.objective-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.objective-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 1rem;
+}
+.objective-tag {
+  color: var(--neon-cyan);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  white-space: nowrap;
+}
+.objective-copy {
+  margin-top: 5px;
+  color: var(--paper-white);
+  font-size: 0.74rem;
+  line-height: 1.42;
+  opacity: 0.86;
+}
+.objective-steps {
+  display: grid;
+  gap: 4px;
+  margin-top: 7px;
+}
+.objective-step {
+  color: rgba(255,255,255,0.76);
+  font-size: 0.66rem;
+  line-height: 1.34;
+}
+.objective-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.objective-chip {
+  padding: 3px 6px;
+  border: 1px solid rgba(0,245,212,0.22);
+  background: rgba(0,245,212,0.06);
+  color: var(--paper-white);
+  font-size: 0.6rem;
+  border-radius: 3px;
+}
+.objective-chip strong {
+  color: var(--neon-cyan);
+  margin-right: 4px;
+}
+.objective-pulse {
+  display: none;
+  margin-top: 8px;
+  padding: 7px 8px;
+  border: 1px solid rgba(254,228,64,0.28);
+  border-radius: 3px;
+  background: rgba(10,10,15,0.52);
+}
+.objective-pulse.active {
+  display: block;
+}
+.objective-pulse.complete {
+  border-color: rgba(254,228,64,0.54);
+  background: rgba(254,228,64,0.12);
+}
+.objective-pulse.route {
+  border-color: rgba(255,43,214,0.46);
+  background: rgba(255,43,214,0.1);
+}
+.objective-pulse.tracking {
+  border-color: rgba(0,245,212,0.44);
+  background: rgba(0,245,212,0.1);
+}
+.objective-pulse-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+}
+.objective-pulse-title {
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+}
+.objective-pulse-tag {
+  color: var(--fluorescent);
+  font-family: var(--font-pixel);
+  font-size: 0.46rem;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+.objective-pulse-copy {
+  margin-top: 4px;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.64rem;
+  line-height: 1.4;
+}
+.world-glitch-panel {
+  display: none;
+  padding: 9px 10px;
+  border-color: rgba(255,43,214,0.28);
+  background:
+    linear-gradient(90deg, rgba(255,43,214,0.11), rgba(254,228,64,0.08)),
+    rgba(17,17,24,0.9);
+}
+.world-glitch-panel.active {
+  display: block;
+}
+.world-glitch-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.world-glitch-title {
+  color: var(--neon-pink);
+  font-family: var(--font-title);
+  font-size: 0.94rem;
+}
+.world-glitch-tag {
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  white-space: nowrap;
+}
+.world-glitch-copy {
+  margin-top: 5px;
+  color: var(--paper-white);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  opacity: 0.84;
+}
+body.world-glitch-corrupted .phase-panel,
+body.world-glitch-stutter .phase-panel {
+  border-color: rgba(255,43,214,0.28);
+  box-shadow: 0 0 18px rgba(255,43,214,0.08);
+}
+body.world-glitch-stutter .hud-turn {
+  color: var(--neon-pink);
+}
+.route-panel {
+  display: none;
+  padding: 9px 10px;
+  border-color: rgba(0,245,212,0.22);
+  background: rgba(0,245,212,0.055);
+}
+.route-panel.active {
+  display: block;
+}
+.route-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.route-title {
+  color: var(--neon-cyan);
+  font-family: var(--font-title);
+  font-size: 0.96rem;
+}
+.route-tag {
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  white-space: nowrap;
+}
+.route-copy {
+  margin-top: 5px;
+  color: var(--paper-white);
+  font-size: 0.72rem;
+  line-height: 1.42;
+  opacity: 0.82;
+}
+.route-risk {
+  margin-top: 4px;
+  color: var(--neon-pink);
+  font-size: 0.66rem;
+  line-height: 1.36;
+}
+.rescue-panel {
+  padding: 8px 10px;
+  border-color: rgba(255,45,120,0.24);
+  background: rgba(255,45,120,0.055);
+}
+.rescue-panel.ready {
+  border-color: rgba(0,245,212,0.22);
+  background: rgba(0,245,212,0.05);
+}
+.rescue-panel.spent {
+  border-color: rgba(255,45,120,0.4);
+  background: rgba(255,45,120,0.1);
+}
+.rescue-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.rescue-title {
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+}
+.rescue-tag {
+  color: var(--neon-pink);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  white-space: nowrap;
+}
+.rescue-panel.ready .rescue-tag {
+  color: var(--neon-cyan);
+}
+.rescue-copy {
+  margin-top: 4px;
+  color: var(--paper-white);
+  font-size: 0.66rem;
+  line-height: 1.36;
+  opacity: 0.78;
+}
+.npc-panel {
+  padding: 9px 10px;
+  border-color: rgba(254,228,64,0.22);
+  background: rgba(254,228,64,0.055);
+}
+.npc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.npc-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 0.96rem;
+}
+.npc-summary {
+  color: var(--fluorescent);
+  font-size: 0.66rem;
+  line-height: 1.35;
+  opacity: 0.74;
+  margin-top: 4px;
+}
+.npc-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+}
+.npc-item {
+  min-height: 92px;
+  padding: 7px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 3px;
+}
+.npc-item.hot {
+  border-color: rgba(255,45,120,0.34);
+  background: rgba(255,45,120,0.08);
+}
+.npc-item.warm {
+  border-color: rgba(254,228,64,0.32);
+}
+.npc-item.cold {
+  opacity: 0.72;
+}
+.npc-item-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  color: var(--paper-white);
+  font-size: 0.72rem;
+}
+.npc-level {
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.44rem;
+  white-space: nowrap;
+}
+.npc-meter {
+  height: 5px;
+  margin-top: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.npc-meter-fill {
+  height: 100%;
+  width: 0;
+  background: var(--neon-cyan);
+}
+.npc-item.hot .npc-meter-fill {
+  background: var(--neon-pink);
+}
+.npc-item.warm .npc-meter-fill {
+  background: var(--neon-yellow);
+}
+.npc-warning {
+  margin-top: 6px;
+  color: var(--fluorescent);
+  font-size: 0.62rem;
+  line-height: 1.35;
+  opacity: 0.78;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+  font-size: 0.85rem;
+}
+.stat-label {
+  width: 48px;
+  text-align: right;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+.stat-bar {
+  flex: 1;
+  height: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.stat-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.stat-fill.anxiety-high {
+  animation: shake 0.1s infinite;
+}
+.stat-val {
+  width: 30px;
+  text-align: right;
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  flex-shrink: 0;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+/* 角色区域 */
+.char-display {
+  text-align: center;
+  padding: 12px;
+  position: relative;
+}
+.mayfly-mascot {
+  width: 112px;
+  height: 116px;
+  display: inline-block;
+  position: relative;
+  filter: drop-shadow(0 0 18px rgba(0,245,212,0.4));
+}
+.mayfly-mascot .wing {
+  position: absolute;
+  top: 13px;
+  width: 58px;
+  height: 78px;
+  background: rgba(225,238,238,0.82);
+  border: 2px solid rgba(17,17,17,0.75);
+  border-radius: 70% 12% 70% 18%;
+  box-shadow: inset 0 0 16px rgba(0,0,0,0.12);
+}
+.mayfly-mascot .wing::after {
+  content: '';
+  position: absolute;
+  inset: 12px 13px;
+  border-left: 1px solid rgba(40,40,40,0.45);
+  border-bottom: 1px solid rgba(40,40,40,0.35);
+  transform: rotate(-18deg);
+}
+.mayfly-mascot .wing-left { left: 0; transform: rotate(-28deg); }
+.mayfly-mascot .wing-right { right: 0; transform: scaleX(-1) rotate(-28deg); }
+.mayfly-mascot .body {
+  position: absolute;
+  left: 42px;
+  top: 48px;
+  width: 30px;
+  height: 48px;
+  background: linear-gradient(#c79d52, #7a5427);
+  border: 2px solid #15120d;
+  border-radius: 48% 48% 54% 54%;
+}
+.mayfly-mascot .head {
+  position: absolute;
+  left: 31px;
+  top: 20px;
+  width: 52px;
+  height: 42px;
+  background: #f1c861;
+  border: 2px solid #14100c;
+  border-radius: 48% 48% 43% 43%;
+}
+.mayfly-mascot .eye {
+  position: absolute;
+  top: 26px;
+  width: 21px;
+  height: 23px;
+  background: #fff8d8;
+  border: 2px solid #14100c;
+  border-radius: 50%;
+}
+.mayfly-mascot .eye-left { left: 34px; }
+.mayfly-mascot .eye-right { right: 34px; }
+.mayfly-mascot .eye::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  background: #111;
+  border-radius: 50%;
+}
+.mayfly-mascot .mouth {
+  position: absolute;
+  left: 52px;
+  top: 53px;
+  width: 11px;
+  height: 6px;
+  border-bottom: 2px solid #111;
+  border-radius: 50%;
+}
+.mayfly-mascot .antenna {
+  position: absolute;
+  top: 7px;
+  width: 24px;
+  height: 20px;
+  border-top: 2px solid #f2c94c;
+}
+.mayfly-mascot .antenna-left {
+  left: 34px;
+  transform: rotate(-28deg);
+  border-left: 2px solid #f2c94c;
+}
+.mayfly-mascot .antenna-right {
+  right: 34px;
+  transform: rotate(28deg);
+  border-right: 2px solid #f2c94c;
+}
+.mayfly-mascot .leg {
+  position: absolute;
+  top: 82px;
+  width: 26px;
+  height: 2px;
+  background: #17130e;
+}
+.mayfly-mascot .leg-1 { left: 27px; transform: rotate(22deg); }
+.mayfly-mascot .leg-2 { right: 27px; transform: rotate(-22deg); }
+.mayfly-mascot .leg-3 { left: 29px; top: 92px; transform: rotate(-16deg); }
+.mayfly-mascot .leg-4 { right: 29px; top: 92px; transform: rotate(16deg); }
+.mayfly-mascot.anxious .eye::after { top: 5px; left: 5px; }
+.mayfly-mascot.anxious .mouth {
+  height: 8px;
+  border: 2px solid #111;
+  border-top: 0;
+}
+.char-status {
+  font-size: 0.85rem;
+  color: var(--fluorescent);
+  margin-top: 6px;
+  min-height: 1.2em;
+  opacity: 0.7;
+}
+.mentor-bubble {
+  max-width: 360px;
+  margin: 10px auto 0;
+  padding: 9px 12px;
+  border: 1px solid rgba(254,228,64,0.35);
+  background: rgba(254,228,64,0.08);
+  color: var(--postit-yellow);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  border-radius: 4px;
+  position: relative;
+}
+.mentor-bubble::before {
+  content: 'AI毒舌导师';
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  padding: 0 6px;
+  background: var(--bg-void);
+  color: var(--neon-yellow);
+  font-size: 0.62rem;
+}
+
+.goals-panel {
+  padding: 10px;
+}
+.goals-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--paper-white);
+  font-size: 0.8rem;
+}
+.goal-count {
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  color: var(--neon-cyan);
+}
+.goal-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+}
+.goal-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 3px;
+}
+.goal-item.complete {
+  border-color: rgba(57,255,20,0.32);
+  background: rgba(57,255,20,0.08);
+}
+.goal-label {
+  color: var(--paper-white);
+  font-size: 0.75rem;
+}
+.goal-reward {
+  margin-top: 2px;
+  color: var(--fluorescent);
+  font-size: 0.66rem;
+  opacity: 0.62;
+}
+.goal-meter {
+  height: 5px;
+  margin-top: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.goal-meter-fill {
+  height: 100%;
+  background: var(--neon-cyan);
+}
+.goal-progress {
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  white-space: nowrap;
+}
+
+.target-tracker-panel {
+  display: none;
+  padding: 10px;
+  border-color: rgba(255,45,120,0.22);
+  background: rgba(38,12,28,0.82);
+}
+.target-tracker-panel.active {
+  display: block;
+}
+.target-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.target-title {
+  margin-top: 6px;
+  color: var(--neon-pink);
+  font-family: var(--font-title);
+  font-size: 0.98rem;
+}
+.target-hook,
+.target-next {
+  margin-top: 5px;
+  color: var(--fluorescent);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  opacity: 0.78;
+}
+.target-next {
+  color: var(--neon-yellow);
+}
+.target-steps {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+.target-step {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 7px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.18);
+  color: var(--fluorescent);
+  font-size: 0.68rem;
+}
+.target-step.complete {
+  border-color: rgba(57,255,20,0.26);
+  color: #8aff80;
+}
+.target-step.pending {
+  border-color: rgba(254,228,64,0.34);
+  color: var(--neon-yellow);
+}
+.target-step-dot {
+  width: 18px;
+  text-align: center;
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+}
+
+.turn-feed {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 9px 10px;
+  color: var(--fluorescent);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+.turn-feed-line {
+  min-height: 78px;
+  padding: 8px;
+  border: 1px solid rgba(0,245,212,0.24);
+  border-left: 3px solid rgba(0,245,212,0.62);
+  background: rgba(0,0,0,0.22);
+  border-radius: 3px;
+}
+.turn-feed-line::before {
+  content: attr(data-panel);
+  display: inline-flex;
+  margin-bottom: 5px;
+  padding: 1px 5px;
+  background: rgba(254,228,64,0.13);
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.44rem;
+}
+
+.consequence-panel {
+  display: none;
+  padding: 8px 10px;
+  border-color: rgba(255,45,120,0.28);
+  background: rgba(255,45,120,0.06);
+}
+.consequence-panel.active {
+  display: block;
+}
+.consequence-head {
+  display: flex;
+  justify-content: space-between;
+  color: var(--neon-pink);
+  font-size: 0.68rem;
+}
+.consequence-list {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+.consequence-item {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 8px;
+  align-items: start;
+  color: var(--paper-white);
+  font-size: 0.72rem;
+  line-height: 1.42;
+}
+.consequence-turn {
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  padding-top: 2px;
+}
+.consequence-source {
+  color: var(--neon-cyan);
+  font-size: 0.66rem;
+  margin-bottom: 2px;
+}
+.consequence-preview {
+  color: var(--paper-white);
+  opacity: 0.84;
+}
+.consequence-risk {
+  display: inline-flex;
+  margin-bottom: 3px;
+  padding: 1px 6px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 2px;
+  font-size: 0.56rem;
+  font-family: var(--font-pixel);
+}
+.consequence-risk.mild {
+  color: var(--neon-cyan);
+  border-color: rgba(0,245,212,0.28);
+}
+.consequence-risk.danger {
+  color: var(--neon-yellow);
+  border-color: rgba(254,228,64,0.34);
+}
+.consequence-risk.lethal {
+  color: var(--neon-pink);
+  border-color: rgba(255,45,120,0.4);
+  background: rgba(255,45,120,0.1);
+}
+
+.legacy-panel {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px;
+  background: rgba(181,55,242,0.09);
+  border: 1px solid rgba(181,55,242,0.28);
+  border-radius: 4px;
+}
+.legacy-panel.empty {
+  display: none;
+}
+.legacy-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--neon-purple);
+  font-size: 0.74rem;
+}
+.legacy-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+.legacy-card {
+  min-height: 82px;
+  padding: 8px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 3px;
+}
+.legacy-title {
+  color: var(--paper-white);
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+.legacy-effect {
+  margin-top: 5px;
+  color: var(--neon-yellow);
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+.legacy-stack {
+  display: inline-flex;
+  margin-top: 6px;
+  padding: 1px 5px;
+  background: rgba(254,228,64,0.12);
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+}
+
+/* 活动选择网格 */
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 520px;
+  padding: 0 4px;
+}
+.activity-btn {
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px),
+    var(--postit-yellow);
+  color: #333;
+  padding: 12px 10px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-align: left;
+  position: relative;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 1px;
+}
+.activity-btn:nth-child(1) { transform: rotate(-0.8deg); }
+.activity-btn:nth-child(2) {
+  transform: rotate(0.5deg);
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px),
+    var(--postit-pink);
+}
+.activity-btn:nth-child(3) {
+  transform: rotate(0.8deg);
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.03), rgba(0,0,0,0.03) 1px, transparent 1px, transparent 8px),
+    var(--postit-blue);
+}
+.activity-btn:hover {
+  transform: rotate(0deg) scale(1.04) !important;
+  box-shadow: 0 0 15px rgba(0,245,212,0.3), 2px 3px 8px rgba(0,0,0,0.3);
+  z-index: 5;
+}
+.activity-btn:active { transform: scale(0.97) !important; }
+.activity-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none !important;
+  box-shadow: none;
+}
+.activity-btn .act-icon { font-size: 1.3rem; }
+.activity-btn .act-name { font-weight: bold; margin-top: 2px; }
+.activity-btn .act-simple-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+.activity-btn .act-simple-label {
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.08);
+  color: #222;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+.activity-btn .act-quote {
+  margin-top: 8px;
+  line-height: 1.35;
+  min-height: 3.8em;
+  font-size: 0.8rem;
+}
+.activity-btn .act-simple-result {
+  display: grid;
+  gap: 5px;
+  margin-top: 9px;
+  padding: 7px 8px;
+  background: rgba(0,0,0,0.07);
+  border-left: 3px solid rgba(0,0,0,0.24);
+  border-radius: 2px;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.activity-btn .act-simple-result strong {
+  color: #111;
+}
+.activity-btn .act-simple-result span {
+  color: rgba(0,0,0,0.66);
+}
+.activity-btn .act-first-guide {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 7px 8px;
+  border: 1px solid rgba(0,0,0,0.14);
+  border-left: 3px solid rgba(0,0,0,0.38);
+  background: rgba(255,255,255,0.34);
+  color: #222;
+  font-size: 0.66rem;
+  line-height: 1.34;
+}
+.activity-btn .act-first-guide.route,
+.activity-btn .act-first-guide.branch {
+  border-left-color: rgba(0,111,114,0.72);
+}
+.activity-btn .act-first-guide.debt {
+  border-left-color: rgba(178,29,70,0.72);
+}
+.activity-btn .act-first-guide span {
+  color: rgba(0,0,0,0.48);
+  font-family: var(--font-pixel);
+  font-size: 0.46rem;
+}
+.activity-btn .act-first-guide strong {
+  color: #111;
+}
+.activity-btn .act-first-guide em {
+  color: rgba(0,0,0,0.68);
+  font-style: normal;
+}
+.activity-btn .act-cost {
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+.activity-btn .act-cost.modified {
+  color: #8d1638;
+  opacity: 0.85;
+}
+.activity-btn .act-route-inertia {
+  display: grid;
+  gap: 5px;
+  margin-top: 7px;
+  padding: 6px 7px;
+  border: 1px solid rgba(178,29,70,0.22);
+  border-left: 3px solid rgba(178,29,70,0.72);
+  background: rgba(178,29,70,0.08);
+  color: #7b1431;
+  font-size: 0.64rem;
+  line-height: 1.32;
+}
+.activity-btn .act-route-inertia .inertia-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+.activity-btn .act-route-inertia .inertia-label {
+  color: #7b1431;
+  font-weight: 800;
+}
+.activity-btn .act-route-inertia .inertia-detail {
+  color: rgba(0,0,0,0.55);
+  font-weight: 700;
+}
+.activity-btn .act-route-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.activity-btn .act-route-chips span {
+  padding: 1px 5px;
+  background: rgba(0,0,0,0.08);
+  color: #40121f;
+  border-radius: 2px;
+  font-size: 0.58rem;
+}
+.activity-btn .act-npc-warning {
+  margin-top: 7px;
+  padding: 6px 7px;
+  border-left: 3px solid rgba(255,45,120,0.72);
+  background: rgba(255,45,120,0.08);
+  color: #7b1431;
+  font-size: 0.64rem;
+  line-height: 1.32;
+}
+.activity-btn .act-npc-warning span {
+  color: rgba(0,0,0,0.55);
+  font-weight: 800;
+  margin-right: 4px;
+}
+.activity-btn .act-npc-relief {
+  margin-top: 7px;
+  padding: 6px 7px;
+  border-left: 3px solid rgba(11,196,140,0.75);
+  background: rgba(11,196,140,0.1);
+  color: #0c5b47;
+  font-size: 0.64rem;
+  line-height: 1.32;
+}
+.activity-btn .act-npc-relief span {
+  color: rgba(0,0,0,0.55);
+  font-weight: 800;
+  margin-right: 4px;
+}
+.activity-btn .act-tag {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 0.55rem;
+  opacity: 0.4;
+  font-style: italic;
+}
+.activity-btn .act-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 0.62rem;
+}
+.activity-btn .act-effects span {
+  background: rgba(0,0,0,0.08);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+.activity-btn .act-consequence-hint {
+  margin-top: 8px;
+  padding: 6px 7px;
+  border-left: 3px solid rgba(178,29,70,0.7);
+  background: rgba(178,29,70,0.08);
+  color: #8d1638;
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+.activity-btn .act-route-hint {
+  display: inline-flex;
+  margin-top: 7px;
+  padding: 3px 6px;
+  border: 1px solid rgba(0,245,212,0.34);
+  background: rgba(0,245,212,0.1);
+  color: #0f6f72;
+  font-size: 0.62rem;
+  line-height: 1.2;
+}
+.activity-btn .act-causal-preview {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 7px 8px;
+  background: rgba(0,0,0,0.07);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 3px;
+  font-size: 0.66rem;
+  line-height: 1.3;
+}
+.activity-btn .act-causal-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 6px;
+  align-items: start;
+}
+.activity-btn .act-causal-row span {
+  color: rgba(0,0,0,0.52);
+  font-weight: 700;
+}
+.activity-btn .act-causal-row strong {
+  color: #222;
+}
+.activity-btn .act-causal-row.danger strong,
+.activity-btn .act-causal-row.lethal strong {
+  color: #9b1638;
+}
+.activity-btn .act-causal-row.mild strong {
+  color: #0f6f72;
+}
+body.first-run-mode .advanced-effect,
+body.first-run-mode .advanced-stat,
+body.first-run-mode .goals-panel,
+body.first-run-mode .legacy-panel,
+body.first-run-mode .target-tracker-panel,
+body.first-run-mode .world-glitch-panel,
+body.first-run-mode .npc-panel,
+body.first-run-mode .route-panel {
+  display: none !important;
+}
+body.first-run-mode .turn-feed {
+  grid-template-columns: 1fr;
+}
+body.first-run-mode .turn-feed-line {
+  min-height: 0;
+}
+body.first-run-mode .activity-btn .act-effects {
+  display: none;
+}
+body.first-run-mode .activity-btn .act-tag {
+  display: none;
+}
+.activity-btn .act-collection-hint {
+  margin-top: 8px;
+  padding: 5px 6px;
+  border: 1px dashed rgba(106,35,168,0.36);
+  background: rgba(106,35,168,0.08);
+  color: #5b1f92;
+  font-size: 0.66rem;
+  line-height: 1.3;
+}
+.activity-btn .act-collection-hint.collected {
+  border-style: solid;
+  border-color: rgba(15,122,65,0.28);
+  background: rgba(15,122,65,0.08);
+  color: #0f7a41;
+}
+.activity-btn .act-collection-hint.tracking {
+  border-style: solid;
+  border-color: rgba(178,29,70,0.34);
+  background: rgba(178,29,70,0.08);
+  color: #b21d46;
+}
+.activity-btn .positive { color: #0f7a41; }
+.activity-btn .negative { color: #b21d46; }
+.activity-btn .disrupt { color: #6a23a8; font-weight: bold; }
+
+/* ========== 事件弹窗 ========== */
+.event-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.event-overlay.active { display: flex; }
+.event-card {
+  background: #f5ebd6;
+  color: #15120d;
+  border: 2px solid #15120d;
+  border-radius: 4px;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 30px rgba(181,55,242,0.3);
+}
+.event-card.death-rescue {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 32px rgba(255,45,120,0.42);
+}
+.event-card.death-rescue .event-time {
+  color: var(--neon-pink);
+}
+.event-time {
+  display: inline-flex;
+  padding: 4px 10px;
+  background: #15120d;
+  color: var(--neon-yellow);
+  border-radius: 2px;
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+}
+.event-card .ev-emoji { font-size: 3rem; }
+.event-card .ev-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-top: 12px;
+  color: #19140f;
+}
+.event-card .ev-effect {
+  margin-top: 12px;
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.event-card .ev-effect .neg { color: var(--neon-pink); }
+.event-card .ev-effect .pos { color: var(--neon-green); }
+.event-card .ev-effect .warn { color: var(--neon-orange); }
+.event-card .ev-responses {
+  display: none;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+.event-card .ev-response {
+  border: 1px solid rgba(21,18,13,0.28);
+  background: rgba(255,255,255,0.42);
+  color: #15120d;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  border-radius: 3px;
+  transition: transform 0.18s, background 0.18s, border-color 0.18s;
+}
+.event-card .ev-response:hover {
+  transform: translateY(-1px);
+  background: rgba(254,228,64,0.32);
+  border-color: rgba(21,18,13,0.55);
+}
+.event-card .ev-response-title {
+  display: block;
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+.event-card .ev-response-text {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  opacity: 0.82;
+}
+.event-card .ev-close {
+  margin-top: 16px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: none;
+  border: 1px solid var(--fluorescent);
+  color: var(--fluorescent);
+  padding: 6px 20px;
+  cursor: pointer;
+  border-radius: 2px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.event-card .ev-close:hover { opacity: 1; }
+
+/* ========== 死亡屏 ========== */
+#screen-death {
+  background: var(--bg-void);
+  height: 100vh;
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+}
+.death-card {
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
+.death-emoji { font-size: 5rem; }
+.death-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  margin-top: 16px;
+  position: relative;
+}
+.death-title.glitching { animation: glitch 0.4s ease-in-out; }
+.death-epitaph {
+  font-size: 1rem;
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid var(--neon-pink);
+  border-radius: 2px;
+  color: var(--neon-pink);
+  line-height: 1.6;
+  background: rgba(255,45,120,0.05);
+}
+.death-stats {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: var(--fluorescent);
+  opacity: 0.6;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.death-stats span {
+  background: var(--bg-office);
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+.death-explain {
+  margin-top: 12px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid rgba(254,228,64,0.22);
+  background: rgba(254,228,64,0.06);
+  border-radius: 4px;
+}
+.death-explain-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 0.96rem;
+}
+.death-explain-summary {
+  margin-top: 6px;
+  color: var(--paper-white);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.death-fatal-bill {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 9px;
+  border: 1px solid rgba(255,45,120,0.28);
+  background: rgba(255,45,120,0.08);
+  border-radius: 3px;
+}
+.death-fatal-title {
+  color: var(--neon-pink);
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+}
+.death-fatal-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  color: var(--fluorescent);
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+.death-fatal-row strong {
+  color: var(--paper-white);
+}
+.death-fatal-delta {
+  color: var(--neon-pink);
+  font-family: var(--font-pixel);
+  font-size: 0.54rem;
+}
+.death-receipt {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 9px;
+  border: 1px solid rgba(254,228,64,0.26);
+  background: rgba(254,228,64,0.07);
+  border-radius: 3px;
+}
+.death-receipt-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+}
+.death-receipt-row {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  color: var(--paper-white);
+  font-size: 0.72rem;
+  line-height: 1.42;
+}
+.death-receipt-row strong {
+  color: var(--neon-cyan);
+  font-size: 0.66rem;
+}
+.death-receipt-row span {
+  color: rgba(255,255,255,0.82);
+}
+.death-explain-chain {
+  display: grid;
+  gap: 5px;
+  margin-top: 10px;
+}
+.death-explain-step {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 8px;
+  color: var(--fluorescent);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.death-explain-turn {
+  color: var(--neon-cyan);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  padding-top: 2px;
+}
+.death-collection {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.death-collection span {
+  padding: 5px 9px;
+  border: 1px solid rgba(254,228,64,0.35);
+  border-radius: 2px;
+  color: var(--neon-yellow);
+  background: rgba(254,228,64,0.08);
+  font-size: 0.75rem;
+}
+.death-rarity {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 4px 12px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  opacity: 0.9;
+}
+.death-report {
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  text-align: left;
+}
+.death-legacy {
+  margin-top: 14px;
+  padding: 12px;
+  background: rgba(181,55,242,0.12);
+  border: 1px solid rgba(181,55,242,0.35);
+  border-radius: 4px;
+  text-align: left;
+}
+.death-legacy-title {
+  color: var(--neon-purple);
+  font-family: var(--font-title);
+  font-size: 1rem;
+}
+.death-legacy-body {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 10px;
+  margin-top: 8px;
+  align-items: start;
+}
+.death-legacy-emoji {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: rgba(0,0,0,0.24);
+  border-radius: 50%;
+}
+.death-legacy-name {
+  color: var(--paper-white);
+  font-size: 0.84rem;
+}
+.death-legacy-text,
+.death-legacy-effect {
+  margin-top: 4px;
+  color: var(--fluorescent);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  opacity: 0.78;
+}
+.death-legacy-effect {
+  color: var(--neon-yellow);
+  opacity: 0.92;
+}
+.death-next {
+  margin-top: 14px;
+  padding: 12px;
+  background: rgba(0,245,212,0.08);
+  border: 1px solid rgba(0,245,212,0.28);
+  border-radius: 4px;
+  text-align: left;
+}
+.death-next-title {
+  color: var(--neon-cyan);
+  font-family: var(--font-title);
+  font-size: 1rem;
+}
+.death-next-text,
+.death-next-risk {
+  margin-top: 6px;
+  color: var(--paper-white);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+.death-next-risk {
+  color: var(--neon-yellow);
+  opacity: 0.86;
+}
+.death-next-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 9px;
+}
+.death-next-cards span {
+  padding: 3px 7px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(0,245,212,0.22);
+  color: var(--fluorescent);
+  font-size: 0.68rem;
+  border-radius: 2px;
+}
+.memorial-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.memorial-comment {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 8px;
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 3px;
+  color: var(--paper-white);
+}
+.memorial-avatar {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: rgba(254,228,64,0.12);
+  border-radius: 50%;
+}
+.memorial-speaker {
+  color: var(--neon-yellow);
+  font-size: 0.72rem;
+}
+.memorial-text {
+  margin-top: 2px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  opacity: 0.84;
+}
+.report-title {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  color: var(--neon-cyan);
+}
+.report-line {
+  margin-top: 8px;
+  color: var(--fluorescent);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+.signature-arc {
+  display: none;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border: 1px solid rgba(254,228,64,0.38);
+  border-radius: 2px;
+  background: rgba(254,228,64,0.08);
+  color: var(--neon-yellow);
+  font-size: 0.72rem;
+}
+.signature-arc.active {
+  display: inline-flex;
+}
+.split-bars {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+.split-row {
+  display: grid;
+  grid-template-columns: 54px 1fr 34px;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--fluorescent);
+}
+.split-track {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.split-fill {
+  height: 100%;
+  background: var(--neon-cyan);
+}
+.causality-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--paper-white);
+  opacity: 0.78;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.death-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.death-btns .btn-neon {
+  margin-top: 0;
+  padding: 12px 18px;
+  max-width: 100%;
+  white-space: normal;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+/* ========== 收藏册 ========== */
+#screen-collection {
+  justify-content: flex-start;
+  overflow-y: auto;
+  height: 100vh;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+}
+.collection-shell {
+  width: 100%;
+  max-width: 960px;
+}
+.collection-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.collection-top .btn-neon {
+  margin-top: 0;
+  padding: 10px 16px;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+.collection-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+}
+.collection-sub {
+  margin-top: 4px;
+  color: var(--fluorescent);
+  font-size: 0.82rem;
+  opacity: 0.72;
+}
+.collection-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.collection-stat {
+  padding: 10px;
+  border: 1px solid rgba(254,228,64,0.24);
+  background: rgba(17,17,24,0.86);
+  border-radius: 4px;
+}
+.collection-stat-label {
+  color: var(--fluorescent);
+  font-size: 0.68rem;
+  opacity: 0.68;
+}
+.collection-stat-value {
+  margin-top: 4px;
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+}
+.collection-section {
+  margin-top: 14px;
+}
+.collection-section-title {
+  color: var(--neon-cyan);
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.collection-card {
+  min-height: 126px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+}
+.collection-card.locked {
+  opacity: 0.45;
+  filter: grayscale(0.85);
+}
+.collection-emoji {
+  font-size: 1.65rem;
+}
+.collection-name {
+  margin-top: 6px;
+  color: var(--paper-white);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+.collection-meta {
+  margin-top: 5px;
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+}
+.collection-desc {
+  margin-top: 6px;
+  color: var(--fluorescent);
+  font-size: 0.68rem;
+  line-height: 1.42;
+  opacity: 0.75;
+}
+.collection-target-note {
+  margin-top: 8px;
+  color: var(--neon-pink);
+  font-size: 0.78rem;
+}
+.collection-chase {
+  margin-top: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid rgba(0,245,212,0.4);
+  border-radius: 2px;
+  background: rgba(0,245,212,0.08);
+  color: var(--neon-cyan);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.collection-chase.active {
+  border-color: rgba(254,228,64,0.48);
+  background: rgba(254,228,64,0.1);
+  color: var(--neon-yellow);
+}
+.collection-empty {
+  padding: 12px;
+  color: var(--fluorescent);
+  border: 1px dashed rgba(255,255,255,0.16);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  opacity: 0.72;
+}
+
+/* ========== 假通知 ========== */
+.fake-notif {
+  position: fixed;
+  top: -80px;
+  right: 16px;
+  background: rgba(30,30,40,0.95);
+  border-left: 3px solid var(--neon-pink);
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  z-index: 200;
+  max-width: 260px;
+  backdrop-filter: blur(4px);
+  color: var(--fluorescent);
+  font-family: var(--font-body);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.fake-notif .notif-app { color: var(--neon-pink); font-size: 0.65rem; margin-bottom: 2px; }
+
+/* ========== 高焦虑效果 ========== */
+.anxiety-warning {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.5s;
+  border: 3px solid transparent;
+}
+.anxiety-warning.active {
+  opacity: 1;
+  border-color: rgba(255,45,120,0.15);
+  box-shadow: inset 0 0 60px rgba(255,45,120,0.1);
+}
+
+/* ========== 屏幕撕裂 ========== */
+.screen-tear::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0px, transparent 2px, rgba(255,45,120,0.02) 2px, rgba(255,45,120,0.02) 4px);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 600px) {
+  .activity-grid { grid-template-columns: 1fr; gap: 9px; max-width: 420px; }
+  .legacy-list { grid-template-columns: 1fr; }
+  .npc-list { grid-template-columns: 1fr; }
+  .npc-item { min-height: 0; }
+  .turn-feed { grid-template-columns: 1fr; }
+  .turn-feed-line { min-height: 0; }
+  .activity-btn { padding: 12px 10px; font-size: 0.86rem; min-height: 112px; }
+  .activity-btn .act-quote { min-height: auto; }
+  .death-fatal-row { grid-template-columns: 34px minmax(0, 1fr); }
+  .death-fatal-delta { grid-column: 2; }
+  .char-card { width: 100%; max-width: 260px; }
+  .intent-grid { grid-template-columns: 1fr; }
+  .intent-card { min-height: 0; }
+  .collection-top { flex-direction: column; }
+  .collection-tabs { grid-template-columns: 1fr; }
+  .collection-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- 焦虑边框 -->
+<div class="anxiety-warning" id="anxiety-warning"></div>
+
+<!-- ========== 标题屏 ========== -->
+<section id="screen-title" class="screen active">
+  <div class="title-main" id="title-text">蜉蝣哲学</div>
+  <div class="title-sub" id="title-sub">活不过一天也要搅局</div>
+  <div class="title-slogan">"刚出生就下班，死前才开始摸鱼。"</div>
+  <div class="title-actions">
+    <button class="btn-neon" id="btn-start">开始搅局</button>
+    <button class="btn-neon pink" id="btn-collection-title">结局收藏册</button>
+  </div>
+  <div style="margin-top: 60px; opacity: 0.2; font-size: 0.7rem; font-family: var(--font-pixel);">
+    MAYFLY PHILOSOPHY v0.1
+  </div>
+</section>
+
+<!-- ========== 收藏册 ========== -->
+<section id="screen-collection" class="screen">
+  <div class="collection-shell">
+    <div class="collection-top">
+      <div>
+        <div class="collection-title">结局收藏册</div>
+        <div class="collection-sub">每一种荒诞死法、人格路线和遗产，都是你认真生活留下的证据。</div>
+        <div class="collection-target-note" id="collection-target-note"></div>
+      </div>
+      <button class="btn-neon pink" id="btn-collection-back">返回标题</button>
+    </div>
+    <div class="collection-tabs">
+      <div class="collection-stat">
+        <div class="collection-stat-label">死亡明信片</div>
+        <div class="collection-stat-value" id="collection-postcard-count">0/0</div>
+      </div>
+      <div class="collection-stat">
+        <div class="collection-stat-label">人格路线</div>
+        <div class="collection-stat-value" id="collection-personality-count">0/0</div>
+      </div>
+      <div class="collection-stat">
+        <div class="collection-stat-label">遗产卡</div>
+        <div class="collection-stat-value" id="collection-legacy-count">0</div>
+      </div>
+    </div>
+    <div class="collection-section">
+      <div class="collection-section-title">死亡明信片</div>
+      <div class="collection-grid" id="collection-postcards"></div>
+    </div>
+    <div class="collection-section">
+      <div class="collection-section-title">人格路线</div>
+      <div class="collection-grid" id="collection-personalities"></div>
+    </div>
+    <div class="collection-section">
+      <div class="collection-section-title">遗产卡</div>
+      <div class="collection-grid" id="collection-legacies"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 角色选择 ========== -->
+<section id="screen-select" class="screen">
+  <div style="font-family: var(--font-title); font-size: 1.5rem; color: var(--neon-cyan); margin-bottom: 24px;">
+    选择你的蜉蝣
+  </div>
+  <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;" id="char-cards">
+    <!-- JS生成 -->
+  </div>
+</section>
+
+<!-- ========== 本局目标选择 ========== -->
+<section id="screen-intent" class="screen">
+  <div class="intent-shell">
+    <div class="intent-head">
+      <div class="intent-title">今天怎么活完？</div>
+      <div class="intent-sub" id="intent-sub">先选一个死前目标。它不会替你赢，只会让开局更像你想要的荒诞路线。</div>
+    </div>
+    <div class="intent-grid" id="intent-cards"></div>
+    <div class="intent-actions">
+      <button class="btn-neon pink" id="btn-intent-back">换一只命</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 游戏主界面 ========== -->
+<section id="screen-game" class="screen">
+	  <!-- HUD -->
+	  <div class="hud-bar">
+	    <div>
+	      <div class="hud-label">剩余寿命</div>
+	      <div class="hud-time" id="hud-time">24:00:00</div>
+	    </div>
+	    <div class="hud-turn" id="hud-turn">已活0分 / 第0次选择</div>
+	  </div>
+
+  <div class="phase-panel">
+    <div class="phase-top">
+      <div>
+        <div class="phase-kicker">人生阶段</div>
+        <div class="phase-title" id="phase-title">破壳上岗</div>
+      </div>
+      <div class="goal-count" id="phase-clock">已活0分</div>
+    </div>
+    <div class="phase-desc" id="phase-desc">你刚学会呼吸，系统已经把工牌挂到了你脖子上。</div>
+    <div class="phase-track"><div class="phase-fill" id="phase-fill"></div></div>
+  </div>
+
+  <div class="objective-panel" id="objective-panel">
+    <div class="objective-head">
+      <div class="objective-title" id="objective-title">今日死前KPI</div>
+      <div class="objective-tag" id="objective-tag">24H LIFE BRIEF</div>
+    </div>
+    <div class="objective-copy" id="objective-copy"></div>
+    <div class="objective-steps" id="objective-steps"></div>
+    <div class="objective-chips" id="objective-chips"></div>
+    <div class="objective-pulse" id="objective-pulse">
+      <div class="objective-pulse-head">
+        <div class="objective-pulse-title" id="objective-pulse-title">本局KPI入账</div>
+        <div class="objective-pulse-tag" id="objective-pulse-tag">CLAIMED</div>
+      </div>
+      <div class="objective-pulse-copy" id="objective-pulse-copy"></div>
+    </div>
+  </div>
+
+  <div class="world-glitch-panel" id="world-glitch-panel">
+    <div class="world-glitch-top">
+      <div class="world-glitch-title" id="world-glitch-title">现实开始偏航</div>
+      <div class="world-glitch-tag" id="world-glitch-tag">搅局偏移</div>
+    </div>
+    <div class="world-glitch-copy" id="world-glitch-copy"></div>
+  </div>
+
+  <!-- 活动选择 -->
+  <div class="activity-grid" id="activity-grid">
+    <!-- JS生成 -->
+  </div>
+
+  <div class="rescue-panel ready" id="rescue-panel">
+    <div class="rescue-top">
+      <div class="rescue-title" id="rescue-title">临终抢救未用</div>
+      <div class="rescue-tag" id="rescue-tag">ONE SAVE</div>
+    </div>
+    <div class="rescue-copy" id="rescue-copy"></div>
+  </div>
+
+  <div class="route-panel" id="route-panel">
+    <div class="route-top">
+      <div class="route-title" id="route-title">路线未定</div>
+      <div class="route-tag" id="route-tag">LIFE ROUTE</div>
+    </div>
+    <div class="route-copy" id="route-copy"></div>
+    <div class="route-risk" id="route-risk"></div>
+  </div>
+
+  <div class="npc-panel" id="npc-panel">
+    <div class="npc-head">
+      <div class="npc-title">关系旧账</div>
+      <div class="route-tag" id="npc-hot-count">0 HOT</div>
+    </div>
+    <div class="npc-summary" id="npc-summary"></div>
+    <div class="npc-list" id="npc-list"></div>
+  </div>
+
+  <div class="consequence-panel" id="consequence-panel">
+    <div class="consequence-head">
+      <span>后果回访</span>
+      <span id="consequence-count">0</span>
+    </div>
+    <div class="consequence-list" id="consequence-list"></div>
+  </div>
+
+  <div class="target-tracker-panel" id="target-tracker-panel">
+    <div class="target-head">
+      <span class="goals-kicker">结局追踪</span>
+      <span class="goal-count" id="target-progress">0/0</span>
+    </div>
+    <div class="target-title" id="target-title"></div>
+    <div class="target-hook" id="target-hook"></div>
+    <div class="target-steps" id="target-steps"></div>
+    <div class="target-next" id="target-next"></div>
+  </div>
+
+  <!-- 属性条 -->
+  <div class="stat-row">
+    <span class="stat-label" style="color: var(--stat-spirit);">精神</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-spirit" style="width: 50%; background: var(--stat-spirit);"></div></div>
+    <span class="stat-val" id="val-spirit">50</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label" style="color: var(--stat-social);">社交</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-social" style="width: 50%; background: var(--stat-social);"></div></div>
+    <span class="stat-val" id="val-social">50</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label" style="color: var(--stat-health);">健康</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-health" style="width: 50%; background: var(--stat-health);"></div></div>
+    <span class="stat-val" id="val-health">50</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label" style="color: var(--stat-anxiety);">焦虑</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-anxiety" style="width: 30%; background: var(--stat-anxiety);"></div></div>
+    <span class="stat-val" id="val-anxiety">30</span>
+  </div>
+  <div class="stat-row advanced-stat">
+    <span class="stat-label" style="color: var(--neon-yellow);">搅局</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-disruption" style="width: 0%; background: var(--neon-yellow);"></div></div>
+    <span class="stat-val" id="val-disruption">0</span>
+  </div>
+  <div class="stat-row advanced-stat">
+    <span class="stat-label" style="color: var(--neon-purple);">荒诞债</span>
+    <div class="stat-bar"><div class="stat-fill" id="bar-absurdDebt" style="width: 0%; background: var(--neon-purple);"></div></div>
+    <span class="stat-val" id="val-absurdDebt">0</span>
+  </div>
+
+  <div class="goals-panel">
+    <div class="goals-head">
+      <span class="goals-kicker">今日搅局目标</span>
+      <span class="goal-count" id="goal-count">0/3</span>
+    </div>
+    <div class="goal-list" id="goal-list"></div>
+  </div>
+
+  <div class="legacy-panel empty" id="legacy-panel">
+    <div class="legacy-head">
+      <span>上一世遗产</span>
+      <span class="goal-count" id="legacy-count">0/3</span>
+    </div>
+    <div class="legacy-list" id="legacy-list"></div>
+  </div>
+
+	  <!-- 角色 -->
+	  <div class="char-display">
+	    <div class="mayfly-mascot" id="game-char-emoji" aria-label="Q版蜉蝣">
+	      <div class="wing wing-left"></div>
+	      <div class="wing wing-right"></div>
+	      <div class="body"></div>
+	      <div class="head"></div>
+	      <div class="eye eye-left"></div>
+	      <div class="eye eye-right"></div>
+	      <div class="mouth"></div>
+	      <div class="antenna antenna-left"></div>
+	      <div class="antenna antenna-right"></div>
+	      <div class="leg leg-1"></div>
+	      <div class="leg leg-2"></div>
+	      <div class="leg leg-3"></div>
+	      <div class="leg leg-4"></div>
+	    </div>
+	    <div class="char-status" id="game-char-status">你睁开了眼，世界好亮……</div>
+	    <div class="mentor-bubble" id="mentor-bubble">别卷了，今晚就死，但可以死得有点风格。</div>
+	  </div>
+
+  <div class="turn-feed" id="turn-feed">
+    <div class="turn-feed-line">今日目标会给你一点喘息，但不会替你做人。</div>
+  </div>
+</section>
+
+<!-- ========== 事件弹窗 ========== -->
+	<div class="event-overlay" id="event-overlay">
+	  <div class="event-card">
+	    <div class="event-time" id="ev-time">已活0分</div>
+	    <div class="ev-emoji" id="ev-emoji">📧</div>
+    <div class="ev-text" id="ev-text">事件内容</div>
+    <div class="ev-effect" id="ev-effect"></div>
+    <div class="ev-responses" id="ev-responses"></div>
+    <button class="ev-close" id="ev-close">好吧……</button>
+  </div>
+</div>
+
+<!-- ========== 死亡屏 ========== -->
+<section id="screen-death" class="screen">
+  <div class="death-card">
+	    <div class="death-emoji" id="death-emoji">💀</div>
+	    <div class="death-title" id="death-title">死因</div>
+	    <div class="death-rarity" id="death-rarity">N</div>
+	    <div class="death-epitaph" id="death-epitaph">墓志铭</div>
+	    <div class="death-explain" id="death-explain">
+	      <div class="death-explain-title">事故复盘</div>
+	      <div class="death-explain-summary" id="death-explain-summary"></div>
+	      <div class="death-fatal-bill" id="death-fatal-bill"></div>
+	      <div class="death-receipt" id="death-receipt"></div>
+	      <div class="death-explain-chain" id="death-explain-chain"></div>
+	    </div>
+	    <div class="death-stats" id="death-stats"></div>
+	    <div class="death-collection" id="death-collection"></div>
+	    <div class="death-legacy" id="death-legacy">
+	      <div class="death-legacy-title">新遗产卡</div>
+	      <div class="death-legacy-body">
+	        <div class="death-legacy-emoji" id="death-legacy-emoji">🌀</div>
+	        <div>
+	          <div class="death-legacy-name" id="death-legacy-name">遗产卡</div>
+	          <div class="death-legacy-text" id="death-legacy-text">这张卡会影响下一局。</div>
+	          <div class="death-legacy-effect" id="death-legacy-effect"></div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="death-next" id="death-next">
+	      <div class="death-next-title" id="death-next-title">下一世建议</div>
+	      <div class="death-next-text" id="death-next-text"></div>
+	      <div class="death-next-risk" id="death-next-risk"></div>
+	      <div class="death-next-cards" id="death-next-cards"></div>
+	    </div>
+	    <div class="death-report">
+	      <div class="report-title" id="personality-title">人格报告</div>
+	      <div class="report-line" id="personality-tagline">你的一生还没有被系统归档。</div>
+	      <div class="signature-arc" id="signature-arc"></div>
+	      <div class="split-bars" id="time-split"></div>
+		      <div class="report-line">因果账本</div>
+		      <ol class="causality-list" id="causality-list"></ol>
+		      <div class="report-line">朋友圈悼念</div>
+		      <div class="memorial-list" id="memorial-list"></div>
+		    </div>
+	    <div class="death-btns">
+	      <button class="btn-neon" id="btn-retry">带着遗产再活一次</button>
+	      <button class="btn-neon pink" id="btn-switch">查看另一条命</button>
+	      <button class="btn-neon" id="btn-collection-death">查看收藏册</button>
+	    </div>
+	  </div>
+	</section>
+
+<script src="src/game-core.js"></script>
+<script>
+// ========== 游戏数据 ==========
+
+const CORE = window.MayflyCore;
+
+const CHARACTERS = {
+  mayfly: {
+    id: 'mayfly',
+    name: '蜉蝣',
+    emoji: '🪰',
+    subtitle: '朝生暮死，卷生卷死',
+    baseStats: { spirit: 50, social: 30, health: 60, anxiety: 40 },
+    description: '你知道自己只有24小时。但你还是决定把TODO list写满。',
+    color: 'var(--neon-cyan)'
+  },
+  mosquito: {
+    id: 'mosquito',
+    name: '蚊子',
+    emoji: '🦟',
+    subtitle: '嗡嗡嗡，我来帮你加班……啊不，吸血',
+    baseStats: { spirit: 40, social: 20, health: 70, anxiety: 50 },
+    description: '你的一生就是不停地找机会叮一口。但每个人都想拍死你。',
+    color: 'var(--neon-pink)',
+    locked: true
+  }
+};
+
+const ACTIVITIES = [
+  {
+    id: 'overtime', name: '加班', icon: '💻',
+    cost: { time: 4 },
+    effect: { spirit: -10, social: -5, health: -8, anxiety: +15 },
+    flavor: [
+      '你不加班，但你的飞书还在亮着。',
+      '加班到一半发现PPT是昨天的版本。',
+      '老板说"辛苦了"，你信了。',
+      '加班的意义在于——第二天继续加班。'
+    ],
+    tag: '内卷警告'
+  },
+  {
+    id: 'slack', name: '摸鱼', icon: '🐟',
+    cost: { time: 2 },
+    effect: { spirit: +8, social: 0, health: +2, anxiety: -5 },
+    flavor: [
+      '你打开了一个假IDE窗口，其实在看豆瓣。',
+      '摸鱼的时候时间过得特别快，就像你的寿命。',
+      '你在厕所待了40分钟，同事以为你掉进去了。',
+      '摸鱼是打工人最后的尊严。'
+    ],
+    tag: '正义之举'
+  },
+  {
+    id: 'meeting', name: '开会', icon: '🗣',
+    cost: { time: 3 },
+    effect: { spirit: -5, social: +10, health: -3, anxiety: +10 },
+    flavor: [
+      '这个会本可以是一封邮件。',
+      '领导说了40分钟，结论是"下次再议"。',
+      '你在会议上走神了，被点名回答问题。',
+      '会议纪要写了三页，全是废话。'
+    ],
+    tag: '时间黑洞'
+  },
+  {
+    id: 'phone', name: '刷手机', icon: '📱',
+    cost: { time: 1 },
+    effect: { spirit: +5, social: +5, health: -2, anxiety: +5 },
+    flavor: [
+      '你刷了30分钟短视频，觉得自己更焦虑了。',
+      '朋友圈里的人都在度假，你在摸鱼。',
+      '你给老板的朋友圈点了赞，然后后悔了。',
+      '刷到前任的动态，寿命-1。'
+    ],
+    tag: '精神内耗'
+  },
+  {
+    id: 'social', name: '社交', icon: '🧋',
+    cost: { time: 2 },
+    effect: { spirit: +5, social: +15, health: 0, anxiety: -8 },
+    flavor: [
+      '同事请你喝奶茶，你感动得差点哭出来。',
+      '你参加了一个饭局，发现每个人都在聊KPI。',
+      '你和一个同事聊了半天，发现不是你们部门的。',
+      '社交的本质是互相确认对方也活着。'
+    ],
+    tag: '表面功夫'
+  },
+  {
+    id: 'crisis', name: '思考人生', icon: '🫠',
+    cost: { time: 1 },
+    effect: { spirit: -15, social: -5, health: 0, anxiety: +20 },
+    flavor: [
+      '你想了想人生的意义，没想明白，但焦虑翻倍了。',
+      '你开始算自己的时薪，然后不想算了。',
+      '你问了一个哲学问题，同事说"你是不是病了"。',
+      '你领悟到：想得越多，活得越短。'
+    ],
+    tag: '危险操作'
+  }
+];
+
+const EVENTS = [
+  {
+    id: 'boss-email', emoji: '📧',
+    text: '老板深夜发来邮件："明天的PPT改成……算了，你看到邮件再说。"',
+    effect: { anxiety: +20, spirit: -5 },
+    type: 'negative'
+  },
+  {
+    id: 'free-tea', emoji: '🧋',
+    text: '同事请了奶茶！你感动得差点哭出来，虽然只是因为凑单。',
+    effect: { spirit: +10, anxiety: -5 },
+    type: 'positive'
+  },
+  {
+    id: 'printer-revolt', emoji: '🖨',
+    text: '打印机卡纸了。你修了它，它喷了你一脸墨。你的存在感+1。',
+    effect: { health: -5, social: +5 },
+    type: 'negative'
+  },
+  {
+    id: 'fire-drill', emoji: '🚨',
+    text: '消防演习！所有人跑下楼，你发现……你是最后一个出来的。',
+    effect: { anxiety: +15, health: -3 },
+    type: 'negative'
+  },
+  {
+    id: 'wechat-explosion', emoji: '💬',
+    text: '微信群99+未读。你点开一看，全是"收到"和"好的"。',
+    effect: { anxiety: +10, social: -5 },
+    type: 'negative'
+  },
+  {
+    id: 'ceiling-leak', emoji: '💧',
+    text: '天花板漏水了！你工位上方的灯开始闪烁。气氛非常恐怖。',
+    effect: { health: -8, anxiety: +10 },
+    type: 'negative'
+  },
+  {
+    id: 'accidental-praise', emoji: '🌟',
+    text: '你在会议上不小心说了一句实话，老板居然夸了你。所有人都在看你。',
+    effect: { spirit: +15, social: +10, anxiety: +10 },
+    type: 'mixed'
+  },
+  {
+    id: 'lunch-roulette', emoji: '🍱',
+    text: '你点的外卖到了。打开一看……这是别人的。但你已经饿了。',
+    effect: { health: +5, spirit: -3 },
+    type: 'mixed'
+  },
+  {
+    id: 'ac-broken', emoji: '🥵',
+    text: '办公室空调坏了。25个人挤在一起，像一罐正在发酵的酸奶。',
+    effect: { health: -10, anxiety: +15, spirit: -10 },
+    type: 'negative'
+  },
+  {
+    id: 'dog-day', emoji: '🐕',
+    text: '同事带了狗来上班。你摸了狗，精神恢复。但狗不太想理你。',
+    effect: { spirit: +15, social: +5 },
+    type: 'positive'
+  }
+];
+
+const DEATHS = [
+  {
+    id: 'burnout',
+    condition: (s) => s.anxiety >= 100,
+    title: '过劳死',
+    emoji: '💀',
+    epitaphs: [
+      '此处安葬一只蜉蝣，它生前把PPT做得比命还长。',
+      '你倒在了工位上。同事以为你在午睡，直到下班才叫了120。',
+      '你的焦虑值爆表了。表没碎，你碎了。',
+      '你死了。钉钉上还显示你"在线"。'
+    ],
+    color: 'var(--neon-pink)'
+  },
+  {
+    id: 'loneliness',
+    condition: (s) => s.social <= 0,
+    title: '社孤死',
+    emoji: '🫥',
+    epitaphs: [
+      '你的社交值归零了。没有同事记得你的名字。',
+      '你悄悄地走了，正如你悄悄地来。连飞书都没弹出通知。',
+      '你发了一条朋友圈，没有一个人点赞。然后你就消失了。',
+      '你的工牌被回收了。好像从来没有人用过。'
+    ],
+    color: 'var(--neon-purple)'
+  },
+  {
+    id: 'breakdown',
+    condition: (s) => s.spirit <= 0,
+    title: '精神崩溃',
+    emoji: '🫠',
+    epitaphs: [
+      '你的精神值归零了。你看着Excel表格笑了一个小时，然后走了。',
+      '你终于理解了"活着就是为了加班"是个病句。',
+      '你在工位上冥想，结果灵魂出窍了。回不来了。',
+      '你的精神去了远方。身体还在开会。'
+    ],
+    color: 'var(--neon-orange)'
+  },
+  {
+    id: 'health-fail',
+    condition: (s) => s.health <= 0,
+    title: '身体罢工',
+    emoji: '🏥',
+    epitaphs: [
+      '你的健康值归零了。你最后的遗言是"这个需求我还没改完"。',
+      '你用健康换了KPI，KPI给你上了一炷香。',
+      '你的身体说：我不再服务了。你的钉钉说：请提交周报。',
+      '你走了。体检报告说一切正常。只是死了而已。'
+    ],
+    color: 'var(--neon-green)'
+  },
+  {
+    id: 'natural',
+    condition: (s) => s.timeLeft <= 0,
+    title: '寿终正寝',
+    emoji: '🌅',
+    epitaphs: [
+      '你的24小时用完了。你看着窗外的夕阳，觉得……也就这样吧。',
+      '你活了一整天。对于蜉蝣来说，这已经很了不起了。',
+      '时间到了。你的遗言是"明天见"——虽然没有明天。',
+      '你的寿命到了。最后一条朋友圈：[蜉蝣] 享年24小时。'
+    ],
+    color: 'var(--neon-yellow)'
+  },
+  {
+    id: 'nirvana',
+    condition: (s) => s.anxiety <= 0 && s.spirit >= 80,
+    title: '摸鱼成仙',
+    emoji: '🧘',
+    epitaphs: [
+      '你悟了。焦虑为零，精神满格。你化作一道光飞走了。',
+      '你通过摸鱼达到了人生巅峰。佛祖都给你点赞了。',
+      '你的焦虑归零了。没有人知道你是怎么做到的。包括你自己。',
+      '你成仙了。工位上只留下一件外套和一封辞职信。'
+    ],
+    color: 'var(--neon-cyan)'
+  }
+];
+
+const FAKE_NOTIFICATIONS = [
+  { app: '飞书', text: '您有 99+ 未读消息' },
+  { app: '钉钉', text: '请今日18:00前提交周报' },
+  { app: '微信', text: '老板在群里@了你' },
+  { app: '日历', text: '15分钟后有会议' },
+  { app: '飞书', text: '你的PPT被退回了' },
+  { app: '钉钉', text: '考勤异常提醒' },
+  { app: '邮箱', text: '一封标记为紧急的邮件' },
+  { app: '微信', text: '工作群正在讨论你的方案' },
+];
+
+const STATUS_TEXTS = {
+  low_anxiety: ['你感到一阵平静……不对劲', '你突然不焦虑了，这让你很焦虑', '空气中弥漫着摸鱼的气息'],
+  high_anxiety: ['手在抖……是咖啡喝多了吧', '你的心跳比PPT翻页还快', '焦虑到你开始整理桌面了'],
+  low_spirit: ['灵魂正在出窍中……99%', '你盯着屏幕，屏幕也盯着你', '你思考了一下人生，决定不思考了'],
+  high_spirit: ['今天状态不错！……吧？', '你莫名其妙地感到开心，一定有坏事要发生', '你的精神值很高，但不知道为什么'],
+  low_social: ['你开始自言自语了', '你的社交值比股市还低', '你决定和盆栽聊天'],
+  high_social: ['你是办公室的人气王！但没人想和你吃午饭', '社交达人！下一秒就是社死', '你的社交值很高，但都是表面功夫'],
+  low_health: ['你听到了自己骨骼的声音', '你的健康值正在抗议', '身体是革命的本钱，你的本钱快没了'],
+  default: ['你是一只蜉蝣，你确定吗？', '今天的你也很努力地活着', '你突然想喝奶茶', '你的TODO list比你的寿命还长']
+};
+
+// ========== 游戏状态 ==========
+
+let gameState = {
+  screen: 'title',
+  ...CORE.createRunState('mayfly'),
+  deathType: null,
+  currentCards: [],
+  progress: {
+    collectedPostcards: [],
+    collectedPersonalities: [],
+    totalRuns: 0,
+    legacyCards: []
+  },
+  unlockedChars: ['mayfly'],
+};
+let lastNextRunRecommendation = null;
+let pendingRunSetup = null;
+
+// ========== 初始化 ==========
+
+function init() {
+  loadProgress();
+  createFloatingGlyphs();
+  setupTitleScreen();
+  startFakeNotifications();
+}
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('mayfly-progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      gameState.progress = {
+        collectedPostcards: progress.collectedPostcards || [],
+        collectedPersonalities: progress.collectedPersonalities || [],
+        totalRuns: progress.totalRuns || 0,
+        legacyCards: progress.legacyCards || []
+      };
+      gameState.unlockedChars = progress.unlockedChars || ['mayfly'];
+      gameState.collectionTarget = progress.collectionTarget || null;
+      return;
+    }
+    const oldUnlocked = localStorage.getItem('mayfly-unlocked');
+    if (oldUnlocked) {
+      gameState.unlockedChars = JSON.parse(oldUnlocked);
+    }
+  } catch(e) {}
+}
+
+function saveProgress() {
+  try {
+    localStorage.setItem('mayfly-progress', JSON.stringify({
+      ...gameState.progress,
+      unlockedChars: gameState.unlockedChars,
+      collectionTarget: gameState.collectionTarget || null
+    }));
+    localStorage.setItem('mayfly-unlocked', JSON.stringify(gameState.unlockedChars));
+  } catch(e) {}
+}
+
+function isFirstRunProgress() {
+  return (gameState.progress && gameState.progress.totalRuns ? gameState.progress.totalRuns : 0) === 0;
+}
+
+function updateTitleControls() {
+  const collectionButton = document.getElementById('btn-collection-title');
+  if (collectionButton) {
+    collectionButton.style.display = isFirstRunProgress() ? 'none' : '';
+  }
+}
+
+// ========== 漂浮文字 ==========
+
+function createFloatingGlyphs() {
+  const glyphs = ['卷','忙','累','困','急','赶','死','卷','忙','卷','班','KPI','卷','加班','卷'];
+  const container = document.body;
+  glyphs.forEach((char, i) => {
+    const el = document.createElement('div');
+    el.className = 'floating-glyph';
+    el.textContent = char;
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDelay = (i * 2.5) + 's';
+    el.style.animationDuration = (15 + Math.random() * 15) + 's';
+    container.appendChild(el);
+  });
+}
+
+// ========== 假通知系统 ==========
+
+function startFakeNotifications() {
+  setInterval(() => {
+    if (gameState.screen !== 'game') return;
+    if (Math.random() > 0.3) return;
+    showFakeNotif();
+  }, 8000);
+}
+
+function showFakeNotif() {
+  const notif = FAKE_NOTIFICATIONS[Math.floor(Math.random() * FAKE_NOTIFICATIONS.length)];
+  const el = document.createElement('div');
+  el.className = 'fake-notif';
+  el.innerHTML = `<div class="notif-app">${notif.app}</div><div>${notif.text}</div>`;
+  document.body.appendChild(el);
+  gsap.to(el, { top: 16, duration: 0.5, ease: 'back.out(1.5)', onComplete: () => {
+    gsap.to(el, { opacity: 0, top: -80, duration: 0.5, delay: 2.5, onComplete: () => el.remove() });
+  }});
+}
+
+// ========== 屏幕切换 ==========
+
+function switchScreen(target) {
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById('screen-' + target);
+  if (!current || !next) return;
+
+  current.classList.remove('active');
+  current.style.opacity = '';
+  gameState.screen = target;
+  document.body.classList.toggle('first-run-mode', target === 'game' && Boolean(gameState.firstRun));
+  if (target !== 'game') {
+    document.body.classList.remove('world-glitch-warped', 'world-glitch-corrupted', 'world-glitch-stutter');
+  }
+  if (target === 'title') updateTitleControls();
+  next.classList.add('active');
+  gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+}
+
+// ========== 标题屏 ==========
+
+function setupTitleScreen() {
+  updateTitleControls();
+  // 标题glitch动画
+  const title = document.getElementById('title-text');
+  setInterval(() => {
+    title.classList.add('glitching');
+    setTimeout(() => title.classList.remove('glitching'), 300);
+  }, 4000);
+
+  // 入场动画
+  gsap.fromTo('#title-text', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.5)' });
+  gsap.fromTo('#title-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.4 });
+  gsap.fromTo('.title-slogan', { opacity: 0 }, { opacity: 0.5, duration: 0.6, delay: 0.8 });
+  gsap.fromTo('#btn-start', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, delay: 1.2, ease: 'back.out(2)' });
+
+  document.getElementById('btn-start').addEventListener('click', () => {
+    switchScreen('select');
+    setupSelectScreen();
+  });
+
+  document.getElementById('btn-collection-title').addEventListener('click', () => {
+    openCollectionScreen();
+  });
+}
+
+// ========== 收藏册 ==========
+
+function openCollectionScreen() {
+  renderCollectionScreen();
+  switchScreen('collection');
+}
+
+function renderCollectionScreen() {
+  const summary = CORE.buildCollectionSummary(gameState.progress);
+  const activeTarget = gameState.collectionTarget;
+  document.getElementById('collection-postcard-count').textContent = `${summary.postcardCount.collected}/${summary.postcardCount.total}`;
+  document.getElementById('collection-personality-count').textContent = `${summary.personalityCount.collected}/${summary.personalityCount.total}`;
+  document.getElementById('collection-legacy-count').textContent = String(summary.legacyCards.length);
+  document.getElementById('collection-target-note').textContent = activeTarget
+    ? `当前追踪：${activeTarget.target}。下一局系统会把相关麻烦优先递到你手边。`
+    : '未追踪任何结局线。点一个未归档人格，下一局会更容易遇到相关麻烦。';
+
+  document.getElementById('collection-postcards').innerHTML = summary.postcards.map((item) => `
+    <div class="collection-card ${item.collected ? '' : 'locked'}">
+      <div class="collection-emoji">${item.emoji}</div>
+      <div class="collection-name">${item.displayTitle}</div>
+      <div class="collection-meta">${item.collected ? item.rarity : 'LOCKED'}</div>
+      <div class="collection-desc">${item.displayText}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('collection-personalities').innerHTML = summary.personalities.map((item) => {
+    const chasing = activeTarget && activeTarget.kind === 'personality' && activeTarget.target === item.type;
+    return `
+    <div class="collection-card ${item.collected ? '' : 'locked'}">
+      <div class="collection-emoji">${item.collected ? '🧾' : '？'}</div>
+      <div class="collection-name">${item.displayType}</div>
+      <div class="collection-meta">${item.collected ? item.category : 'LOCKED'}</div>
+      <div class="collection-desc">${item.displayTagline}</div>
+      ${item.collected ? '' : `<button class="collection-chase ${chasing ? 'active' : ''}" data-kind="personality" data-target="${item.type}">${chasing ? '追踪中' : '追踪这条线'}</button>`}
+    </div>
+  `;
+  }).join('');
+
+  document.querySelectorAll('.collection-chase').forEach((button) => {
+    button.addEventListener('click', () => {
+      setCollectionTarget(button.dataset.kind, button.dataset.target);
+    });
+  });
+
+  document.getElementById('collection-legacies').innerHTML = summary.legacyCards.length
+    ? summary.legacyCards.map((item) => `
+      <div class="collection-card">
+        <div class="collection-emoji">${item.emoji || '🌀'}</div>
+        <div class="collection-name">${item.title}${item.stack > 1 ? ` ×${item.stack}` : ''}</div>
+        <div class="collection-meta">LEGACY</div>
+        <div class="collection-desc">${item.effectText || item.text || '这张遗产卡还没有写好说明。'}</div>
+      </div>
+    `).join('')
+    : '<div class="collection-empty">还没有遗产卡。先去认真死一次，系统才有东西可以归档。</div>';
+}
+
+function setCollectionTarget(kind, target) {
+  gameState.collectionTarget = { kind, target };
+  saveProgress();
+  renderCollectionScreen();
+}
+
+// ========== 角色选择 ==========
+
+function setupSelectScreen() {
+  const container = document.getElementById('char-cards');
+  container.innerHTML = '';
+
+  Object.values(CORE.CHARACTERS).forEach((char) => {
+    const locked = char.locked && !gameState.unlockedChars.includes(char.id);
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'char-card' + (locked ? ' locked' : '');
+    card.disabled = locked;
+    card.setAttribute('aria-label', locked ? `${char.name}暂未解锁` : `选择${char.name}`);
+    card.innerHTML = `
+      <div class="emoji">${char.emoji}</div>
+      <div class="name">${char.name}</div>
+      <div class="subtitle">${char.subtitle}</div>
+      <div class="desc">${char.description}</div>
+      <div class="stats-preview">
+        <span>精神${char.baseStats.spirit}</span>
+        <span>社交${char.baseStats.social}</span>
+        <span>健康${char.baseStats.health}</span>
+        <span>焦虑${char.baseStats.anxiety}</span>
+      </div>
+    `;
+    if (!locked) {
+      card.addEventListener('click', () => selectCharacter(char.id));
+    }
+    container.appendChild(card);
+  });
+
+  gsap.fromTo('.char-card', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.15, ease: 'back.out(1.5)' });
+}
+
+function selectCharacter(charId) {
+  const progress = gameState.progress;
+  const unlockedChars = gameState.unlockedChars;
+  const firstRun = isFirstRunProgress();
+  const collectionTarget = firstRun ? null : (gameState.collectionTarget || null);
+  const activeLegacyCards = firstRun ? [] : CORE.selectActiveLegacyCards(progress, 3);
+  pendingRunSetup = {
+    charId,
+    progress,
+    unlockedChars,
+    firstRun,
+    collectionTarget,
+    activeLegacyCards,
+    suggestedIntentId: lastNextRunRecommendation ? lastNextRunRecommendation.routeId : null
+  };
+  switchScreen('intent');
+  setupIntentScreen();
+}
+
+function setupIntentScreen() {
+  const container = document.getElementById('intent-cards');
+  const suggestedId = pendingRunSetup && pendingRunSetup.suggestedIntentId;
+  const firstRun = pendingRunSetup && pendingRunSetup.firstRun;
+  document.getElementById('intent-sub').textContent = firstRun
+    ? '第一局先选一种活法倾向。它会影响开局手牌，但不会提前决定你的死法。'
+    : '先定今天的死前目标。系统会把相关选择放到你手边，代价也会更准时地回来。';
+
+  container.innerHTML = CORE.RUN_INTENTS.map((intent) => `
+    <button class="intent-card ${intent.id === suggestedId ? 'recommended' : ''}" data-intent="${intent.id}" aria-label="选择${intent.title}">
+      <div class="intent-emoji">${intent.emoji}</div>
+      <div class="intent-name">${intent.title}</div>
+      <div class="intent-hook">${intent.hook}</div>
+      <div class="intent-risk">${intent.risk}</div>
+      <div class="intent-badge">${intent.id === suggestedId ? '系统建议' : '今日倾向'}</div>
+    </button>
+  `).join('');
+
+  container.querySelectorAll('.intent-card').forEach((button) => {
+    button.addEventListener('click', () => startRunWithIntent(button.dataset.intent));
+  });
+  gsap.fromTo('.intent-card', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.06 });
+}
+
+function startRunWithIntent(intentId) {
+  const setup = pendingRunSetup || {
+    charId: 'mayfly',
+    progress: gameState.progress,
+    unlockedChars: gameState.unlockedChars,
+    firstRun: isFirstRunProgress(),
+    collectionTarget: null,
+    activeLegacyCards: []
+  };
+  const baseRun = CORE.applyRunIntent({
+    ...CORE.createRunState(setup.charId),
+    collectionTarget: setup.collectionTarget,
+    firstRun: setup.firstRun
+  }, intentId);
+  const runState = CORE.applyLegacyCards(baseRun, setup.activeLegacyCards);
+  gameState = {
+    screen: gameState.screen,
+    ...runState,
+    deathType: null,
+    currentCards: [],
+    progress: setup.progress,
+    unlockedChars: setup.unlockedChars,
+    collectionTarget: runState.collectionTarget
+  };
+  pendingRunSetup = null;
+
+  switchScreen('game');
+  setupGameScreen();
+}
+
+// ========== 游戏主界面 ==========
+
+function setupGameScreen() {
+  const char = gameState.character;
+  document.getElementById('game-char-emoji').classList.toggle('anxious', gameState.stats.anxiety > 70);
+  document.getElementById('game-char-status').textContent = '你睁开了眼，世界好亮……';
+  document.getElementById('mentor-bubble').textContent = CORE.getMentorQuip(gameState, null);
+  const openingLines = gameState.firstRun
+    ? ['先别管收藏、遗产和终局。你只有一件事：选一张牌，把今天活明白。']
+    : ['今日目标会给你一点喘息，但不会替你做人。'];
+  if (!gameState.firstRun && (gameState.activeLegacyCards || []).length) {
+    openingLines.push(`上一世留下了 ${gameState.activeLegacyCards.length} 张遗产卡，系统假装这是公平开局。`);
+  }
+  if (!gameState.firstRun && gameState.collectionTarget) {
+    openingLines.push(`追踪结局线：${gameState.collectionTarget.target}。相关麻烦会更主动地找到你。`);
+  }
+  renderTurnFeed(openingLines);
+
+  renderChoiceCards();
+  renderGameUI();
+  gsap.fromTo('.mayfly-mascot', { scale: 0, rotation: -12 }, { scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(2)' });
+  gsap.fromTo('.activity-btn', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.08, delay: 0.3 });
+}
+
+function renderChoiceCards() {
+  const grid = document.getElementById('activity-grid');
+  const seed = Date.now() + Math.floor(Math.random() * 100000);
+  const choiceCount = CORE.getChoiceCountForRun(gameState, window.innerWidth || 1024);
+  const route = CORE.buildRouteStatus(gameState);
+  const firstRunSimple = gameState.firstRun && gameState.turnCount < 3;
+  gameState.currentCards = CORE.drawCardOptions(gameState, seed, choiceCount);
+  grid.innerHTML = '';
+
+  gameState.currentCards.forEach((card) => {
+    const btn = document.createElement('button');
+    const causalPreview = CORE.buildChoiceCausalPreview(gameState, card);
+    const firstRunGuide = CORE.buildFirstRunGuide(gameState, card);
+    const routeMatch = route.active && route.categories.includes(card.category);
+    const hint = (!gameState.firstRun && gameState.collectionTarget)
+      ? CORE.buildCardCollectionHint(card, gameState.progress)
+      : null;
+    const tracking = hint && gameState.collectionTarget
+      && hint.kind === gameState.collectionTarget.kind
+      && hint.target === gameState.collectionTarget.target;
+    const hintClasses = [
+      'act-collection-hint',
+      hint && hint.status === 'collected' ? 'collected' : '',
+      tracking ? 'tracking' : ''
+    ].filter(Boolean).join(' ');
+    const hintLabel = tracking ? '追踪中' : hint?.label;
+    btn.className = 'activity-btn';
+    const consequenceLine = causalPreview.callback
+      ? causalPreview.callback.text
+      : `${causalPreview.risk.label}：${causalPreview.risk.text}`;
+    const simpleLabel = causalPreview.risk.level === 'lethal' || causalPreview.risk.level === 'danger'
+      ? '危险但好笑'
+      : /焦虑-|精神\+|社交\+|健康\+/.test(causalPreview.immediate)
+        ? '稳一点'
+        : card.disruption >= 15
+          ? '搅一下'
+          : '试试看';
+    btn.innerHTML = firstRunSimple ? `
+      <div class="act-icon">${card.icon}</div>
+      <div class="act-simple-top">
+        <div class="act-name">${card.name}</div>
+        <div class="act-simple-label">${simpleLabel}</div>
+      </div>
+      <div class="act-quote">${card.quote}</div>
+      <div class="act-simple-result">
+        <strong>${causalPreview.immediate}</strong>
+        <span>${consequenceLine}</span>
+      </div>
+      ${firstRunGuide ? `
+        <div class="act-first-guide ${firstRunGuide.focus}">
+          <span>${firstRunGuide.tag}</span>
+          <strong>${firstRunGuide.title}</strong>
+          <em>${firstRunGuide.text}</em>
+        </div>
+      ` : ''}
+    ` : `
+      <div class="act-icon">${card.icon}</div>
+      <div class="act-name">${card.name}</div>
+      <div class="act-quote">${card.quote}</div>
+      <div class="act-cost ${causalPreview.routeModifier ? 'modified' : ''}">-${formatDuration(causalPreview.timeCost || card.cost.time)}${causalPreview.routeModifier ? ' · 路线改写' : ''}</div>
+      <div class="act-causal-preview">
+        <div class="act-causal-row">
+          <span>推进</span><strong>${causalPreview.routeTitle}${routeMatch ? ' · 偏向中' : ''}</strong>
+        </div>
+        <div class="act-causal-row">
+          <span>马上</span><strong>${causalPreview.immediate}</strong>
+        </div>
+        <div class="act-causal-row ${causalPreview.risk.level}">
+          <span>${causalPreview.callback ? '旧账' : '风险'}</span><strong>${causalPreview.callback ? causalPreview.callback.text : `${causalPreview.risk.label}：${causalPreview.risk.text}`}</strong>
+        </div>
+      </div>
+      ${causalPreview.routeModifier ? `
+        <div class="act-route-inertia">
+          <div class="inertia-head">
+            <strong class="inertia-label">${causalPreview.routeModifier.label || '路线惯性'}</strong>
+            <span class="inertia-detail">${causalPreview.routeModifier.detail || causalPreview.routeModifier.note}</span>
+          </div>
+          <div class="act-route-chips">${formatRouteModifierChips(causalPreview.routeModifier)}</div>
+        </div>
+      ` : ''}
+      ${causalPreview.npcWarning ? `
+        <div class="act-npc-warning">
+          <span>关系预警</span>${causalPreview.npcWarning.avatar} ${causalPreview.npcWarning.name} ${causalPreview.npcWarning.before}->${causalPreview.npcWarning.after}：${causalPreview.npcWarning.text}
+        </div>
+      ` : ''}
+      ${causalPreview.npcRelief ? `
+        <div class="act-npc-relief">
+          <span>关系降温</span>${causalPreview.npcRelief.avatar} ${causalPreview.npcRelief.name} ${causalPreview.npcRelief.before}->${causalPreview.npcRelief.after}：${causalPreview.npcRelief.text}
+        </div>
+      ` : ''}
+      <div class="act-effects">${formatCardEffects(card, causalPreview)}</div>
+      ${hint ? `<div class="${hintClasses}">${hintLabel}：${hint.text}</div>` : ''}
+      <div class="act-tag">${card.tag}</div>
+    `;
+    btn.addEventListener('click', () => executeTurn(card.id));
+    grid.appendChild(btn);
+  });
+}
+
+function formatDuration(hours) {
+  const minutes = Math.max(1, Math.round(hours * 60));
+  const wholeHours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  if (!wholeHours) return `${minutes}m`;
+  if (!rest) return `${wholeHours}h`;
+  return `${wholeHours}h${rest}m`;
+}
+
+function formatCardEffects(card, causalPreview) {
+  const names = CORE.STAT_NAMES;
+  const statTags = Object.keys(card.effect || {}).map((key) => {
+    const val = card.effect[key];
+    const good = key === 'anxiety' ? val < 0 : val > 0;
+    return `<span class="${good ? 'positive' : 'negative'}">${names[key]} ${val > 0 ? '+' : ''}${val}</span>`;
+  });
+  if (card.disruption) {
+    statTags.push(`<span class="disrupt advanced-effect">搅局 ${card.disruption > 0 ? '+' : ''}${card.disruption}</span>`);
+  }
+  if (card.absurdDebt) {
+    const cls = card.absurdDebt > 0 ? 'negative' : 'positive';
+    statTags.push(`<span class="${cls} advanced-effect">荒诞债 ${card.absurdDebt > 0 ? '+' : ''}${card.absurdDebt}</span>`);
+  }
+  return statTags.join('');
+}
+
+function formatRouteModifierChips(modifier) {
+  const names = CORE.STAT_NAMES;
+  const chips = [];
+  if (modifier.timeDelta) {
+    const label = modifier.timeDelta < 0 ? '省' : '多耗';
+    chips.push(`${label}${formatDuration(Math.abs(modifier.timeDelta))}`);
+  }
+  Object.keys(modifier.effect || {}).forEach((key) => {
+    const val = modifier.effect[key];
+    chips.push(`${names[key]}${val > 0 ? '+' : ''}${val}`);
+  });
+  if (modifier.disruption) chips.push(`搅局${modifier.disruption > 0 ? '+' : ''}${modifier.disruption}`);
+  if (modifier.absurdDebt) chips.push(`荒诞债${modifier.absurdDebt > 0 ? '+' : ''}${modifier.absurdDebt}`);
+  return chips.map((chip) => `<span>${chip}</span>`).join('');
+}
+
+function renderGameUI() {
+  const s = gameState.stats;
+  document.body.classList.toggle('first-run-mode', gameState.screen === 'game' && Boolean(gameState.firstRun));
+
+  // 时间
+  document.getElementById('hud-time').textContent = CORE.formatCountdown(gameState.timeLeft);
+  document.getElementById('hud-turn').textContent = `${CORE.formatLifeAge(gameState)} / 第${gameState.turnCount}次选择`;
+  renderPhasePanel();
+  renderObjectivePanel();
+  renderWorldGlitchPanel();
+  renderDeathRescuePanel();
+  renderRoutePanel();
+  renderNpcPanel();
+  renderConsequencePanel();
+  renderTargetTrackerPanel();
+  renderGoalPanel();
+  renderLegacyPanel();
+
+  // 属性条
+  ['spirit', 'social', 'health', 'anxiety'].forEach(key => {
+    const val = Math.max(0, Math.min(100, s[key]));
+    const bar = document.getElementById('bar-' + key);
+    const valEl = document.getElementById('val-' + key);
+    bar.style.width = val + '%';
+    valEl.textContent = val;
+
+    // 焦虑高时抖动
+    if (key === 'anxiety') {
+      bar.classList.toggle('anxiety-high', val > 70);
+    }
+  });
+
+  const disruptionVal = Math.max(0, Math.min(999, gameState.disruption || 0));
+  document.getElementById('bar-disruption').style.width = Math.min(100, disruptionVal / 1.5) + '%';
+  document.getElementById('val-disruption').textContent = disruptionVal;
+
+  const debtVal = Math.max(0, Math.min(100, gameState.absurdDebt || 0));
+  document.getElementById('bar-absurdDebt').style.width = debtVal + '%';
+  document.getElementById('val-absurdDebt').textContent = debtVal;
+
+  // 焦虑警告
+  const warning = document.getElementById('anxiety-warning');
+  warning.classList.toggle('active', s.anxiety > 70);
+  document.getElementById('game-char-emoji').classList.toggle('anxious', s.anxiety > 70);
+
+  // 屏幕撕裂（时间<4h）
+  document.body.classList.toggle('screen-tear', gameState.timeLeft <= 4);
+
+  // 时间条颜色变化
+  const timeEl = document.getElementById('hud-time');
+  if (gameState.timeLeft <= 4) {
+    timeEl.style.color = 'var(--neon-pink)';
+    timeEl.style.textShadow = '0 0 10px var(--neon-pink)';
+  } else if (gameState.timeLeft <= 8) {
+    timeEl.style.color = 'var(--neon-orange)';
+    timeEl.style.textShadow = '0 0 8px var(--neon-orange)';
+  } else {
+    timeEl.style.color = 'var(--neon-yellow)';
+    timeEl.style.textShadow = '0 0 8px rgba(254,228,64,0.4)';
+  }
+}
+
+function renderPhasePanel() {
+  const phase = CORE.getLifePhase(gameState);
+  const limit = gameState.character && gameState.character.timeLimit ? gameState.character.timeLimit : 24;
+  const progress = Math.max(0, Math.min(100, ((limit - gameState.timeLeft) / limit) * 100));
+  document.getElementById('phase-title').textContent = phase.title;
+  document.getElementById('phase-desc').textContent = phase.subtitle;
+  document.getElementById('phase-clock').textContent = CORE.formatLifeAge(gameState);
+  document.getElementById('phase-fill').style.width = `${progress}%`;
+}
+
+function renderObjectivePanel() {
+  const brief = CORE.buildRunObjectiveBrief(gameState);
+  document.getElementById('objective-title').textContent = brief.title;
+  document.getElementById('objective-tag').textContent = brief.tag;
+  document.getElementById('objective-copy').textContent = brief.premise;
+  document.getElementById('objective-steps').innerHTML = brief.steps
+    .map((step) => `<div class="objective-step">${step}</div>`)
+    .join('');
+  document.getElementById('objective-chips').innerHTML = brief.chips
+    .map((chip) => `<div class="objective-chip"><strong>${chip.label}</strong>${chip.text}</div>`)
+    .join('');
+  const pulse = brief.pulse;
+  const pulseEl = document.getElementById('objective-pulse');
+  pulseEl.className = `objective-pulse${pulse ? ` active ${pulse.tone}` : ''}`;
+  if (pulse) {
+    document.getElementById('objective-pulse-title').textContent = pulse.title;
+    document.getElementById('objective-pulse-tag').textContent = pulse.tag;
+    document.getElementById('objective-pulse-copy').textContent = pulse.text;
+  }
+}
+
+function renderWorldGlitchPanel() {
+  const glitch = CORE.buildWorldGlitches(gameState);
+  const panel = document.getElementById('world-glitch-panel');
+  const bodyClasses = ['world-glitch-warped', 'world-glitch-corrupted', 'world-glitch-stutter'];
+
+  bodyClasses.forEach((name) => document.body.classList.remove(name));
+  panel.classList.toggle('active', glitch.active);
+  if (glitch.active) document.body.classList.add(glitch.className);
+  document.getElementById('world-glitch-title').textContent = glitch.title;
+  document.getElementById('world-glitch-tag').textContent = glitch.hudLabel;
+  document.getElementById('world-glitch-copy').textContent = glitch.text;
+}
+
+function renderRoutePanel() {
+  const route = CORE.buildRouteStatus(gameState);
+  const panel = document.getElementById('route-panel');
+  const pressureLeft = route.active && route.pressureAt
+    ? Math.max(0, route.pressureAt - route.count)
+    : null;
+  const pressureText = route.active && route.pressureAt
+    ? pressureLeft > 0
+      ? `路线回访：再${pressureLeft}次同路选择会挂账`
+      : '路线回访：旧账已开始排队'
+    : '';
+  panel.classList.toggle('active', route.active);
+  document.getElementById('route-title').textContent = route.title;
+  document.getElementById('route-tag').textContent = route.active ? `${route.count}/${route.threshold} 已偏航` : `${route.count}/${route.threshold} 路线未定`;
+  document.getElementById('route-copy').textContent = route.hook;
+  document.getElementById('route-risk').textContent = route.active
+    ? `风险：${route.risk} / 偏向：${route.perk} / ${pressureText}`
+    : route.risk;
+}
+
+function renderDeathRescuePanel() {
+  const status = CORE.buildDeathRescueStatus(gameState);
+  const panel = document.getElementById('rescue-panel');
+  panel.classList.toggle('ready', status.tone === 'ready');
+  panel.classList.toggle('spent', status.tone === 'spent');
+  document.getElementById('rescue-title').textContent = status.title;
+  document.getElementById('rescue-tag').textContent = status.tag;
+  document.getElementById('rescue-copy').textContent = status.text;
+}
+
+function renderNpcPanel() {
+  const status = CORE.buildNpcRelationshipStatus(gameState);
+  document.getElementById('npc-hot-count').textContent = `${status.hotCount} HOT`;
+  document.getElementById('npc-summary').textContent = status.summary;
+  document.getElementById('npc-list').innerHTML = status.items.map((item) => {
+    const pct = Math.max(0, Math.min(100, item.fill));
+    const levelLabel = {
+      hot: '过热',
+      warm: '升温',
+      cold: '冷却',
+      stable: '稳定'
+    }[item.level] || item.level;
+    return `
+      <div class="npc-item ${item.level}">
+        <div class="npc-item-top">
+          <span>${item.avatar} ${item.name}</span>
+          <span class="npc-level">${levelLabel} ${item.value}</span>
+        </div>
+        <div class="npc-meter"><div class="npc-meter-fill" style="width: ${pct}%;"></div></div>
+        <div class="npc-warning">${item.warning}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderGoalPanel() {
+  const goals = CORE.buildRunGoals(gameState);
+  const done = goals.filter((goal) => goal.complete).length;
+  document.getElementById('goal-count').textContent = `${done}/${goals.length}`;
+  document.getElementById('goal-list').innerHTML = goals.map((goal) => {
+    const pct = Math.max(0, Math.min(100, (goal.progress / goal.target) * 100));
+    return `
+      <div class="goal-item ${goal.complete ? 'complete' : ''}">
+        <div>
+          <div class="goal-label">${goal.complete ? '✓ ' : ''}${goal.label}</div>
+          <div class="goal-reward">${goal.reward}</div>
+          <div class="goal-meter"><div class="goal-meter-fill" style="width: ${pct}%;"></div></div>
+        </div>
+        <div class="goal-progress">${goal.progress}/${goal.target}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderConsequencePanel() {
+  const items = gameState.pendingConsequences || [];
+  const panel = document.getElementById('consequence-panel');
+  panel.classList.toggle('active', items.length > 0);
+  document.getElementById('consequence-count').textContent = String(items.length);
+  document.getElementById('consequence-list').innerHTML = items.map((item) => {
+    const turnsLeft = Math.max(0, item.dueTurn - gameState.turnCount);
+    const risk = CORE.buildConsequenceRisk(gameState, item);
+    return `
+      <div class="consequence-item">
+        <div class="consequence-turn">${turnsLeft || 'NOW'}回合</div>
+        <div>
+          <div class="consequence-source">${item.sourceCardName || '因果回收站'}</div>
+          <div class="consequence-risk ${risk.level}">${risk.label}：${risk.reason}</div>
+          <div class="consequence-preview">${item.preview || item.text}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTargetTrackerPanel() {
+  if (gameState.firstRun) {
+    document.getElementById('target-tracker-panel').classList.remove('active');
+    return;
+  }
+  const tracker = CORE.buildCollectionTargetTracker(gameState, gameState.progress);
+  const panel = document.getElementById('target-tracker-panel');
+  panel.classList.toggle('active', Boolean(tracker));
+  if (!tracker) return;
+
+  document.getElementById('target-progress').textContent = `${tracker.completed}/${tracker.total}`;
+  document.getElementById('target-title').textContent = tracker.title;
+  document.getElementById('target-hook').textContent = tracker.hook;
+  document.getElementById('target-next').textContent = tracker.nextText;
+  document.getElementById('target-steps').innerHTML = tracker.steps.map((step, index) => {
+    const dot = step.status === 'complete' ? '✓' : step.status === 'pending' ? '…' : String(index + 1);
+    return `
+      <div class="target-step ${step.status}">
+        <span class="target-step-dot">${dot}</span>
+        <span>${step.label}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderLegacyPanel() {
+  const cards = gameState.activeLegacyCards || [];
+  const panel = document.getElementById('legacy-panel');
+  panel.classList.toggle('empty', cards.length === 0);
+  document.getElementById('legacy-count').textContent = `${cards.length}/3`;
+  document.getElementById('legacy-list').innerHTML = cards.map((card) => `
+    <div class="legacy-card">
+      <div class="legacy-title">${card.emoji || '🌀'} ${card.title}${card.stack > 1 ? ` ×${card.stack}` : ''}</div>
+      <div class="legacy-effect">${card.effectText || ''}</div>
+      <div class="legacy-stack">LEGACY</div>
+    </div>
+  `).join('');
+}
+
+function renderTurnFeed(lines) {
+  document.getElementById('turn-feed').innerHTML = lines
+    .map((line, index) => `<div class="turn-feed-line" data-panel="${String(index + 1).padStart(2, '0')}">${line}</div>`)
+    .join('');
+}
+
+// ========== 核心游戏循环 ==========
+
+function executeTurn(activityId) {
+  const card = gameState.currentCards.find(a => a.id === activityId);
+  if (!card) return;
+
+  // 禁用按钮防连点
+  document.querySelectorAll('.activity-btn').forEach(b => b.disabled = true);
+
+  const previousState = gameState;
+  gameState = CORE.applyCard(gameState, card);
+  document.getElementById('game-char-status').textContent = card.quote;
+  document.getElementById('mentor-bubble').textContent = CORE.getMentorQuip(gameState, card);
+  renderTurnFeed(CORE.buildTurnFeedback(previousState, card, gameState));
+
+  // 5. 动画
+  gsap.fromTo('#game-char-emoji', { scale: 1.3 }, { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.5)' });
+  gsap.fromTo('.char-status', { opacity: 0, y: 10 }, { opacity: 0.7, y: 0, duration: 0.3 });
+  gsap.fromTo('#mentor-bubble', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25 });
+  gsap.fromTo('.turn-feed-line', { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.25, stagger: 0.05 });
+
+  // 6. 检查死亡
+  renderGameUI();
+  const death = CORE.checkDeath(gameState);
+  if (death) {
+    setTimeout(() => handleDeathOrRescue(death, continueAfterImmediateSurvival), 800);
+    return;
+  }
+
+  continueAfterImmediateSurvival();
+}
+
+function continueAfterImmediateSurvival() {
+  const dueConsequences = CORE.getDueConsequences(gameState);
+  if (dueConsequences.length) {
+    renderGameUI();
+    setTimeout(() => {
+      showConsequenceResponseQueue(() => {
+        renderGameUI();
+        renderChoiceCards();
+        enableButtons();
+      });
+    }, 600);
+    return;
+  }
+
+  continueAfterTurn();
+}
+
+function continueAfterTurn() {
+  const phase = CORE.getLifePhase(gameState);
+  const baseEventChance = gameState.timeLeft <= 4 ? Math.max(0.65, phase.eventChance) : phase.eventChance;
+  const eventChance = CORE.getRandomEventChance(gameState, baseEventChance);
+  if (Math.random() < eventChance) {
+    setTimeout(() => {
+      const event = CORE.pickRandomEvent(gameState, Math.floor(Math.random() * 100000));
+      if (event) showEvent(event, () => {
+        renderGameUI();
+        renderChoiceCards();
+        enableButtons();
+      });
+    }, 600);
+  } else {
+    renderGameUI();
+    renderChoiceCards();
+    setTimeout(enableButtons, 400);
+  }
+}
+
+function applyStats(effect) {
+  Object.keys(effect).forEach(key => {
+    if (gameState.stats[key] !== undefined) {
+      gameState.stats[key] = Math.max(0, Math.min(100, gameState.stats[key] + effect[key]));
+    }
+  });
+}
+
+function enableButtons() {
+  document.querySelectorAll('.activity-btn').forEach(b => b.disabled = false);
+}
+
+function checkDeath() {
+  return CORE.checkDeath(gameState);
+}
+
+// ========== 事件系统 ==========
+
+function pickRandomEvent() {
+  const available = EVENTS.filter(e => !gameState.usedEvents.includes(e.id));
+  if (available.length === 0) {
+    gameState.usedEvents = [];
+    return EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  }
+  const event = available[Math.floor(Math.random() * available.length)];
+  gameState.usedEvents.push(event.id);
+  return event;
+}
+
+function renderEventEffect(event, risk) {
+  const effectEl = document.getElementById('ev-effect');
+  effectEl.innerHTML = '';
+  Object.keys(event.effect || {}).forEach(key => {
+    const val = event.effect[key];
+    const names = CORE.STAT_NAMES;
+    const cls = val > 0 ? (key === 'anxiety' ? 'neg' : 'pos') : (key === 'anxiety' ? 'pos' : 'neg');
+    effectEl.innerHTML += `<span class="${cls}">${names[key]} ${val > 0 ? '+' : ''}${val}</span>`;
+  });
+  if (event.disruption) {
+    effectEl.innerHTML += `<span class="pos">搅局 ${event.disruption > 0 ? '+' : ''}${event.disruption}</span>`;
+  }
+  if (event.absurdDebt) {
+    const cls = event.absurdDebt > 0 ? 'neg' : 'pos';
+    effectEl.innerHTML += `<span class="${cls}">荒诞债 ${event.absurdDebt > 0 ? '+' : ''}${event.absurdDebt}</span>`;
+  }
+  if (event.timeCost) {
+    effectEl.innerHTML += `<span class="neg">寿命 -${formatDuration(event.timeCost)}</span>`;
+  }
+  if (risk) {
+    const cls = risk.level === 'lethal' ? 'neg' : risk.level === 'danger' ? 'warn' : 'pos';
+    effectEl.innerHTML += `<span class="${cls}">${risk.label}：${risk.reason}</span>`;
+  }
+}
+
+function formatRescueEffects(option) {
+  const names = CORE.STAT_NAMES;
+  const chips = [];
+  Object.keys(option.effect || {}).forEach((key) => {
+    const val = option.effect[key];
+    if (!val) return;
+    chips.push(`${names[key]} ${val > 0 ? '+' : ''}${val}`);
+  });
+  if (option.timeDelta) {
+    chips.push(`寿命 ${option.timeDelta > 0 ? '+' : '-'}${formatDuration(Math.abs(option.timeDelta))}`);
+  }
+  if (option.disruption) chips.push(`搅局 ${option.disruption > 0 ? '+' : ''}${option.disruption}`);
+  if (option.absurdDebt) chips.push(`荒诞债 ${option.absurdDebt > 0 ? '+' : ''}${option.absurdDebt}`);
+  return chips.join(' / ');
+}
+
+function renderDeathRescueEffect(death, options) {
+  const effectEl = document.getElementById('ev-effect');
+  const reason = options[0] ? options[0].reason : death.title;
+  effectEl.innerHTML = `
+    <span class="neg">死因预警：${death.title}</span>
+    <span class="warn">${reason}</span>
+    <span class="pos">临终抢救：本局仅一次</span>
+  `;
+}
+
+function showEventQueue(events, callback) {
+  const [event, ...rest] = events;
+  if (!event) {
+    if (callback) callback();
+    return;
+  }
+  showEvent(event, () => showEventQueue(rest, callback), { alreadyApplied: true });
+}
+
+function showConsequenceResponseQueue(callback) {
+  const [event] = CORE.getDueConsequences(gameState);
+  if (!event) {
+    if (callback) callback();
+    return;
+  }
+  showConsequenceResponse(event, () => showConsequenceResponseQueue(callback));
+}
+
+function showConsequenceResponse(event, callback) {
+  const overlay = document.getElementById('event-overlay');
+  const cardEl = overlay.querySelector('.event-card');
+  const closeButton = document.getElementById('ev-close');
+  const responsesEl = document.getElementById('ev-responses');
+  const responses = CORE.buildConsequenceResponses(gameState, event);
+  cardEl.classList.remove('death-rescue');
+  closeButton.textContent = '好吧……';
+
+  document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
+  document.getElementById('ev-emoji').textContent = event.emoji || '🧾';
+  document.getElementById('ev-text').textContent = /回访：/.test(event.text)
+    ? event.text
+    : `后果回访：${event.text}`;
+  renderEventEffect(event, CORE.buildConsequenceRisk(gameState, event));
+
+  closeButton.style.display = 'none';
+  responsesEl.style.display = 'grid';
+  responsesEl.innerHTML = responses.map((response) => `
+    <button class="ev-response" type="button" data-response="${response.id}">
+      <span class="ev-response-title">${response.title}</span>
+      <span class="ev-response-text">${response.text}</span>
+    </button>
+  `).join('');
+
+  overlay.classList.add('active');
+  gsap.fromTo('.event-card', { y: 80, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' });
+
+  responsesEl.querySelectorAll('.ev-response').forEach((button) => {
+    button.addEventListener('click', () => {
+      const response = responses.find((item) => item.id === button.dataset.response) || responses[0];
+      responsesEl.querySelectorAll('.ev-response').forEach((item) => { item.disabled = true; });
+      gameState = CORE.resolveConsequenceResponse(gameState, event, response.id);
+      renderGameUI();
+      renderTurnFeed([
+        `旧账回访：${event.sourceCardName || event.preview || '一笔没结清的因果'}终于找上门。`,
+        `你的应对：${response.title}。${response.text}`,
+        CORE.checkDeath(gameState) ? '系统提示：这次应对没能救下你。' : '系统提示：旧账已结算，但它会在下一世留下口供。'
+      ]);
+
+      gsap.to('.event-card', { y: 80, opacity: 0, duration: 0.3, onComplete: () => {
+        overlay.classList.remove('active');
+        responsesEl.style.display = 'none';
+        responsesEl.innerHTML = '';
+        closeButton.style.display = '';
+        const death = CORE.checkDeath(gameState);
+        if (death) {
+          handleDeathOrRescue(death, callback);
+          return;
+        }
+        if (callback) callback();
+      }});
+    });
+  });
+}
+
+function showEvent(event, callback, options = {}) {
+  const overlay = document.getElementById('event-overlay');
+  const cardEl = overlay.querySelector('.event-card');
+  const closeButton = document.getElementById('ev-close');
+  const responsesEl = document.getElementById('ev-responses');
+  cardEl.classList.remove('death-rescue');
+  closeButton.textContent = '好吧……';
+  document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
+  document.getElementById('ev-emoji').textContent = event.emoji || '📧';
+  document.getElementById('ev-text').textContent = event.text;
+  closeButton.style.display = '';
+  responsesEl.style.display = 'none';
+  responsesEl.innerHTML = '';
+  renderEventEffect(event);
+
+  overlay.classList.add('active');
+  gsap.fromTo('.event-card', { y: 80, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' });
+
+  // 应用效果
+  if (!options.alreadyApplied) {
+    gameState = CORE.applyEvent(gameState, event);
+  }
+
+  closeButton.onclick = () => {
+    gsap.to('.event-card', { y: 80, opacity: 0, duration: 0.3, onComplete: () => {
+      overlay.classList.remove('active');
+      const death = CORE.checkDeath(gameState);
+      if (death) {
+        handleDeathOrRescue(death, callback);
+        return;
+      }
+      if (callback) callback();
+    }});
+  };
+}
+
+// ========== 死亡系统 ==========
+
+function handleDeathOrRescue(death, onRescued) {
+  const options = CORE.buildDeathRescueOptions(gameState, death);
+  if (!options.length) {
+    triggerDeath(death);
+    return;
+  }
+  showDeathRescue(death, options, onRescued);
+}
+
+function showDeathRescue(death, options, onRescued) {
+  const overlay = document.getElementById('event-overlay');
+  const cardEl = overlay.querySelector('.event-card');
+  const closeButton = document.getElementById('ev-close');
+  const responsesEl = document.getElementById('ev-responses');
+
+  cardEl.classList.add('death-rescue');
+  document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
+  document.getElementById('ev-emoji').textContent = '🚨';
+  document.getElementById('ev-text').textContent = `临终抢救：${death.title}。系统已经把死亡申请提交到审批流，你还有一次把它改成“待处理”的机会。`;
+  renderDeathRescueEffect(death, options);
+
+  closeButton.style.display = '';
+  closeButton.textContent = '放弃抢救';
+  responsesEl.style.display = 'grid';
+  responsesEl.innerHTML = options.map((option) => `
+    <button class="ev-response" type="button" data-rescue="${option.id}">
+      <span class="ev-response-title">${option.title}</span>
+      <span class="ev-response-text">${option.text}<br>${formatRescueEffects(option)}</span>
+    </button>
+  `).join('');
+
+  overlay.classList.add('active');
+  gsap.fromTo('.event-card', { y: 80, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' });
+
+  closeButton.onclick = () => {
+    gsap.to('.event-card', { y: 80, opacity: 0, duration: 0.3, onComplete: () => {
+      overlay.classList.remove('active');
+      cardEl.classList.remove('death-rescue');
+      closeButton.textContent = '好吧……';
+      triggerDeath(death);
+    }});
+  };
+
+  responsesEl.querySelectorAll('.ev-response').forEach((button) => {
+    button.addEventListener('click', () => {
+      const option = options.find((item) => item.id === button.dataset.rescue) || options[0];
+      responsesEl.querySelectorAll('.ev-response').forEach((item) => { item.disabled = true; });
+      gameState = CORE.resolveDeathRescueOption(gameState, death, option.id);
+      renderGameUI();
+      renderTurnFeed([
+        `临终抢救：${death.title}已经贴到你脸上。`,
+        `你的选择：${option.title}。${option.text}`,
+        CORE.checkDeath(gameState) ? '系统提示：抢救失败，死亡审批已通过。' : '系统提示：死亡被改成待处理，但本局不会再给第二次机会。'
+      ]);
+
+      gsap.to('.event-card', { y: 80, opacity: 0, duration: 0.3, onComplete: () => {
+        overlay.classList.remove('active');
+        cardEl.classList.remove('death-rescue');
+        responsesEl.style.display = 'none';
+        responsesEl.innerHTML = '';
+        closeButton.textContent = '好吧……';
+        const stillDeath = CORE.checkDeath(gameState);
+        if (stillDeath) {
+          triggerDeath(stillDeath);
+          return;
+        }
+        if (onRescued) onRescued();
+      }});
+    });
+  });
+}
+
+function triggerDeath(death) {
+  gameState.deathType = death;
+  const postcard = CORE.buildDeathPostcard(gameState, death);
+  const explanation = CORE.buildDeathExplanation(gameState, death);
+  const report = CORE.buildPersonalityReport(gameState);
+  const ledger = CORE.buildCausalityLedger(gameState);
+  const memorial = CORE.buildMemorialComments(gameState, report);
+  const legacyCard = CORE.buildLegacyCard(postcard, report);
+
+  // 角色解锁
+  if (death.id !== 'natural' || gameState.turnCount >= 3 || gameState.disruption >= 50) {
+    if (!gameState.unlockedChars.includes('mosquito')) {
+      gameState.unlockedChars.push('mosquito');
+    }
+  }
+  recordProgress(postcard, report, legacyCard);
+  saveProgress();
+
+  switchScreen('death');
+  setTimeout(() => playDeathAnimation(postcard, explanation, report, ledger, memorial, legacyCard), 300);
+}
+
+function recordProgress(postcard, report, legacyCard) {
+  let progress = gameState.progress;
+  progress.totalRuns += 1;
+  if (!progress.collectedPostcards.includes(postcard.id)) {
+    progress.collectedPostcards.push(postcard.id);
+  }
+  if (!progress.collectedPersonalities.includes(report.type)) {
+    progress.collectedPersonalities.push(report.type);
+  }
+  progress = CORE.mergeLegacyCard(progress, legacyCard);
+  gameState.progress = progress;
+}
+
+function playDeathAnimation(postcard, explanation, report, ledger, memorial, legacyCard) {
+  document.getElementById('death-emoji').textContent = postcard.emoji;
+  document.getElementById('death-title').textContent = postcard.title;
+  document.getElementById('death-title').style.color = postcard.color;
+  document.getElementById('death-rarity').textContent = postcard.rarity;
+  document.getElementById('death-rarity').style.color = postcard.color;
+  document.getElementById('death-epitaph').textContent = postcard.epitaph;
+  document.getElementById('death-epitaph').style.borderColor = postcard.color;
+  document.getElementById('death-epitaph').style.color = postcard.color;
+  document.getElementById('death-explain-summary').textContent = explanation.summary;
+  const fatalBillEl = document.getElementById('death-fatal-bill');
+  fatalBillEl.style.display = explanation.fatalBill ? 'grid' : 'none';
+  fatalBillEl.innerHTML = explanation.fatalBill
+    ? `
+      <div class="death-fatal-title">致命账单：${explanation.fatalBill.metric}</div>
+      ${explanation.fatalBill.contributors.map((item) => `
+        <div class="death-fatal-row">
+          <span>#${item.turn}</span>
+          <strong>${item.title}</strong>
+          <span class="death-fatal-delta">${item.beforeText} ${item.deltaText} -> ${item.afterText}</span>
+        </div>
+      `).join('')}
+    `
+    : '';
+  const receiptEl = document.getElementById('death-receipt');
+  receiptEl.style.display = explanation.receipt ? 'grid' : 'none';
+  receiptEl.innerHTML = explanation.receipt
+    ? `
+      <div class="death-receipt-title">${explanation.receipt.title}</div>
+      ${explanation.receipt.rows.map((item) => `
+        <div class="death-receipt-row">
+          <strong>${item.label}</strong>
+          <span>${item.text}</span>
+        </div>
+      `).join('')}
+    `
+    : '';
+  document.getElementById('death-explain-chain').innerHTML = explanation.chain.length
+    ? explanation.chain.map((item) => `
+      <div class="death-explain-step">
+        <div class="death-explain-turn">#${item.turn}</div>
+        <div>${item.title}</div>
+      </div>
+    `).join('')
+    : '<div class="death-explain-step"><div class="death-explain-turn">--</div><div>系统没有记录到足够证据，这本身也很像人生。</div></div>';
+
+  // 统计回顾
+  const statsEl = document.getElementById('death-stats');
+  statsEl.innerHTML = `
+    <span>存活 ${postcard.turns} 回合</span>
+    <span>剩余 ${CORE.formatCountdown(postcard.timeLeft)}</span>
+    <span>搅局 ${postcard.disruption}</span>
+    <span>荒诞债 ${postcard.absurdDebt}</span>
+  `;
+
+  // 检查是否新解锁
+  if (gameState.unlockedChars.includes('mosquito') && gameState.character.id === 'mayfly') {
+    statsEl.innerHTML += `<span style="color: var(--neon-green);">🔓 解锁新角色：蚊子!</span>`;
+  }
+
+  const collectionEl = document.getElementById('death-collection');
+  const progress = gameState.progress || {};
+  const summary = CORE.buildCollectionSummary(progress);
+  collectionEl.innerHTML = `
+    <span>明信片 ${summary.postcardCount.collected}/${summary.postcardCount.total}</span>
+    <span>人格 ${summary.personalityCount.collected}/${summary.personalityCount.total}</span>
+    <span>遗产 ${(progress.legacyCards || []).length}</span>
+  `;
+
+  document.getElementById('death-legacy-emoji').textContent = legacyCard.emoji || '🌀';
+  document.getElementById('death-legacy-name').textContent = `${legacyCard.title}${legacyCard.stack > 1 ? ` ×${legacyCard.stack}` : ''}`;
+  document.getElementById('death-legacy-text').textContent = legacyCard.text;
+  document.getElementById('death-legacy-effect').textContent = legacyCard.effectText;
+
+  const recommendation = CORE.buildNextRunRecommendation(gameState, gameState.deathType, report);
+  lastNextRunRecommendation = recommendation;
+  const seedCardNames = recommendation.seedCards
+    .map((id) => CORE.ACTION_CARDS.find((card) => card.id === id))
+    .filter(Boolean)
+    .map((card) => card.name);
+  document.getElementById('death-next-title').textContent = recommendation.title;
+  document.getElementById('death-next-text').textContent = recommendation.text;
+  document.getElementById('death-next-risk').textContent = `路线风险：${recommendation.risk}`;
+  document.getElementById('death-next-cards').innerHTML = seedCardNames
+    .map((name) => `<span>${name}</span>`)
+    .join('');
+  document.getElementById('btn-retry').textContent = recommendation.actionLabel;
+
+  document.getElementById('personality-title').textContent = `蜉蝣人格：${report.type}`;
+  document.getElementById('personality-tagline').textContent = report.tagline;
+  const arcEl = document.getElementById('signature-arc');
+  arcEl.classList.toggle('active', Boolean(report.signatureArc));
+  arcEl.textContent = report.signatureArc ? `专属结局线：${report.type}` : '';
+  const splitEl = document.getElementById('time-split');
+  splitEl.innerHTML = report.timeSplit.map((item) => `
+    <div class="split-row">
+      <span>${item.label}</span>
+      <div class="split-track"><div class="split-fill" style="width: ${Math.max(4, item.percent)}%;"></div></div>
+      <span>${item.percent}%</span>
+    </div>
+  `).join('');
+  document.getElementById('causality-list').innerHTML = ledger
+    .map((item) => `<li>${item}</li>`)
+    .join('');
+  document.getElementById('memorial-list').innerHTML = memorial
+    .map((item) => `
+      <div class="memorial-comment">
+        <div class="memorial-avatar">${item.avatar}</div>
+        <div>
+          <div class="memorial-speaker">${item.speaker}</div>
+          <div class="memorial-text">${item.text}</div>
+        </div>
+      </div>
+    `)
+    .join('');
+
+  // GSAP timeline
+  const tl = gsap.timeline();
+  tl.fromTo('.death-emoji', { scale: 0, rotation: -360 }, { scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(2)' })
+    .fromTo('.death-title', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, '-=0.2')
+    .add(() => {
+      document.getElementById('death-title').classList.add('glitching');
+      setTimeout(() => document.getElementById('death-title').classList.remove('glitching'), 400);
+    })
+    .fromTo('.death-epitaph', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.1')
+    .fromTo('.death-stats span', { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.3, stagger: 0.1 }, '-=0.2')
+    .fromTo('.death-collection span', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.06 }, '-=0.1')
+    .fromTo('.death-next', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35 }, '-=0.1')
+    .fromTo('.death-report', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4 }, '-=0.1')
+    .fromTo('.death-btns', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 }, '-=0.1');
+}
+
+// 死亡按钮
+document.getElementById('btn-retry').addEventListener('click', () => {
+  const target = CORE.buildRecommendedCollectionTarget(lastNextRunRecommendation);
+  if (target) {
+    gameState.collectionTarget = target;
+    saveProgress();
+  }
+  switchScreen('select');
+  setupSelectScreen();
+});
+
+document.getElementById('btn-switch').addEventListener('click', () => {
+  switchScreen('select');
+  setupSelectScreen();
+});
+
+document.getElementById('btn-collection-death').addEventListener('click', () => {
+  openCollectionScreen();
+});
+
+document.getElementById('btn-collection-back').addEventListener('click', () => {
+  switchScreen('title');
+});
+
+document.getElementById('btn-intent-back').addEventListener('click', () => {
+  pendingRunSetup = null;
+  switchScreen('select');
+  setupSelectScreen();
+});
+
+// ========== 启动 ==========
+init();
+</script>
+</body>
+</html>
