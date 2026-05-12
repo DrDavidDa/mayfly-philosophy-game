@@ -135,13 +135,14 @@ body::after {
   font-size: 1.2rem;
   padding: 14px 40px;
   border: 2px solid var(--neon-cyan);
-  background: transparent;
+  background: rgba(0,245,212,0.12);
   color: var(--neon-cyan);
   cursor: pointer;
   position: relative;
   transition: all 0.3s;
   margin-top: 40px;
   letter-spacing: 0.15em;
+  box-shadow: 0 0 0 3px rgba(0,245,212,0.08), 0 8px 22px rgba(0,0,0,0.32);
 }
 .btn-neon:hover {
   background: var(--neon-cyan);
@@ -453,6 +454,51 @@ body::after {
   gap: 5px;
   margin-top: 8px;
 }
+.objective-map {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+.objective-map-card {
+  min-height: 72px;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(10,10,15,0.54);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.objective-map-card::after {
+  content: '';
+  position: absolute;
+  inset: auto 8px 6px 8px;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+}
+.objective-map-card.route::after { background: var(--neon-cyan); }
+.objective-map-card.task::after { background: var(--neon-yellow); }
+.objective-map-card.debt::after { background: var(--neon-pink); }
+.objective-map-icon { font-size: 1.1rem; line-height: 1; }
+.objective-map-label {
+  margin-top: 5px;
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.objective-map-text {
+  margin-top: 3px;
+  color: rgba(255,255,255,0.64);
+  font-size: 0.58rem;
+  line-height: 1.26;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .objective-chip {
   padding: 3px 6px;
   border: 1px solid rgba(0,245,212,0.22);
@@ -519,6 +565,66 @@ body::after {
   background:
     linear-gradient(90deg, rgba(255,43,214,0.11), rgba(254,228,64,0.08)),
     rgba(17,17,24,0.9);
+}
+.rookie-panel {
+  display: none;
+  width: 100%;
+  max-width: 520px;
+  border: 2px solid rgba(254,228,64,0.44);
+  background:
+    linear-gradient(135deg, rgba(254,228,64,0.14), rgba(0,245,212,0.08)),
+    rgba(17,17,24,0.92);
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 0 0 3px rgba(254,228,64,0.06), 0 10px 26px rgba(0,0,0,0.28);
+}
+.rookie-panel.active { display: block; }
+.rookie-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+.rookie-title {
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 1rem;
+}
+.rookie-cta {
+  padding: 4px 8px;
+  background: var(--neon-yellow);
+  color: #16120b;
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+}
+.rookie-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+}
+.rookie-step {
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(10,10,15,0.44);
+  border-radius: 4px;
+}
+.rookie-step.active {
+  border-color: rgba(0,245,212,0.72);
+  background: rgba(0,245,212,0.12);
+}
+.rookie-step-icon { font-size: 1rem; }
+.rookie-step-label {
+  margin-top: 4px;
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 0.76rem;
+}
+.rookie-step-text {
+  margin-top: 2px;
+  color: rgba(255,255,255,0.62);
+  font-size: 0.58rem;
+  line-height: 1.3;
 }
 .world-glitch-panel.active {
   display: block;
@@ -1196,15 +1302,37 @@ body.world-glitch-stutter .hud-turn {
     var(--postit-yellow);
   color: #333;
   padding: 12px 10px;
-  border: none;
+  border: 2px solid rgba(18,18,18,0.86);
   cursor: pointer;
   font-family: var(--font-body);
   font-size: 0.9rem;
   text-align: left;
   position: relative;
-  box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 3px 0 rgba(0,0,0,0.58), 2px 8px 16px rgba(0,0,0,0.32);
   transition: transform 0.2s, box-shadow 0.2s;
   border-radius: 1px;
+}
+.activity-btn.recommended {
+  border-color: var(--neon-cyan);
+  box-shadow:
+    0 0 0 4px rgba(0,245,212,0.18),
+    0 0 24px rgba(0,245,212,0.42),
+    0 4px 0 rgba(0,0,0,0.66),
+    2px 10px 20px rgba(0,0,0,0.34);
+  transform: rotate(0deg) translateY(-2px) !important;
+}
+.activity-btn.recommended::before {
+  content: '推荐下一步';
+  position: absolute;
+  top: -12px;
+  right: 8px;
+  padding: 4px 7px;
+  background: var(--neon-cyan);
+  color: #07100f;
+  border: 2px solid rgba(7,16,15,0.88);
+  font-family: var(--font-pixel);
+  font-size: 0.46rem;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.45);
 }
 .activity-btn:nth-child(1) { transform: rotate(-0.8deg); }
 .activity-btn:nth-child(2) {
@@ -1302,6 +1430,18 @@ body.world-glitch-stutter .hud-turn {
 .activity-btn .act-first-guide em {
   color: rgba(0,0,0,0.68);
   font-style: normal;
+}
+.activity-btn .act-cta {
+  margin-top: 9px;
+  padding: 8px 10px;
+  background: #121212;
+  color: var(--neon-yellow);
+  border: 2px solid rgba(0,0,0,0.22);
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 -2px 0 rgba(255,255,255,0.1);
 }
 .activity-btn .act-cost {
   font-family: var(--font-pixel);
@@ -1464,6 +1604,14 @@ body.first-run-mode .turn-feed {
 }
 body.first-run-mode .turn-feed-line {
   min-height: 0;
+}
+body.first-run-mode .objective-copy,
+body.first-run-mode .objective-steps {
+  display: none;
+}
+body.first-run-mode .objective-panel {
+  border-width: 2px;
+  background: rgba(254,228,64,0.09);
 }
 body.first-run-mode .activity-btn .act-effects {
   display: none;
@@ -2160,6 +2308,9 @@ body.first-run-mode .activity-btn .act-tag {
   .npc-item { min-height: 0; }
   .turn-feed { grid-template-columns: 1fr; }
   .turn-feed-line { min-height: 0; }
+  .objective-map,
+  .rookie-steps { grid-template-columns: 1fr; }
+  .objective-map-card { min-height: 58px; }
   .activity-btn { padding: 12px 10px; font-size: 0.86rem; min-height: 112px; }
   .activity-btn .act-quote { min-height: auto; }
   .death-fatal-row { grid-template-columns: 34px minmax(0, 1fr); }
@@ -2285,6 +2436,7 @@ body.first-run-mode .activity-btn .act-tag {
       <div class="objective-tag" id="objective-tag">24H LIFE BRIEF</div>
     </div>
     <div class="objective-copy" id="objective-copy"></div>
+    <div class="objective-map" id="objective-map"></div>
     <div class="objective-steps" id="objective-steps"></div>
     <div class="objective-chips" id="objective-chips"></div>
     <div class="objective-pulse" id="objective-pulse">
@@ -2294,6 +2446,14 @@ body.first-run-mode .activity-btn .act-tag {
       </div>
       <div class="objective-pulse-copy" id="objective-pulse-copy"></div>
     </div>
+  </div>
+
+  <div class="rookie-panel" id="rookie-panel">
+    <div class="rookie-head">
+      <div class="rookie-title">三步上手</div>
+      <div class="rookie-cta" id="rookie-cta">先点高亮卡</div>
+    </div>
+    <div class="rookie-steps" id="rookie-steps"></div>
   </div>
 
   <div class="world-glitch-panel" id="world-glitch-panel">
@@ -3115,13 +3275,15 @@ function renderChoiceCards() {
   const route = CORE.buildRouteStatus(gameState);
   const firstRunSimple = gameState.firstRun && gameState.turnCount < 3;
   gameState.currentCards = CORE.drawCardOptions(gameState, seed, choiceCount);
+  const recommendedIds = getRecommendedCardIds(gameState.currentCards);
   grid.innerHTML = '';
 
-  gameState.currentCards.forEach((card) => {
+  gameState.currentCards.forEach((card, index) => {
     const btn = document.createElement('button');
     const causalPreview = CORE.buildChoiceCausalPreview(gameState, card);
     const firstRunGuide = CORE.buildFirstRunGuide(gameState, card);
     const routeMatch = route.active && route.categories.includes(card.category);
+    const recommended = recommendedIds.includes(card.id) || (!recommendedIds.length && firstRunSimple && index === 0);
     const hint = (!gameState.firstRun && gameState.collectionTarget)
       ? CORE.buildCardCollectionHint(card, gameState.progress)
       : null;
@@ -3134,7 +3296,7 @@ function renderChoiceCards() {
       tracking ? 'tracking' : ''
     ].filter(Boolean).join(' ');
     const hintLabel = tracking ? '追踪中' : hint?.label;
-    btn.className = 'activity-btn';
+    btn.className = `activity-btn${recommended ? ' recommended' : ''}`;
     const consequenceLine = causalPreview.callback
       ? causalPreview.callback.text
       : `${causalPreview.risk.label}：${causalPreview.risk.text}`;
@@ -3154,15 +3316,16 @@ function renderChoiceCards() {
       <div class="act-quote">${card.quote}</div>
       <div class="act-simple-result">
         <strong>${causalPreview.immediate}</strong>
-        <span>${consequenceLine}</span>
+        <span>${shortText(consequenceLine, 34)}</span>
       </div>
       ${firstRunGuide ? `
         <div class="act-first-guide ${firstRunGuide.focus}">
           <span>${firstRunGuide.tag}</span>
           <strong>${firstRunGuide.title}</strong>
-          <em>${firstRunGuide.text}</em>
+          <em>${getShortFirstRunGuideText(firstRunGuide)}</em>
         </div>
       ` : ''}
+      ${recommended ? `<div class="act-cta">先点这张</div>` : ''}
     ` : `
       <div class="act-icon">${card.icon}</div>
       <div class="act-name">${card.name}</div>
@@ -3201,6 +3364,7 @@ function renderChoiceCards() {
       <div class="act-effects">${formatCardEffects(card, causalPreview)}</div>
       ${hint ? `<div class="${hintClasses}">${hintLabel}：${hint.text}</div>` : ''}
       <div class="act-tag">${card.tag}</div>
+      ${recommended ? `<div class="act-cta">下一步</div>` : ''}
     `;
     btn.addEventListener('click', () => executeTurn(card.id));
     grid.appendChild(btn);
@@ -3214,6 +3378,20 @@ function formatDuration(hours) {
   if (!wholeHours) return `${minutes}m`;
   if (!rest) return `${wholeHours}h`;
   return `${wholeHours}h${rest}m`;
+}
+
+function shortText(text, maxLength) {
+  const compact = String(text || '').replace(/\s+/g, ' ').trim();
+  if (compact.length <= maxLength) return compact;
+  return `${compact.slice(0, Math.max(0, maxLength - 3))}...`;
+}
+
+function getShortFirstRunGuideText(guide) {
+  if (!guide) return '';
+  if (guide.focus === 'cost') return '先看寿命和属性。';
+  if (guide.focus === 'route' || guide.focus === 'branch') return '同类选择会形成路线。';
+  if (guide.focus === 'debt') return '旧账会回来，别慌。';
+  return '点完就会看到结果。';
 }
 
 function formatCardEffects(card, causalPreview) {
@@ -3249,6 +3427,21 @@ function formatRouteModifierChips(modifier) {
   return chips.map((chip) => `<span>${chip}</span>`).join('');
 }
 
+function getCurrentRouteTaskChainStatus() {
+  const route = CORE.buildRouteStatus(gameState);
+  const routeId = route.active
+    ? route.id
+    : gameState.runIntent && gameState.runIntent.routeId;
+  return routeId ? CORE.buildRouteTaskChainStatus(gameState, { id: routeId }) : null;
+}
+
+function getRecommendedCardIds(cards) {
+  const chain = getCurrentRouteTaskChainStatus();
+  const ids = (chain && chain.nextCardIds) || [];
+  const visibleIds = new Set((cards || []).map((card) => card.id));
+  return ids.filter((id) => visibleIds.has(id));
+}
+
 function renderGameUI() {
   const s = gameState.stats;
   document.body.classList.toggle('first-run-mode', gameState.screen === 'game' && Boolean(gameState.firstRun));
@@ -3258,6 +3451,7 @@ function renderGameUI() {
   document.getElementById('hud-turn').textContent = `${CORE.formatLifeAge(gameState)} / 第${gameState.turnCount}次选择`;
   renderPhasePanel();
   renderObjectivePanel();
+  renderRookiePanel();
   renderWorldGlitchPanel();
   renderDeathRescuePanel();
   renderRoutePanel();
@@ -3326,6 +3520,15 @@ function renderObjectivePanel() {
   document.getElementById('objective-title').textContent = brief.title;
   document.getElementById('objective-tag').textContent = brief.tag;
   document.getElementById('objective-copy').textContent = brief.premise;
+  document.getElementById('objective-map').innerHTML = buildObjectiveMapCards(brief)
+    .map((item) => `
+      <div class="objective-map-card ${item.tone}">
+        <div class="objective-map-icon">${item.icon}</div>
+        <div class="objective-map-label">${item.label}</div>
+        <div class="objective-map-text">${item.text}</div>
+      </div>
+    `)
+    .join('');
   document.getElementById('objective-steps').innerHTML = brief.steps
     .map((step) => `<div class="objective-step">${step}</div>`)
     .join('');
@@ -3340,6 +3543,54 @@ function renderObjectivePanel() {
     document.getElementById('objective-pulse-tag').textContent = pulse.tag;
     document.getElementById('objective-pulse-copy').textContent = pulse.text;
   }
+}
+
+function buildObjectiveMapCards(brief) {
+  const route = CORE.buildRouteStatus(gameState);
+  const chain = getCurrentRouteTaskChainStatus();
+  const routeLabel = route.active
+    ? route.title
+    : gameState.runIntent
+      ? gameState.runIntent.title
+      : '选一种活法';
+  const routeText = route.active ? '路线已成形，旧账开始排队。' : '先按今日倾向点高亮卡。';
+  const taskText = chain
+    ? chain.complete
+      ? '任务链已闭环，准备迎接终局。'
+      : chain.current.label
+    : '先完成第一张选择。';
+  const debtLine = (brief.steps || []).find((step) => /^里程碑/.test(step)) || '旧账会提前显示，不再突然偷袭。';
+  return [
+    { tone: 'route', icon: route.active ? '🧭' : '🎯', label: routeLabel, text: routeText },
+    { tone: 'task', icon: '👉', label: '下一步', text: taskText },
+    { tone: 'debt', icon: '⚠️', label: '旧账预告', text: debtLine.replace(/^里程碑：/, '') }
+  ];
+}
+
+function renderRookiePanel() {
+  const panel = document.getElementById('rookie-panel');
+  if (!panel) return;
+  const active = Boolean(gameState.firstRun && gameState.turnCount < 3);
+  panel.classList.toggle('active', active);
+  if (!active) return;
+
+  const chain = getCurrentRouteTaskChainStatus();
+  const pendingCount = (gameState.pendingConsequences || []).length;
+  const activeIndex = pendingCount ? 2 : gameState.turnCount === 0 ? 1 : 1;
+  const intentName = gameState.runIntent ? gameState.runIntent.title : '活过今天';
+  const nextTask = chain && chain.current ? chain.current.label : '点高亮卡';
+  document.getElementById('rookie-cta').textContent = pendingCount ? '先处理旧账' : '先点高亮卡';
+  document.getElementById('rookie-steps').innerHTML = [
+    { icon: '🎯', label: '目标', text: intentName },
+    { icon: '👉', label: '行动', text: nextTask },
+    { icon: '⚠️', label: '后果', text: pendingCount ? `${pendingCount} 个旧账在排队` : '旧账会提前预告' }
+  ].map((item, index) => `
+    <div class="rookie-step ${index === activeIndex ? 'active' : ''}">
+      <div class="rookie-step-icon">${item.icon}</div>
+      <div class="rookie-step-label">${item.label}</div>
+      <div class="rookie-step-text">${item.text}</div>
+    </div>
+  `).join('');
 }
 
 function renderWorldGlitchPanel() {
