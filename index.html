@@ -2085,7 +2085,7 @@ body.first-run-mode .activity-btn .act-tag {
   color: #15120d;
   border: 2px solid #15120d;
   border-radius: 4px;
-  padding: 24px;
+  padding: 14px;
   max-width: 420px;
   width: 100%;
   text-align: center;
@@ -2108,10 +2108,38 @@ body.first-run-mode .activity-btn .act-tag {
   font-family: var(--font-pixel);
   font-size: 0.56rem;
 }
-.event-card .ev-emoji { font-size: 3rem; }
+.event-card .ev-emoji {
+  position: absolute;
+  left: 50%;
+  top: 67px;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #15120d;
+  border-radius: 50%;
+  background: var(--postit-yellow);
+  font-size: 2rem;
+  box-shadow: 4px 5px 0 rgba(0,0,0,0.26);
+}
+.ev-comic {
+  height: 138px;
+  margin-top: 12px;
+  border: 3px solid #15120d;
+  background: #dcecf0;
+  overflow: hidden;
+  position: relative;
+}
+.ev-comic svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .event-card .ev-text {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 0.86rem;
+  line-height: 1.42;
   margin-top: 12px;
   color: #19140f;
 }
@@ -2120,9 +2148,14 @@ body.first-run-mode .activity-btn .act-tag {
   font-family: var(--font-pixel);
   font-size: 0.55rem;
   display: flex;
-  gap: 10px;
+  gap: 6px;
   justify-content: center;
   flex-wrap: wrap;
+}
+.event-card .ev-effect span {
+  padding: 4px 6px;
+  border: 1px solid rgba(21,18,13,0.16);
+  background: rgba(21,18,13,0.06);
 }
 .event-card .ev-effect .neg { color: var(--neon-pink); }
 .event-card .ev-effect .pos { color: var(--neon-green); }
@@ -2131,13 +2164,13 @@ body.first-run-mode .activity-btn .act-tag {
   display: none;
   grid-template-columns: 1fr;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .event-card .ev-response {
-  border: 1px solid rgba(21,18,13,0.28);
+  border: 2px solid rgba(21,18,13,0.42);
   background: rgba(255,255,255,0.42);
   color: #15120d;
-  padding: 10px 12px;
+  padding: 9px 10px;
   text-align: left;
   cursor: pointer;
   font-family: var(--font-body);
@@ -2165,10 +2198,10 @@ body.first-run-mode .activity-btn .act-tag {
   margin-top: 16px;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  background: none;
-  border: 1px solid var(--fluorescent);
-  color: var(--fluorescent);
-  padding: 6px 20px;
+  background: #15120d;
+  border: 2px solid #15120d;
+  color: var(--neon-yellow);
+  padding: 8px 22px;
   cursor: pointer;
   border-radius: 2px;
   opacity: 0.7;
@@ -2190,6 +2223,35 @@ body.first-run-mode .activity-btn .act-tag {
   width: 100%;
 }
 .death-emoji { font-size: 5rem; }
+.death-postcard-art {
+  margin: 12px auto 0;
+  width: min(340px, 100%);
+  aspect-ratio: 1.7;
+  border: 3px solid rgba(240,240,232,0.86);
+  background: #101722;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.38), 0 0 24px rgba(255,45,120,0.12);
+  overflow: hidden;
+  position: relative;
+}
+.death-postcard-art svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.death-postcard-stamp {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 46px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed rgba(240,240,232,0.72);
+  color: var(--paper-white);
+  font-family: var(--font-pixel);
+  font-size: 0.42rem;
+  transform: rotate(5deg);
+}
 .death-title {
   font-family: var(--font-title);
   font-size: clamp(1.8rem, 5vw, 2.5rem);
@@ -2234,6 +2296,22 @@ body.first-run-mode .activity-btn .act-tag {
   color: var(--neon-yellow);
   font-family: var(--font-title);
   font-size: 0.96rem;
+  cursor: pointer;
+  list-style: none;
+}
+.death-explain-title::-webkit-details-marker {
+  display: none;
+}
+.death-explain-title::after {
+  content: '展开';
+  float: right;
+  color: var(--neon-cyan);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  padding-top: 4px;
+}
+.death-explain[open] .death-explain-title::after {
+  content: '收起';
 }
 .death-explain-summary {
   margin-top: 6px;
@@ -3043,6 +3121,7 @@ body.first-run-mode .activity-btn .act-tag {
 	  <div class="event-card">
 	    <div class="event-time" id="ev-time">已活0分</div>
 	    <div class="ev-emoji" id="ev-emoji">📧</div>
+    <div class="ev-comic" id="ev-comic"></div>
     <div class="ev-text" id="ev-text">事件内容</div>
     <div class="ev-effect" id="ev-effect"></div>
     <div class="ev-responses" id="ev-responses"></div>
@@ -3056,14 +3135,15 @@ body.first-run-mode .activity-btn .act-tag {
 	    <div class="death-emoji" id="death-emoji">💀</div>
 	    <div class="death-title" id="death-title">死因</div>
 	    <div class="death-rarity" id="death-rarity">N</div>
+	    <div class="death-postcard-art" id="death-postcard-art"></div>
 	    <div class="death-epitaph" id="death-epitaph">墓志铭</div>
-	    <div class="death-explain" id="death-explain">
-	      <div class="death-explain-title">事故复盘</div>
+	    <details class="death-explain" id="death-explain">
+	      <summary class="death-explain-title">事故复盘</summary>
 	      <div class="death-explain-summary" id="death-explain-summary"></div>
 	      <div class="death-fatal-bill" id="death-fatal-bill"></div>
 	      <div class="death-receipt" id="death-receipt"></div>
 	      <div class="death-explain-chain" id="death-explain-chain"></div>
-	    </div>
+	    </details>
 	    <div class="death-stats" id="death-stats"></div>
 	    <div class="death-collection" id="death-collection"></div>
 	    <div class="death-legacy" id="death-legacy">
@@ -4490,6 +4570,55 @@ function pickRandomEvent() {
   return event;
 }
 
+function renderEventComic(event, mode = 'event') {
+  const comic = document.getElementById('ev-comic');
+  if (!comic) return;
+  const emoji = event.emoji || (mode === 'rescue' ? '🚨' : '🧾');
+  const isBad = mode === 'rescue'
+    || event.type === 'negative'
+    || Object.values(event.effect || {}).some((val) => val > 10)
+    || (event.absurdDebt || 0) > 0;
+  const isAi = /AI|助手|提示词|模型|机器人|圆宝|深思|会议精灵|周报/.test(`${event.text || ''}${event.sourceCardName || ''}`);
+  const isSocial = /朋友圈|同事|老板|群|点赞|社交|奶茶|关系/.test(`${event.text || ''}${event.sourceCardName || ''}`);
+  const sky = isAi ? '#101722' : isBad ? '#351427' : isSocial ? '#f0b5bd' : '#dcecf0';
+  const accent = isAi ? '#00f5d4' : isBad ? '#ff2d78' : isSocial ? '#fee440' : '#39ff14';
+  const panelText = mode === 'rescue'
+    ? 'DEATH?'
+    : mode === 'debt'
+      ? 'OLD DEBT'
+      : 'EVENT';
+  comic.innerHTML = `
+    <svg viewBox="0 0 392 138" role="img" aria-label="事件漫画分镜">
+      <rect width="392" height="138" fill="${sky}"/>
+      <g opacity="0.22" stroke="${accent}" stroke-width="1">
+        ${Array.from({ length: 12 }).map((_, i) => `<path d="M${i * 36 - 20} 0 V138"/>`).join('')}
+        ${Array.from({ length: 5 }).map((_, i) => `<path d="M0 ${i * 30 + 16} H392"/>`).join('')}
+      </g>
+      <rect x="12" y="14" width="84" height="26" fill="#15120d"/>
+      <text x="23" y="32" fill="${accent}" font-size="12" font-family="monospace">${panelText}</text>
+      <g transform="translate(70 75)">
+        <ellipse cx="-18" cy="-14" rx="24" ry="11" fill="#d8f7ff" opacity="0.7" stroke="#15120d" stroke-width="2"/>
+        <ellipse cx="18" cy="-14" rx="24" ry="11" fill="#d8f7ff" opacity="0.7" stroke="#15120d" stroke-width="2"/>
+        <ellipse cx="0" cy="7" rx="11" ry="20" fill="#c38a35" stroke="#15120d" stroke-width="3"/>
+        <circle cx="0" cy="-8" r="15" fill="#f1bf56" stroke="#15120d" stroke-width="3"/>
+        <circle cx="-6" cy="-11" r="5" fill="#fff8d8" stroke="#15120d" stroke-width="2"/>
+        <circle cx="7" cy="-11" r="5" fill="#fff8d8" stroke="#15120d" stroke-width="2"/>
+        <circle cx="-5" cy="-10" r="1.8" fill="#15120d"/><circle cx="8" cy="-10" r="1.8" fill="#15120d"/>
+      </g>
+      <g transform="translate(218 72)">
+        <rect x="-40" y="-36" width="80" height="64" rx="8" fill="#f5ebd6" stroke="#15120d" stroke-width="4"/>
+        <text x="0" y="8" text-anchor="middle" font-size="34">${emoji}</text>
+      </g>
+      <path d="M125 76 C151 54 162 55 179 63" fill="none" stroke="${accent}" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 8"/>
+      <g transform="translate(323 78)">
+        <path d="M-26 -28 H28 L39 -4 H20 V31 H-18 V-4 H-38 Z" fill="${isBad ? '#ff2d78' : '#fee440'}" stroke="#15120d" stroke-width="4"/>
+        <text x="0" y="6" text-anchor="middle" font-size="24">${mode === 'rescue' ? '!' : isAi ? 'AI' : isSocial ? '❤' : '!'}</text>
+      </g>
+      <rect x="0" y="115" width="392" height="23" fill="rgba(21,18,13,0.22)"/>
+    </svg>
+  `;
+}
+
 function renderEventEffect(event, risk) {
   const effectEl = document.getElementById('ev-effect');
   effectEl.innerHTML = '';
@@ -4571,8 +4700,9 @@ function showConsequenceResponse(event, callback) {
   document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
   document.getElementById('ev-emoji').textContent = event.emoji || '🧾';
   document.getElementById('ev-text').textContent = /回访：/.test(event.text)
-    ? event.text
-    : `后果回访：${event.text}`;
+    ? shortText(event.text, 58)
+    : `后果回访：${shortText(event.text, 52)}`;
+  renderEventComic(event, 'debt');
   renderEventEffect(event, CORE.buildConsequenceRisk(gameState, event));
 
   closeButton.style.display = 'none';
@@ -4580,7 +4710,7 @@ function showConsequenceResponse(event, callback) {
   responsesEl.innerHTML = responses.map((response) => `
     <button class="ev-response" type="button" data-response="${response.id}">
       <span class="ev-response-title">${response.title}</span>
-      <span class="ev-response-text">${response.text}</span>
+      <span class="ev-response-text">${shortText(response.text, 42)}</span>
     </button>
   `).join('');
 
@@ -4624,7 +4754,8 @@ function showEvent(event, callback, options = {}) {
   closeButton.textContent = '好吧……';
   document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
   document.getElementById('ev-emoji').textContent = event.emoji || '📧';
-  document.getElementById('ev-text').textContent = event.text;
+  document.getElementById('ev-text').textContent = shortText(event.text, 64);
+  renderEventComic(event, 'event');
   closeButton.style.display = '';
   responsesEl.style.display = 'none';
   responsesEl.innerHTML = '';
@@ -4671,7 +4802,8 @@ function showDeathRescue(death, options, onRescued) {
   cardEl.classList.add('death-rescue');
   document.getElementById('ev-time').textContent = CORE.formatLifeAge(gameState);
   document.getElementById('ev-emoji').textContent = '🚨';
-  document.getElementById('ev-text').textContent = `临终抢救：${death.title}。系统已经把死亡申请提交到审批流，你还有一次把它改成“待处理”的机会。`;
+  document.getElementById('ev-text').textContent = `临终抢救：${death.title}。死亡审批已到最后一步。`;
+  renderEventComic({ emoji: '🚨', text: death.title, type: 'negative' }, 'rescue');
   renderDeathRescueEffect(death, options);
 
   closeButton.style.display = '';
@@ -4680,7 +4812,7 @@ function showDeathRescue(death, options, onRescued) {
   responsesEl.innerHTML = options.map((option) => `
     <button class="ev-response" type="button" data-rescue="${option.id}">
       <span class="ev-response-title">${option.title}</span>
-      <span class="ev-response-text">${option.text}<br>${formatRescueEffects(option)}</span>
+      <span class="ev-response-text">${shortText(option.text, 38)}<br>${formatRescueEffects(option)}</span>
     </button>
   `).join('');
 
@@ -4760,12 +4892,54 @@ function recordProgress(postcard, report, legacyCard) {
   gameState.progress = progress;
 }
 
+function buildDeathPostcardArt(postcard, report) {
+  const color = postcard.color || '#ff2d78';
+  const isNatural = postcard.id === 'natural' || /黄昏|日落|活过/.test(`${postcard.title}${postcard.epitaph}`);
+  const isAi = /AI|提示词|外包|代理|助手/.test(`${postcard.title}${report.type}`);
+  const bg = isNatural ? '#283947' : isAi ? '#101722' : '#2a1220';
+  const moon = isNatural ? '#fee440' : color;
+  return `
+    <svg viewBox="0 0 340 200" role="img" aria-label="死亡明信片">
+      <rect width="340" height="200" fill="${bg}"/>
+      <g opacity="0.32" stroke="${color}" stroke-width="1">
+        ${Array.from({ length: 11 }).map((_, i) => `<path d="M${i * 34} 0 V200"/>`).join('')}
+        ${Array.from({ length: 6 }).map((_, i) => `<path d="M0 ${i * 36 + 12} H340"/>`).join('')}
+      </g>
+      <circle cx="277" cy="48" r="28" fill="${moon}" opacity="0.92"/>
+      <circle cx="292" cy="41" r="28" fill="${bg}" opacity="0.66"/>
+      <g transform="translate(0 116)">
+        ${[18,58,102,148,198,250,292].map((x, i) => `
+          <rect x="${x}" y="${i % 2 ? -44 : -28}" width="${i % 2 ? 34 : 42}" height="${i % 2 ? 84 : 68}" fill="${i % 2 ? '#171827' : '#222437'}" stroke="rgba(255,255,255,0.08)"/>
+          <rect x="${x + 9}" y="${i % 2 ? -29 : -15}" width="6" height="7" fill="${color}" opacity="0.72"/>
+          <rect x="${x + 22}" y="${i % 2 ? -13 : 1}" width="6" height="7" fill="#fee440" opacity="0.5"/>
+        `).join('')}
+      </g>
+      <path d="M32 137 C87 100 126 149 172 118 C214 90 246 109 309 83" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M32 137 C87 100 126 149 172 118 C214 90 246 109 309 83" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+      <g transform="translate(151 109)">
+        <ellipse cx="-20" cy="-15" rx="28" ry="13" fill="#d8f7ff" opacity="0.72" stroke="#fff" stroke-width="2"/>
+        <ellipse cx="20" cy="-15" rx="28" ry="13" fill="#d8f7ff" opacity="0.72" stroke="#fff" stroke-width="2"/>
+        <ellipse cx="0" cy="11" rx="12" ry="24" fill="#c38a35" stroke="#15120d" stroke-width="3"/>
+        <circle cx="0" cy="-9" r="17" fill="#f1bf56" stroke="#15120d" stroke-width="3"/>
+        <circle cx="-7" cy="-12" r="5" fill="#fff8d8" stroke="#15120d" stroke-width="2"/>
+        <circle cx="8" cy="-12" r="5" fill="#fff8d8" stroke="#15120d" stroke-width="2"/>
+        <text x="0" y="50" text-anchor="middle" font-size="28">${postcard.emoji || '💀'}</text>
+      </g>
+      <rect x="0" y="164" width="340" height="36" fill="rgba(0,0,0,0.46)"/>
+      <text x="17" y="187" fill="#f0f0e8" font-size="16" font-family="sans-serif">${shortText(postcard.title || '死亡明信片', 13)}</text>
+    </svg>
+    <div class="death-postcard-stamp">${shortText(postcard.rarity || 'N', 5)}</div>
+  `;
+}
+
 function playDeathAnimation(postcard, explanation, report, ledger, memorial, legacyCard) {
+  document.getElementById('death-explain').open = false;
   document.getElementById('death-emoji').textContent = postcard.emoji;
   document.getElementById('death-title').textContent = postcard.title;
   document.getElementById('death-title').style.color = postcard.color;
   document.getElementById('death-rarity').textContent = postcard.rarity;
   document.getElementById('death-rarity').style.color = postcard.color;
+  document.getElementById('death-postcard-art').innerHTML = buildDeathPostcardArt(postcard, report);
   document.getElementById('death-epitaph').textContent = postcard.epitaph;
   document.getElementById('death-epitaph').style.borderColor = postcard.color;
   document.getElementById('death-epitaph').style.color = postcard.color;
