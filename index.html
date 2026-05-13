@@ -686,6 +686,13 @@ body::after {
   transform-origin: center;
   animation: stageWingBeat 0.28s ease-in-out infinite alternate;
 }
+.stage-stageLabel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0;
+}
+.stage-mood-jitter {
+  animation: stageMoodJitter 0.42s steps(2, end) infinite;
+}
 @keyframes stageWingFloat {
   0%, 100% { translate: 0 0; }
   50% { translate: 0 -4px; }
@@ -693,6 +700,10 @@ body::after {
 @keyframes stageWingBeat {
   from { opacity: 0.48; scale: 0.94; }
   to { opacity: 0.88; scale: 1.04; }
+}
+@keyframes stageMoodJitter {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 1px -1px; }
 }
 .details-toggle {
   width: min(520px, 100%);
@@ -1957,6 +1968,34 @@ body.world-glitch-stutter .hud-turn {
   min-height: 3.8em;
   font-size: 0.8rem;
 }
+.activity-btn .act-compact-note {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 7px;
+  align-items: center;
+  margin-top: 8px;
+  padding: 7px 8px;
+  border-left: 3px solid rgba(0,0,0,0.34);
+  background: rgba(255,255,255,0.28);
+  color: #222;
+  font-size: 0.68rem;
+  line-height: 1.3;
+}
+.activity-btn .act-compact-note span {
+  color: rgba(0,0,0,0.52);
+  font-family: var(--font-pixel);
+  font-size: 0.44rem;
+}
+.activity-btn .act-compact-note strong {
+  color: #111;
+  font-weight: 800;
+}
+.activity-btn .act-details-label {
+  display: none;
+  margin-top: 7px;
+  color: rgba(0,0,0,0.54);
+  font-size: 0.62rem;
+}
 .activity-btn .act-simple-result {
   display: grid;
   gap: 5px;
@@ -2162,6 +2201,27 @@ body.world-glitch-stutter .hud-turn {
 }
 .activity-btn .act-causal-row.mild strong {
   color: #0f6f72;
+}
+body:not(.details-open) .activity-btn:not(.simple-card) .act-quote,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-cost,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-causal-preview,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-route-inertia,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-npc-warning,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-npc-relief,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-effects,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-collection-hint,
+body:not(.details-open) .activity-btn:not(.simple-card) .act-tag {
+  display: none !important;
+}
+body:not(.details-open) .activity-btn:not(.simple-card) {
+  min-height: 190px;
+}
+body:not(.details-open) .activity-btn:not(.simple-card) .act-details-label {
+  display: block;
+}
+body.details-open .activity-btn:not(.simple-card) .act-compact-note,
+body.details-open .activity-btn:not(.simple-card) .act-impact-row.compact {
+  display: none;
 }
 body.first-run-mode .advanced-effect,
 body.first-run-mode .advanced-stat,
@@ -2878,24 +2938,56 @@ body.first-run-mode .activity-btn .act-tag {
   gap: 10px;
 }
 .collection-card {
-  min-height: 126px;
-  padding: 10px;
+  min-height: 184px;
+  padding: 0;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 4px;
   background: rgba(255,255,255,0.04);
+  overflow: hidden;
+  position: relative;
 }
 .collection-card.locked {
-  opacity: 0.45;
   filter: grayscale(0.85);
 }
+.collection-card.locked .collection-art,
+.collection-card.locked .collection-body {
+  opacity: 0.46;
+}
+.collection-card.tracking {
+  border-color: rgba(0,245,212,0.5);
+  box-shadow: 0 0 24px rgba(0,245,212,0.12);
+}
+.collection-art {
+  height: 94px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: #101722;
+}
+.collection-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.collection-body {
+  padding: 10px;
+}
 .collection-emoji {
-  font-size: 1.65rem;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 1rem;
 }
 .collection-name {
-  margin-top: 6px;
   color: var(--paper-white);
   font-size: 0.82rem;
   line-height: 1.35;
+  min-height: 32px;
 }
 .collection-meta {
   margin-top: 5px;
@@ -2909,6 +3001,10 @@ body.first-run-mode .activity-btn .act-tag {
   font-size: 0.68rem;
   line-height: 1.42;
   opacity: 0.75;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .collection-target-note {
   margin-top: 8px;
@@ -3905,22 +4001,28 @@ function renderCollectionScreen() {
 
   document.getElementById('collection-postcards').innerHTML = summary.postcards.map((item) => `
     <div class="collection-card ${item.collected ? '' : 'locked'}">
+      <div class="collection-art">${buildCollectionArt('postcard', item, item.collected)}</div>
       <div class="collection-emoji">${item.emoji}</div>
-      <div class="collection-name">${item.displayTitle}</div>
-      <div class="collection-meta">${item.collected ? item.rarity : 'LOCKED'}</div>
-      <div class="collection-desc">${item.displayText}</div>
+      <div class="collection-body">
+        <div class="collection-name">${item.displayTitle}</div>
+        <div class="collection-meta">${item.collected ? item.rarity : 'LOCKED'}</div>
+        <div class="collection-desc">${item.displayText}</div>
+      </div>
     </div>
   `).join('');
 
   document.getElementById('collection-personalities').innerHTML = summary.personalities.map((item) => {
     const chasing = activeTarget && activeTarget.kind === 'personality' && activeTarget.target === item.type;
     return `
-    <div class="collection-card ${item.collected ? '' : 'locked'}">
+    <div class="collection-card ${item.collected ? '' : 'locked'} ${chasing ? 'tracking' : ''}">
+      <div class="collection-art">${buildCollectionArt('personality', item, item.collected || chasing)}</div>
       <div class="collection-emoji">${item.collected ? '🧾' : '？'}</div>
-      <div class="collection-name">${item.displayType}</div>
-      <div class="collection-meta">${item.collected ? item.category : 'LOCKED'}</div>
-      <div class="collection-desc">${item.displayTagline}</div>
-      ${item.collected ? '' : `<button class="collection-chase ${chasing ? 'active' : ''}" data-kind="personality" data-target="${item.type}">${chasing ? '追踪中' : '追踪这条线'}</button>`}
+      <div class="collection-body">
+        <div class="collection-name">${item.displayType}</div>
+        <div class="collection-meta">${item.collected ? item.category : 'LOCKED'}</div>
+        <div class="collection-desc">${item.displayTagline}</div>
+        ${item.collected ? '' : `<button class="collection-chase ${chasing ? 'active' : ''}" data-kind="personality" data-target="${item.type}">${chasing ? '追踪中' : '追踪这条线'}</button>`}
+      </div>
     </div>
   `;
   }).join('');
@@ -3934,13 +4036,49 @@ function renderCollectionScreen() {
   document.getElementById('collection-legacies').innerHTML = summary.legacyCards.length
     ? summary.legacyCards.map((item) => `
       <div class="collection-card">
+        <div class="collection-art">${buildCollectionArt('legacy', item, true)}</div>
         <div class="collection-emoji">${item.emoji || '🌀'}</div>
-        <div class="collection-name">${item.title}${item.stack > 1 ? ` ×${item.stack}` : ''}</div>
-        <div class="collection-meta">LEGACY</div>
-        <div class="collection-desc">${item.effectText || item.text || '这张遗产卡还没有写好说明。'}</div>
+        <div class="collection-body">
+          <div class="collection-name">${item.title}${item.stack > 1 ? ` ×${item.stack}` : ''}</div>
+          <div class="collection-meta">LEGACY</div>
+          <div class="collection-desc">${item.effectText || item.text || '这张遗产卡还没有写好说明。'}</div>
+        </div>
       </div>
     `).join('')
     : '<div class="collection-empty">还没有遗产卡。先去认真死一次，系统才有东西可以归档。</div>';
+}
+
+function buildCollectionArt(kind, item, revealed) {
+  const text = shortText(item.displayTitle || item.displayType || item.title || '未归档', 9);
+  const emoji = item.emoji || (kind === 'legacy' ? '🌀' : kind === 'personality' ? '🧾' : '💀');
+  const locked = !revealed;
+  const colors = {
+    postcard: { bg: '#29394d', accent: '#ff2d78', paper: '#fff3b0', floor: '#15202d' },
+    personality: { bg: '#101722', accent: '#00f5d4', paper: '#bae1ff', floor: '#050912' },
+    legacy: { bg: '#21142e', accent: '#b537f2', paper: '#fee440', floor: '#100a16' }
+  }[kind] || { bg: '#101722', accent: '#00f5d4', paper: '#fff3b0', floor: '#050912' };
+  const stamp = locked ? '?' : emoji;
+  const front = kind === 'legacy'
+    ? `<path d="M74 58 C90 34 112 78 132 43 C145 21 166 38 177 19" fill="none" stroke="${colors.paper}" stroke-width="6" stroke-linecap="round" opacity="0.88"/>`
+    : kind === 'personality'
+      ? `<path d="M58 65 L88 38 L120 58 L153 29" fill="none" stroke="${colors.paper}" stroke-width="6" stroke-linecap="round"/>`
+      : `<rect x="54" y="28" width="112" height="48" fill="${colors.paper}" stroke="#15120d" stroke-width="4" transform="rotate(-4 110 52)"/>`;
+  return `
+    <svg viewBox="0 0 220 94" role="img" aria-label="${text}收藏插图">
+      <rect width="220" height="94" fill="${colors.bg}"/>
+      <g opacity="0.24" stroke="${colors.accent}" stroke-width="1">
+        <path d="M0 22 H220M0 46 H220M0 70 H220"/>
+        <path d="M32 0 V94M76 0 V94M120 0 V94M164 0 V94M208 0 V94"/>
+      </g>
+      <rect x="0" y="74" width="220" height="20" fill="${colors.floor}"/>
+      ${front}
+      <circle cx="174" cy="27" r="21" fill="${locked ? '#1b1b24' : colors.accent}" stroke="#15120d" stroke-width="4"/>
+      <text x="174" y="35" text-anchor="middle" font-size="25">${stamp}</text>
+      <rect x="12" y="10" width="86" height="20" fill="#15120d" stroke="${colors.accent}" stroke-width="2"/>
+      <text x="20" y="24" fill="${colors.accent}" font-size="9" font-family="monospace">${locked ? 'LOCKED' : shortText(kind.toUpperCase(), 9)}</text>
+      <text x="110" y="86" text-anchor="middle" fill="${locked ? 'rgba(255,255,255,0.42)' : '#f0f0e8'}" font-size="10" font-family="sans-serif">${text}</text>
+    </svg>
+  `;
 }
 
 function setCollectionTarget(kind, target) {
@@ -4220,6 +4358,12 @@ function renderChoiceCards() {
     ` : `
       ${buildCardVisual(card, causalPreview)}
       <div class="act-name">${card.name}</div>
+      <div class="act-impact-row compact">${buildQuickImpactChips(card, causalPreview)}</div>
+      <div class="act-compact-note">
+        <span>${causalPreview.callback ? '旧账' : '方向'}</span>
+        <strong>${shortText(causalPreview.callback ? causalPreview.callback.text : `${causalPreview.routeTitle} · ${causalPreview.risk.label}`, 24)}</strong>
+      </div>
+      <div class="act-details-label">展开旧账与属性可看完整因果</div>
       <div class="act-quote">${shortText(card.quote, 36)}</div>
       <div class="act-cost ${causalPreview.routeModifier ? 'modified' : ''}">-${formatDuration(causalPreview.timeCost || card.cost.time)}${causalPreview.routeModifier ? ' · 路线改写' : ''}</div>
       <div class="act-causal-preview">
@@ -4507,6 +4651,8 @@ function renderGameStage() {
   const stage = document.getElementById('game-stage');
   if (!stage) return;
   const route = CORE.buildRouteStatus(gameState);
+  const theme = getStageTheme(route);
+  const mood = getStageMood();
   const chain = getCurrentRouteTaskChainStatus();
   const pending = (gameState.pendingConsequences || []).length;
   const due = CORE.getDueConsequences(gameState).length;
@@ -4536,44 +4682,39 @@ function renderGameStage() {
       <circle cx="${x - 9}" cy="${y + 3}" r="6" fill="${color}"/>
     </g>`;
   }).join('');
-  const routeColor = route.active ? '#00f5d4' : '#fee440';
+  const routeColor = route.active ? theme.accent : '#fee440';
   stage.innerHTML = `
     <svg class="stage-svg" viewBox="0 0 520 178" role="img" aria-label="蜉蝣在压缩人生城市中飞行">
       <defs>
         <linearGradient id="stageSky" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#121827"/>
-          <stop offset="0.58" stop-color="#182339"/>
-          <stop offset="1" stop-color="#351427"/>
+          <stop offset="0" stop-color="${theme.sky[0]}"/>
+          <stop offset="0.58" stop-color="${theme.sky[1]}"/>
+          <stop offset="1" stop-color="${theme.sky[2]}"/>
         </linearGradient>
         <linearGradient id="stageGround" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#273248"/>
-          <stop offset="1" stop-color="#111118"/>
+          <stop offset="0" stop-color="${theme.ground[0]}"/>
+          <stop offset="1" stop-color="${theme.ground[1]}"/>
         </linearGradient>
       </defs>
       <rect width="520" height="178" fill="url(#stageSky)"/>
-      <circle cx="443" cy="33" r="20" fill="#fee440" opacity="0.92"/>
-      <circle cx="458" cy="27" r="20" fill="#121827" opacity="0.78"/>
-      <g opacity="0.32" fill="#00f5d4">
+      <circle cx="443" cy="33" r="20" fill="${theme.moon}" opacity="0.92"/>
+      <circle cx="458" cy="27" r="20" fill="${theme.sky[0]}" opacity="0.78"/>
+      <g opacity="0.32" fill="${theme.accent}">
         <circle cx="48" cy="30" r="2"/><circle cx="112" cy="18" r="1.5"/><circle cx="198" cy="36" r="2"/>
         <circle cx="282" cy="20" r="1.6"/><circle cx="396" cy="56" r="1.8"/>
       </g>
       <path d="M28 112 C118 70 202 138 274 94 C344 53 405 89 486 58" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="8" stroke-linecap="round"/>
       <path d="M28 112 C118 70 202 138 274 94 C344 53 405 89 486 58" fill="none" stroke="${routeColor}" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${lifePct} 100"/>
-      ${buildStageSkyline()}
+      ${buildStageSkyline(theme)}
+      ${buildStageRouteProps(theme)}
       ${debtClouds}
-      <g class="stage-mayfly" transform="translate(${flyX} ${flyY})">
-        <ellipse class="stage-wing" cx="-17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
-        <ellipse class="stage-wing" cx="17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
-        <ellipse cx="0" cy="8" rx="12" ry="21" fill="#c38a35" stroke="#15110b" stroke-width="3"/>
-        <circle cx="0" cy="-8" r="15" fill="#f1bf56" stroke="#15110b" stroke-width="3"/>
-        <circle cx="-6" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
-        <circle cx="7" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
-        <circle cx="-5" cy="-10" r="1.8" fill="#15110b"/><circle cx="8" cy="-10" r="1.8" fill="#15110b"/>
-        <path d="M-5 -2 Q0 2 6 -2" fill="none" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
-        <path d="M-9 23 L-22 32 M0 25 L0 36 M9 23 L22 32" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
-      </g>
+      ${buildStageAvatar(flyX, flyY, mood, theme)}
       <rect x="0" y="143" width="520" height="35" fill="url(#stageGround)"/>
       <path d="M0 145 H520" stroke="rgba(254,228,64,0.28)" stroke-width="2" stroke-dasharray="9 8"/>
+      <rect x="14" y="16" width="118" height="24" fill="#15120d" stroke="${theme.accent}" stroke-width="2"/>
+      <text class="stage-stageLabel" x="23" y="32" fill="${theme.accent}" font-size="10">${shortText(theme.label, 12)}</text>
+      <rect x="384" y="112" width="100" height="24" fill="#15120d" stroke="${mood.color}" stroke-width="2"/>
+      <text class="stage-stageLabel" x="434" y="128" text-anchor="middle" fill="${mood.color}" font-size="9">${shortText(mood.label, 10)}</text>
     </svg>
     <div class="stage-caption">
       <div class="stage-pill">${shortText(focusLabel, 14)}</div>
@@ -4582,14 +4723,156 @@ function renderGameStage() {
   `;
 }
 
-function buildStageSkyline() {
+function getStageTheme(route) {
+  const routeId = route.active
+    ? route.id
+    : gameState.runIntent && gameState.runIntent.routeId;
+  const themes = {
+    work: {
+      id: 'work',
+      label: 'KPI城市',
+      sky: ['#101722', '#20314a', '#43223a'],
+      ground: ['#30394d', '#111118'],
+      accent: '#ff2d78',
+      moon: '#fee440',
+      prop: 'ppt'
+    },
+    slack: {
+      id: 'slack',
+      label: '摸鱼水域',
+      sky: ['#081b1c', '#173b36', '#123626'],
+      ground: ['#254d3e', '#0b1714'],
+      accent: '#39ff14',
+      moon: '#baffc9',
+      prop: 'wc'
+    },
+    social: {
+      id: 'social',
+      label: '人情热岛',
+      sky: ['#24111d', '#543145', '#3d1830'],
+      ground: ['#6a3b4c', '#151018'],
+      accent: '#fee440',
+      moon: '#ffd3d8',
+      prop: 'like'
+    },
+    ai: {
+      id: 'ai',
+      label: '代理机房',
+      sky: ['#07101d', '#101d32', '#0b1524'],
+      ground: ['#101722', '#050912'],
+      accent: '#00f5d4',
+      moon: '#b537f2',
+      prop: 'ai'
+    },
+    disrupt: {
+      id: 'disrupt',
+      label: '现实卡顿',
+      sky: ['#20170d', '#4b3328', '#351427'],
+      ground: ['#4b3328', '#12100d'],
+      accent: '#ff6b35',
+      moon: '#fee440',
+      prop: 'truth'
+    },
+    neutral: {
+      id: 'neutral',
+      label: '蜉蝣市',
+      sky: ['#121827', '#182339', '#351427'],
+      ground: ['#273248', '#111118'],
+      accent: '#00f5d4',
+      moon: '#fee440',
+      prop: 'city'
+    }
+  };
+  return themes[routeId] || themes.neutral;
+}
+
+function getStageMood() {
+  const anxiety = gameState.stats.anxiety || 0;
+  const health = gameState.stats.health || 0;
+  const spirit = gameState.stats.spirit || 0;
+  const social = gameState.stats.social || 0;
+  if (gameState.timeLeft <= 4 || health <= 18) {
+    return { id: 'critical', label: '快没电', color: '#ff2d78', pupilY: -10, mouth: 'M-7 1 Q0 -5 7 1', jitter: true };
+  }
+  if (anxiety >= 74) {
+    return { id: 'panic', label: '开始慌', color: '#ff2d78', pupilY: -12, mouth: 'M-8 2 Q0 8 8 2', jitter: true };
+  }
+  if ((gameState.disruption || 0) >= 38) {
+    return { id: 'smug', label: '搅得不错', color: '#ff6b35', pupilY: -10, mouth: 'M-8 -1 Q0 8 10 -2', jitter: false };
+  }
+  if (spirit >= 68 || social >= 68) {
+    return { id: 'charged', label: '有点上头', color: '#39ff14', pupilY: -10, mouth: 'M-9 -2 Q0 7 10 -2', jitter: false };
+  }
+  return { id: 'normal', label: '还活着', color: '#00f5d4', pupilY: -10, mouth: 'M-5 -2 Q0 2 6 -2', jitter: false };
+}
+
+function buildStageRouteProps(theme) {
+  const props = {
+    ppt: `
+      <g transform="translate(382 88) rotate(-5)">
+        <rect x="0" y="0" width="68" height="42" fill="#fff3b0" stroke="#15120d" stroke-width="3"/>
+        <rect x="10" y="10" width="20" height="18" fill="#ff2d78"/>
+        <path d="M38 29 L57 13" stroke="#15120d" stroke-width="3"/>
+        <text x="34" y="38" text-anchor="middle" font-size="9" font-family="monospace">PPT</text>
+      </g>`,
+    wc: `
+      <g transform="translate(386 90)">
+        <rect x="0" y="0" width="64" height="42" rx="5" fill="#baffc9" stroke="#15120d" stroke-width="3"/>
+        <path d="M18 12 h20 v18 q0 9 -10 9 h-5 q-10 0 -10 -9 v-9" fill="#ffffff" stroke="#15120d" stroke-width="3"/>
+        <path d="M45 13 q14 8 0 18" fill="none" stroke="#39ff14" stroke-width="3"/>
+      </g>`,
+    like: `
+      <g transform="translate(382 88) rotate(4)">
+        <rect x="0" y="0" width="70" height="45" rx="6" fill="#ffd3d8" stroke="#15120d" stroke-width="3"/>
+        <text x="34" y="26" text-anchor="middle" font-size="22">👍</text>
+        <text x="35" y="39" text-anchor="middle" font-size="9" font-family="monospace">BOSS</text>
+      </g>`,
+    ai: `
+      <g transform="translate(386 84)">
+        <rect x="0" y="0" width="72" height="48" rx="6" fill="#101722" stroke="#00f5d4" stroke-width="3"/>
+        <circle cx="25" cy="23" r="10" fill="#00f5d4"/>
+        <circle cx="45" cy="23" r="10" fill="#00f5d4"/>
+        <text x="35" y="42" text-anchor="middle" fill="#00f5d4" font-size="9" font-family="monospace">BOT LOOP</text>
+      </g>`,
+    truth: `
+      <g transform="translate(386 86) rotate(-4)">
+        <rect x="0" y="0" width="74" height="48" rx="5" fill="#fee9a8" stroke="#15120d" stroke-width="3"/>
+        <path d="M18 34 L34 12 L38 29 L55 18" fill="none" stroke="#ff2d78" stroke-width="5" stroke-linecap="round"/>
+        <text x="38" y="43" text-anchor="middle" font-size="9" font-family="monospace">TRUTH</text>
+      </g>`,
+    city: ''
+  };
+  return props[theme.prop] || '';
+}
+
+function buildStageAvatar(x, y, mood, theme) {
+  const jitter = mood.jitter ? ' stage-mood-jitter' : '';
+  const pupilLeftX = mood.id === 'panic' ? -7 : -5;
+  const pupilRightX = mood.id === 'panic' ? 5 : 8;
+  return `
+    <g class="stage-mayfly${jitter}" transform="translate(${x} ${y})">
+      <ellipse class="stage-wing" cx="-17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
+      <ellipse class="stage-wing" cx="17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
+      <ellipse cx="0" cy="8" rx="12" ry="21" fill="#c38a35" stroke="#15110b" stroke-width="3"/>
+      <circle cx="0" cy="-8" r="15" fill="#f1bf56" stroke="#15110b" stroke-width="3"/>
+      <circle cx="-6" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
+      <circle cx="7" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
+      <circle cx="${pupilLeftX}" cy="${mood.pupilY}" r="1.8" fill="#15110b"/><circle cx="${pupilRightX}" cy="${mood.pupilY}" r="1.8" fill="#15110b"/>
+      <path d="${mood.mouth}" fill="none" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-9 23 L-22 32 M0 25 L0 36 M9 23 L22 32" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="0" cy="8" r="19" fill="none" stroke="${theme.accent}" stroke-width="2" opacity="0.28"/>
+    </g>
+  `;
+}
+
+function buildStageSkyline(theme = getStageTheme({ active: false })) {
   const buildings = [
     [18, 92, 34, 54], [60, 76, 44, 70], [112, 98, 32, 48], [152, 67, 48, 79],
     [210, 88, 40, 58], [260, 72, 56, 74], [326, 95, 34, 51], [370, 78, 47, 68], [430, 96, 44, 50]
   ];
   return buildings.map(([x, y, w, h], index) => {
     const windows = Array.from({ length: Math.max(2, Math.floor(h / 18)) }).map((_, row) => (
-      `<rect x="${x + 8}" y="${y + 10 + row * 15}" width="6" height="7" fill="${row % 2 ? '#00f5d4' : '#fee440'}" opacity="0.62"/>
+      `<rect x="${x + 8}" y="${y + 10 + row * 15}" width="6" height="7" fill="${row % 2 ? theme.accent : '#fee440'}" opacity="0.62"/>
        <rect x="${x + w - 14}" y="${y + 10 + row * 15}" width="6" height="7" fill="#ffffff" opacity="0.26"/>`
     )).join('');
     return `<g>
