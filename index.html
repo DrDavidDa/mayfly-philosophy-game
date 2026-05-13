@@ -352,13 +352,14 @@ body::after {
 }
 #screen-game > .hud-bar { order: 1; }
 #screen-game > .state-dock { order: 2; }
-#screen-game > .details-toggle { order: 3; }
-#screen-game > .objective-panel { order: 4; }
-#screen-game > .rookie-panel { order: 5; }
-#screen-game > .world-glitch-panel { order: 6; }
-#screen-game > .activity-grid { order: 7; }
-#screen-game > .char-display { order: 8; }
-#screen-game > .turn-feed { order: 9; }
+#screen-game > .game-stage { order: 3; }
+#screen-game > .details-toggle { order: 4; }
+#screen-game > .objective-panel { order: 5; }
+#screen-game > .rookie-panel { order: 6; }
+#screen-game > .world-glitch-panel { order: 7; }
+#screen-game > .activity-grid { order: 8; }
+#screen-game > .char-display { order: 9; }
+#screen-game > .turn-feed { order: 10; }
 #screen-game > .phase-panel,
 #screen-game > .rescue-panel,
 #screen-game > .route-panel,
@@ -458,6 +459,64 @@ body::after {
 .dock-card.life .dock-fill { background: var(--neon-yellow); }
 .dock-card.task .dock-fill { background: var(--neon-green); }
 .dock-card.debt .dock-fill { background: var(--neon-pink); }
+.game-stage {
+  width: min(520px, 100%);
+  min-height: 178px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(0,245,212,0.24);
+  border-radius: 6px;
+  background: #0c1018;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.32), inset 0 0 34px rgba(0,245,212,0.06);
+}
+.stage-svg {
+  display: block;
+  width: 100%;
+  height: 178px;
+}
+.stage-caption {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+.stage-pill {
+  max-width: 58%;
+  padding: 5px 8px;
+  border: 1px solid rgba(254,228,64,0.35);
+  background: rgba(7,9,14,0.72);
+  color: var(--neon-yellow);
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.28);
+}
+.stage-pill.warning {
+  border-color: rgba(255,45,120,0.42);
+  color: var(--neon-pink);
+}
+.stage-mayfly {
+  transform-origin: center;
+  animation: stageWingFloat 2.6s ease-in-out infinite;
+}
+.stage-wing {
+  transform-origin: center;
+  animation: stageWingBeat 0.28s ease-in-out infinite alternate;
+}
+@keyframes stageWingFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -4px; }
+}
+@keyframes stageWingBeat {
+  from { opacity: 0.48; scale: 0.94; }
+  to { opacity: 0.88; scale: 1.04; }
+}
 .details-toggle {
   width: min(520px, 100%);
   padding: 8px 10px;
@@ -1505,7 +1564,175 @@ body.world-glitch-stutter .hud-turn {
   box-shadow: none;
 }
 .activity-btn.simple-card {
-  min-height: 206px;
+  min-height: 238px;
+}
+.act-visual {
+  height: 88px;
+  margin: -2px 0 10px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(0,0,0,0.22);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.06)),
+    #d9edf0;
+  box-shadow: inset 0 -10px 0 rgba(0,0,0,0.06);
+}
+.act-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(254,228,64,0.85) 0 11px, transparent 12px),
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(0,0,0,0.08) 18px 20px, transparent 20px 38px);
+  opacity: 0.68;
+}
+.act-visual .visual-floor {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: 0;
+  height: 24px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0 10px, transparent 10px 22px),
+    rgba(26,26,36,0.24);
+  border-top: 2px solid rgba(0,0,0,0.16);
+}
+.visual-main {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 58px;
+  height: 58px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border: 3px solid rgba(0,0,0,0.72);
+  border-radius: 50%;
+  background: #fff3b0;
+  font-size: 1.8rem;
+  box-shadow: 4px 5px 0 rgba(0,0,0,0.28);
+  z-index: 2;
+}
+.visual-prop {
+  position: absolute;
+  z-index: 1;
+}
+.visual-prop.a {
+  left: 13px;
+  bottom: 23px;
+  width: 42px;
+  height: 31px;
+  border: 3px solid rgba(0,0,0,0.55);
+  background: rgba(255,255,255,0.48);
+  transform: rotate(-6deg);
+}
+.visual-prop.a::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 8px;
+  height: 3px;
+  background: rgba(0,0,0,0.3);
+  box-shadow: 0 7px 0 rgba(0,0,0,0.2);
+}
+.visual-prop.b {
+  right: 13px;
+  bottom: 22px;
+  width: 33px;
+  height: 44px;
+  border: 3px solid rgba(0,0,0,0.55);
+  background: rgba(255,255,255,0.4);
+  transform: rotate(6deg);
+}
+.visual-prop.b::after {
+  content: '';
+  position: absolute;
+  inset: 8px 7px auto;
+  height: 4px;
+  background: rgba(0,0,0,0.28);
+  box-shadow: 0 9px 0 rgba(0,0,0,0.2), 0 18px 0 rgba(0,0,0,0.18);
+}
+.act-visual.work,
+.act-visual.meeting {
+  background:
+    linear-gradient(180deg, rgba(186,225,255,0.76), rgba(255,243,176,0.22)),
+    #8fb4c4;
+}
+.act-visual.work .visual-main,
+.act-visual.meeting .visual-main {
+  background: #bae1ff;
+}
+.act-visual.slack,
+.act-visual.phone {
+  background:
+    linear-gradient(180deg, rgba(186,255,201,0.88), rgba(0,245,212,0.16)),
+    #9edbb4;
+}
+.act-visual.slack .visual-main,
+.act-visual.phone .visual-main {
+  background: #baffc9;
+}
+.act-visual.social {
+  background:
+    radial-gradient(circle at 22% 24%, rgba(255,179,186,0.82) 0 18px, transparent 19px),
+    linear-gradient(180deg, rgba(255,179,186,0.9), rgba(254,228,64,0.18)),
+    #e5a8b8;
+}
+.act-visual.social .visual-main {
+  background: #ffb3ba;
+}
+.act-visual.ai {
+  background:
+    radial-gradient(circle at 70% 28%, rgba(0,245,212,0.48) 0 18px, transparent 19px),
+    linear-gradient(135deg, rgba(10,10,15,0.94), rgba(27,56,69,0.86));
+}
+.act-visual.ai::before {
+  background:
+    repeating-linear-gradient(0deg, rgba(0,245,212,0.12) 0 2px, transparent 2px 9px),
+    repeating-linear-gradient(90deg, transparent 0 17px, rgba(0,245,212,0.18) 17px 19px, transparent 19px 36px);
+}
+.act-visual.ai .visual-main {
+  background: #101722;
+  color: var(--neon-cyan);
+  border-color: rgba(0,245,212,0.7);
+  box-shadow: 0 0 18px rgba(0,245,212,0.28), 4px 5px 0 rgba(0,0,0,0.38);
+}
+.act-visual.disrupt,
+.act-visual.think {
+  background:
+    radial-gradient(circle at 78% 30%, rgba(255,45,120,0.52) 0 14px, transparent 15px),
+    linear-gradient(135deg, rgba(254,228,64,0.76), rgba(255,107,53,0.34)),
+    #ecc56a;
+}
+.act-visual.disrupt .visual-main,
+.act-visual.think .visual-main {
+  background: #fee440;
+}
+.act-visual.danger .visual-main {
+  animation: visualAlarm 0.75s ease-in-out infinite alternate;
+}
+@keyframes visualAlarm {
+  from { transform: translate(-50%, -50%) rotate(-2deg); }
+  to { transform: translate(-50%, -53%) rotate(3deg); }
+}
+.act-impact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.act-impact-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 22px;
+  padding: 3px 6px;
+  background: rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.12);
+  color: #222;
+  font-size: 0.62rem;
+  font-weight: 800;
 }
 .activity-btn .act-icon {
   width: 36px;
@@ -1791,7 +2018,7 @@ body.first-run-mode .dock-value {
   font-size: 0.68rem;
 }
 body.first-run-mode .rookie-panel {
-  padding: 8px;
+  display: none !important;
 }
 body.first-run-mode .rookie-steps {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2502,6 +2729,9 @@ body.first-run-mode .activity-btn .act-tag {
   .state-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 420px; }
   .dock-card { min-height: 62px; }
   .dock-value { font-size: 0.88rem; }
+  .game-stage { min-height: 150px; }
+  .stage-svg { height: 150px; }
+  .stage-pill { font-size: 0.62rem; max-width: 54%; }
   .activity-grid { grid-template-columns: 1fr; gap: 9px; max-width: 420px; }
   .legacy-list { grid-template-columns: 1fr; }
   .npc-list { grid-template-columns: 1fr; }
@@ -2520,6 +2750,8 @@ body.first-run-mode .activity-btn .act-tag {
   body.first-run-mode .rookie-step { min-height: 64px; padding: 6px 5px; }
   body.first-run-mode .rookie-step-text { font-size: 0.5rem; }
   .activity-btn { padding: 12px 10px; font-size: 0.86rem; min-height: 112px; }
+  .activity-btn.simple-card { min-height: 194px; }
+  .act-visual { height: 78px; }
   .activity-btn .act-quote { min-height: auto; }
   .death-fatal-row { grid-template-columns: 34px minmax(0, 1fr); }
   .death-fatal-delta { grid-column: 2; }
@@ -2633,6 +2865,7 @@ body.first-run-mode .activity-btn .act-tag {
 	  </div>
 
   <div class="state-dock" id="state-dock"></div>
+  <div class="game-stage" id="game-stage" aria-label="本局可视化舞台"></div>
   <button class="details-toggle" id="details-toggle" type="button">展开旧账与属性</button>
 
   <div class="phase-panel">
@@ -3499,7 +3732,6 @@ function renderChoiceCards() {
   gameState.currentCards.forEach((card, index) => {
     const btn = document.createElement('button');
     const causalPreview = CORE.buildChoiceCausalPreview(gameState, card);
-    const firstRunGuide = CORE.buildFirstRunGuide(gameState, card);
     const routeMatch = route.active && route.categories.includes(card.category);
     const recommended = recommendedIds.includes(card.id) || (!recommendedIds.length && firstRunSimple && index === 0);
     const hint = (!gameState.firstRun && gameState.collectionTarget)
@@ -3526,28 +3758,17 @@ function renderChoiceCards() {
           ? '搅一下'
           : '试试看';
     btn.innerHTML = firstRunSimple ? `
-      <div class="act-icon">${card.icon}</div>
+      ${buildCardVisual(card, causalPreview)}
       <div class="act-simple-top">
         <div class="act-name">${card.name}</div>
         <div class="act-simple-label">${simpleLabel}</div>
       </div>
-      <div class="act-quote">${card.quote}</div>
-      <div class="act-simple-result">
-        <strong>${causalPreview.immediate}</strong>
-        <span>${shortText(consequenceLine, 34)}</span>
-      </div>
-      ${firstRunGuide ? `
-        <div class="act-first-guide ${firstRunGuide.focus}">
-          <span>${firstRunGuide.tag}</span>
-          <strong>${firstRunGuide.title}</strong>
-          <em>${getShortFirstRunGuideText(firstRunGuide)}</em>
-        </div>
-      ` : ''}
+      <div class="act-impact-row">${buildQuickImpactChips(card, causalPreview)}</div>
       ${recommended ? `<div class="act-cta">先点这张</div>` : ''}
     ` : `
-      <div class="act-icon">${card.icon}</div>
+      ${buildCardVisual(card, causalPreview)}
       <div class="act-name">${card.name}</div>
-      <div class="act-quote">${card.quote}</div>
+      <div class="act-quote">${shortText(card.quote, 36)}</div>
       <div class="act-cost ${causalPreview.routeModifier ? 'modified' : ''}">-${formatDuration(causalPreview.timeCost || card.cost.time)}${causalPreview.routeModifier ? ' · 路线改写' : ''}</div>
       <div class="act-causal-preview">
         <div class="act-causal-row">
@@ -3602,6 +3823,52 @@ function shortText(text, maxLength) {
   const compact = String(text || '').replace(/\s+/g, ' ').trim();
   if (compact.length <= maxLength) return compact;
   return `${compact.slice(0, Math.max(0, maxLength - 3))}...`;
+}
+
+function buildCardVisual(card, causalPreview) {
+  const category = card.category || 'think';
+  const danger = causalPreview.callback || ['danger', 'lethal'].includes(causalPreview.risk.level);
+  return `
+    <div class="act-visual ${category} ${danger ? 'danger' : ''}" aria-hidden="true">
+      <div class="visual-prop a"></div>
+      <div class="visual-prop b"></div>
+      <div class="visual-main">${card.icon}</div>
+      <div class="visual-floor"></div>
+    </div>
+  `;
+}
+
+function buildQuickImpactChips(card, causalPreview) {
+  const statIcons = {
+    spirit: '🧠',
+    social: '💬',
+    health: '❤',
+    anxiety: '⚡'
+  };
+  const statLabels = {
+    spirit: '精神',
+    social: '社交',
+    health: '健康',
+    anxiety: '焦虑'
+  };
+  const chips = [
+    `<span class="act-impact-chip">⏱ ${formatDuration(causalPreview.timeCost || card.cost.time)}</span>`
+  ];
+  Object.entries(card.effect || {})
+    .sort((left, right) => Math.abs(right[1]) - Math.abs(left[1]))
+    .slice(0, 2)
+    .forEach(([key, val]) => {
+      chips.push(`<span class="act-impact-chip">${statIcons[key] || '•'} ${statLabels[key] || key}${val > 0 ? '+' : ''}${val}</span>`);
+    });
+  if (card.disruption) {
+    chips.push(`<span class="act-impact-chip">⚡ 搅局${card.disruption > 0 ? '+' : ''}${card.disruption}</span>`);
+  } else if (causalPreview.callback) {
+    chips.push('<span class="act-impact-chip">⏳ 旧账</span>');
+  } else {
+    const riskIcon = causalPreview.risk.level === 'mild' ? '🛡' : '⚠';
+    chips.push(`<span class="act-impact-chip">${riskIcon} ${causalPreview.risk.label}</span>`);
+  }
+  return chips.slice(0, 4).join('');
 }
 
 function getShortFirstRunGuideText(guide) {
@@ -3714,6 +3981,102 @@ function renderStateDock() {
   `).join('');
 }
 
+function renderGameStage() {
+  const stage = document.getElementById('game-stage');
+  if (!stage) return;
+  const route = CORE.buildRouteStatus(gameState);
+  const chain = getCurrentRouteTaskChainStatus();
+  const pending = (gameState.pendingConsequences || []).length;
+  const due = CORE.getDueConsequences(gameState).length;
+  const limit = gameState.character && gameState.character.timeLimit ? gameState.character.timeLimit : 24;
+  const elapsedPct = Math.max(0, Math.min(1, (limit - gameState.timeLeft) / limit));
+  const flyX = Math.round(58 + elapsedPct * 384);
+  const flyY = Math.round(103 - Math.sin(elapsedPct * Math.PI) * 20 + Math.min(12, (gameState.stats.anxiety || 0) / 12));
+  const lifePct = Math.round(elapsedPct * 100);
+  const intentTitle = gameState.runIntent && gameState.runIntent.title;
+  const focusLabel = chain && !chain.complete
+    ? chain.current.label
+    : route.active
+      ? route.title
+      : intentTitle || '找一种活法';
+  const warningLabel = due
+    ? `${due}个旧账回访`
+    : pending
+      ? `${pending}个旧账排队`
+      : `焦虑 ${gameState.stats.anxiety || 0}`;
+  const debtClouds = Array.from({ length: Math.min(4, pending + due) }).map((_, index) => {
+    const x = 342 + index * 31;
+    const y = 34 + (index % 2) * 12;
+    const color = due ? '#ff2d78' : '#fee440';
+    return `<g opacity="0.82">
+      <circle cx="${x}" cy="${y}" r="9" fill="${color}"/>
+      <circle cx="${x + 9}" cy="${y + 2}" r="7" fill="${color}"/>
+      <circle cx="${x - 9}" cy="${y + 3}" r="6" fill="${color}"/>
+    </g>`;
+  }).join('');
+  const routeColor = route.active ? '#00f5d4' : '#fee440';
+  stage.innerHTML = `
+    <svg class="stage-svg" viewBox="0 0 520 178" role="img" aria-label="蜉蝣在压缩人生城市中飞行">
+      <defs>
+        <linearGradient id="stageSky" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#121827"/>
+          <stop offset="0.58" stop-color="#182339"/>
+          <stop offset="1" stop-color="#351427"/>
+        </linearGradient>
+        <linearGradient id="stageGround" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#273248"/>
+          <stop offset="1" stop-color="#111118"/>
+        </linearGradient>
+      </defs>
+      <rect width="520" height="178" fill="url(#stageSky)"/>
+      <circle cx="443" cy="33" r="20" fill="#fee440" opacity="0.92"/>
+      <circle cx="458" cy="27" r="20" fill="#121827" opacity="0.78"/>
+      <g opacity="0.32" fill="#00f5d4">
+        <circle cx="48" cy="30" r="2"/><circle cx="112" cy="18" r="1.5"/><circle cx="198" cy="36" r="2"/>
+        <circle cx="282" cy="20" r="1.6"/><circle cx="396" cy="56" r="1.8"/>
+      </g>
+      <path d="M28 112 C118 70 202 138 274 94 C344 53 405 89 486 58" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="8" stroke-linecap="round"/>
+      <path d="M28 112 C118 70 202 138 274 94 C344 53 405 89 486 58" fill="none" stroke="${routeColor}" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${lifePct} 100"/>
+      ${buildStageSkyline()}
+      ${debtClouds}
+      <g class="stage-mayfly" transform="translate(${flyX} ${flyY})">
+        <ellipse class="stage-wing" cx="-17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
+        <ellipse class="stage-wing" cx="17" cy="-13" rx="24" ry="12" fill="#d8f7ff" opacity="0.72" stroke="#ffffff" stroke-width="2"/>
+        <ellipse cx="0" cy="8" rx="12" ry="21" fill="#c38a35" stroke="#15110b" stroke-width="3"/>
+        <circle cx="0" cy="-8" r="15" fill="#f1bf56" stroke="#15110b" stroke-width="3"/>
+        <circle cx="-6" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
+        <circle cx="7" cy="-11" r="5" fill="#fff8d8" stroke="#15110b" stroke-width="2"/>
+        <circle cx="-5" cy="-10" r="1.8" fill="#15110b"/><circle cx="8" cy="-10" r="1.8" fill="#15110b"/>
+        <path d="M-5 -2 Q0 2 6 -2" fill="none" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
+        <path d="M-9 23 L-22 32 M0 25 L0 36 M9 23 L22 32" stroke="#15110b" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <rect x="0" y="143" width="520" height="35" fill="url(#stageGround)"/>
+      <path d="M0 145 H520" stroke="rgba(254,228,64,0.28)" stroke-width="2" stroke-dasharray="9 8"/>
+    </svg>
+    <div class="stage-caption">
+      <div class="stage-pill">${shortText(focusLabel, 14)}</div>
+      <div class="stage-pill warning">${shortText(warningLabel, 12)}</div>
+    </div>
+  `;
+}
+
+function buildStageSkyline() {
+  const buildings = [
+    [18, 92, 34, 54], [60, 76, 44, 70], [112, 98, 32, 48], [152, 67, 48, 79],
+    [210, 88, 40, 58], [260, 72, 56, 74], [326, 95, 34, 51], [370, 78, 47, 68], [430, 96, 44, 50]
+  ];
+  return buildings.map(([x, y, w, h], index) => {
+    const windows = Array.from({ length: Math.max(2, Math.floor(h / 18)) }).map((_, row) => (
+      `<rect x="${x + 8}" y="${y + 10 + row * 15}" width="6" height="7" fill="${row % 2 ? '#00f5d4' : '#fee440'}" opacity="0.62"/>
+       <rect x="${x + w - 14}" y="${y + 10 + row * 15}" width="6" height="7" fill="#ffffff" opacity="0.26"/>`
+    )).join('');
+    return `<g>
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${index % 2 ? '#171827' : '#222437'}" stroke="rgba(255,255,255,0.08)"/>
+      ${windows}
+    </g>`;
+  }).join('');
+}
+
 function renderDetailsToggle() {
   const button = document.getElementById('details-toggle');
   if (!button) return;
@@ -3730,6 +4093,7 @@ function renderGameUI() {
   document.getElementById('hud-time').textContent = CORE.formatCountdown(gameState.timeLeft);
   document.getElementById('hud-turn').textContent = `${CORE.formatLifeAge(gameState)} / 第${gameState.turnCount}次选择`;
   renderStateDock();
+  renderGameStage();
   renderDetailsToggle();
   renderPhasePanel();
   renderObjectivePanel();
