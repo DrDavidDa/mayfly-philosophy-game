@@ -10,7 +10,6 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&family=ZCOOL+KuaiLe&family=Press+Start+2P&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <style>
 /* ========== 设计Token ========== */
@@ -96,13 +95,52 @@ body::after {
 }
 
 /* ========== 标题屏 ========== */
+#screen-title {
+  justify-content: center;
+  gap: 18px;
+}
+.title-shell {
+  width: min(1040px, calc(100vw - 32px));
+  display: grid;
+  grid-template-columns: minmax(310px, 1.08fr) minmax(280px, 0.92fr);
+  align-items: center;
+  gap: 28px;
+}
+.title-visual {
+  min-height: 420px;
+  border: 2px solid rgba(0,245,212,0.28);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #101722;
+  position: relative;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.48), inset 0 0 42px rgba(0,245,212,0.08);
+}
+.title-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 54% 32%, rgba(254,228,64,0.12), transparent 34%),
+    linear-gradient(180deg, transparent, rgba(0,0,0,0.34));
+  pointer-events: none;
+}
+.title-scene-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  display: block;
+}
+.title-copy {
+  position: relative;
+  z-index: 1;
+}
 .title-main {
   font-family: var(--font-title);
   font-size: clamp(2.5rem, 8vw, 5rem);
   color: var(--neon-cyan);
   text-shadow: 0 0 10px var(--neon-cyan), 0 0 40px rgba(0,245,212,0.3);
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
   position: relative;
+  line-height: 0.95;
 }
 .title-main.glitching {
   animation: glitch 0.3s ease-in-out;
@@ -121,6 +159,39 @@ body::after {
   opacity: 0.5;
   margin-top: 8px;
   font-style: italic;
+}
+.title-playbook {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 22px;
+}
+.title-chip {
+  min-height: 72px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(17,17,24,0.76);
+  box-shadow: inset 0 0 18px rgba(0,0,0,0.28);
+}
+.title-chip span {
+  display: block;
+  color: var(--neon-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  margin-bottom: 8px;
+}
+.title-chip strong {
+  display: block;
+  color: var(--paper-white);
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  line-height: 1.16;
+}
+.title-version {
+  opacity: 0.22;
+  font-size: 0.62rem;
+  font-family: var(--font-pixel);
+  text-align: center;
 }
 @keyframes glitch {
   0%, 100% { text-shadow: 2px 0 var(--neon-pink), -2px 0 var(--neon-cyan); transform: translate(0); }
@@ -179,58 +250,151 @@ body::after {
 }
 
 /* ========== 角色选择 ========== */
+.select-shell {
+  width: min(760px, calc(100vw - 32px));
+  display: grid;
+  gap: 18px;
+}
+.select-head {
+  text-align: center;
+}
+.select-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.55rem, 4vw, 2.25rem);
+  color: var(--neon-cyan);
+}
+.select-sub {
+  margin-top: 8px;
+  color: var(--fluorescent);
+  font-size: 0.84rem;
+  opacity: 0.72;
+}
+.select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
 .char-card {
-  background: var(--postit-yellow);
-  color: #333;
-  padding: 20px;
-  width: 260px;
-  border: 0;
-  border-radius: 2px;
+  min-height: 276px;
+  padding: 0;
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(17,17,24,0.88);
+  color: var(--paper-white);
   cursor: pointer;
   font-family: var(--font-body);
   text-align: left;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   position: relative;
-  box-shadow: 3px 4px 12px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 18px 38px rgba(0,0,0,0.28), inset 0 0 26px rgba(0,0,0,0.22);
+  overflow: hidden;
 }
 .char-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: rgba(0,0,0,0.06);
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,245,212,0.08), transparent 42%);
+  pointer-events: none;
 }
-.char-card:nth-child(1) { transform: rotate(-1.5deg); }
-.char-card:nth-child(2) { transform: rotate(1deg); background: var(--postit-pink); }
+.char-card:nth-child(2)::before {
+  background: linear-gradient(180deg, rgba(255,45,120,0.12), transparent 42%);
+}
 .char-card:hover {
-  transform: rotate(0deg) scale(1.05) !important;
-  box-shadow: 0 0 20px rgba(0,245,212,0.3), 3px 4px 12px rgba(0,0,0,0.4);
+  transform: translateY(-4px);
+  border-color: rgba(0,245,212,0.68);
+  box-shadow: 0 0 28px rgba(0,245,212,0.2), 0 22px 44px rgba(0,0,0,0.38);
   z-index: 10;
 }
-.char-card .emoji { font-size: 3rem; }
-.char-card .name { font-family: var(--font-title); font-size: 1.5rem; margin-top: 8px; }
-.char-card .subtitle { font-size: 0.85rem; opacity: 0.7; margin-top: 4px; }
-.char-card .desc { font-size: 0.8rem; margin-top: 8px; line-height: 1.4; }
-.char-card .stats-preview { margin-top: 10px; font-size: 0.75rem; display: flex; gap: 6px; flex-wrap: wrap; }
-.char-card .stats-preview span { background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 2px; }
+.char-portrait {
+  height: 138px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: #101722;
+  overflow: hidden;
+}
+.char-portrait svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.char-body {
+  padding: 12px;
+}
+.char-card .name {
+  font-family: var(--font-title);
+  font-size: 1.32rem;
+  color: var(--neon-yellow);
+  line-height: 1;
+}
+.char-card .subtitle {
+  font-size: 0.74rem;
+  opacity: 0.72;
+  margin-top: 6px;
+  line-height: 1.34;
+}
+.char-card .desc {
+  font-size: 0.72rem;
+  margin-top: 8px;
+  line-height: 1.38;
+  color: var(--fluorescent);
+  opacity: 0.82;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.char-card .stats-preview {
+  margin-top: 11px;
+  display: grid;
+  gap: 5px;
+}
+.char-card .stats-preview span {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 24px;
+  gap: 6px;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  color: var(--paper-white);
+}
+.char-card .stats-preview i {
+  height: 5px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+.char-card .stats-preview b {
+  display: block;
+  height: 100%;
+  background: var(--neon-cyan);
+}
+.char-card .stats-preview em {
+  font-style: normal;
+  color: var(--fluorescent);
+  text-align: right;
+  opacity: 0.76;
+}
+.char-card .stats-preview span:nth-child(2) b { background: var(--neon-purple); }
+.char-card .stats-preview span:nth-child(3) b { background: var(--neon-green); }
+.char-card .stats-preview span:nth-child(4) b { background: var(--neon-pink); }
 .char-card.locked {
   filter: grayscale(0.8) brightness(0.6);
   cursor: not-allowed;
 }
 .char-card:disabled {
-  color: #333;
+  color: var(--paper-white);
 }
 .char-card.locked::after {
-  content: '🔒 首次通关后解锁';
+  content: '首次归档结局后解锁';
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.62);
   color: var(--paper-white);
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 18px;
 }
 
 /* ========== 本局目标选择 ========== */
@@ -291,6 +455,19 @@ body::after {
 }
 .intent-card.recommended {
   box-shadow: 0 0 24px rgba(254,228,64,0.12);
+}
+.intent-scene {
+  height: 82px;
+  margin-bottom: 9px;
+  border: 2px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.24);
+  overflow: hidden;
+  position: relative;
+}
+.intent-scene svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .intent-emoji {
   width: 44px;
@@ -1577,6 +1754,14 @@ body.world-glitch-stutter .hud-turn {
     #d9edf0;
   box-shadow: inset 0 -10px 0 rgba(0,0,0,0.06);
 }
+.act-visual .act-scene-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 2;
+}
 .act-visual::before {
   content: '';
   position: absolute;
@@ -2803,6 +2988,27 @@ body.first-run-mode .activity-btn .act-tag {
 
 /* ========== 响应式 ========== */
 @media (max-width: 600px) {
+  #screen-title { justify-content: flex-start; padding-top: 14px; }
+  .title-shell { grid-template-columns: 1fr; gap: 14px; width: min(420px, calc(100vw - 24px)); }
+  .title-visual { min-height: 236px; order: 1; }
+  .title-scene-svg { min-height: 236px; }
+  .title-copy { order: 2; }
+  .title-main { font-size: clamp(2.2rem, 12vw, 3.2rem); }
+  .title-sub { font-size: 1rem; margin-top: 8px; }
+  .title-slogan { font-size: 0.78rem; }
+  .title-playbook { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 14px; }
+  .title-chip { min-height: 58px; padding: 7px 6px; }
+  .title-chip span { font-size: 0.38rem; margin-bottom: 6px; }
+  .title-chip strong { font-size: 0.66rem; }
+  .title-actions { margin-top: 16px; gap: 8px; }
+  .title-actions .btn-neon { flex: 1; min-width: 0; padding: 10px 8px; font-size: 0.86rem; }
+  .title-version { display: none; }
+  .select-shell { width: min(420px, calc(100vw - 24px)); gap: 12px; }
+  .select-grid { grid-template-columns: 1fr; gap: 10px; }
+  .char-card { min-height: 210px; }
+  .char-portrait { height: 96px; }
+  .char-body { padding: 10px; }
+  .char-card .desc { display: none; }
   #screen-game { padding: 12px 12px 18px; gap: 10px; }
   .state-dock { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 420px; }
   .dock-card { min-height: 62px; }
@@ -2833,10 +3039,10 @@ body.first-run-mode .activity-btn .act-tag {
   .activity-btn .act-quote { min-height: auto; }
   .death-fatal-row { grid-template-columns: 34px minmax(0, 1fr); }
   .death-fatal-delta { grid-column: 2; }
-  .char-card { width: 100%; max-width: 260px; }
   .intent-shell { gap: 10px; }
   .intent-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-  .intent-card { min-height: 150px; padding: 10px 9px; }
+  .intent-card { min-height: 162px; padding: 9px 8px; }
+  .intent-scene { height: 58px; margin-bottom: 7px; }
   .intent-emoji { width: 36px; height: 36px; font-size: 1.35rem; }
   .intent-name { font-size: 0.82rem; margin-top: 7px; }
   .intent-hook { -webkit-line-clamp: 2; font-size: 0.66rem; }
@@ -2855,15 +3061,85 @@ body.first-run-mode .activity-btn .act-tag {
 
 <!-- ========== 标题屏 ========== -->
 <section id="screen-title" class="screen active">
-  <div class="title-main" id="title-text">蜉蝣哲学</div>
-  <div class="title-sub" id="title-sub">活不过一天也要搅局</div>
-  <div class="title-slogan">"刚出生就下班，死前才开始摸鱼。"</div>
-  <div class="title-actions">
-    <button class="btn-neon" id="btn-start">开始搅局</button>
-    <button class="btn-neon pink" id="btn-collection-title">结局收藏册</button>
+  <div class="title-shell">
+    <div class="title-visual" aria-hidden="true">
+      <svg class="title-scene-svg" viewBox="0 0 620 440" role="img" aria-label="蜉蝣在24小时荒诞城市中飞行">
+        <defs>
+          <linearGradient id="titleSky" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#111827"/>
+            <stop offset="0.52" stop-color="#182339"/>
+            <stop offset="1" stop-color="#401529"/>
+          </linearGradient>
+          <linearGradient id="titleStreet" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#26324a"/>
+            <stop offset="1" stop-color="#0a0a0f"/>
+          </linearGradient>
+        </defs>
+        <rect width="620" height="440" fill="url(#titleSky)"/>
+        <g opacity="0.22" stroke="#00f5d4" stroke-width="1">
+          <path d="M0 54 H620M0 108 H620M0 162 H620M0 216 H620M0 270 H620M0 324 H620"/>
+          <path d="M58 0 V440M124 0 V440M190 0 V440M256 0 V440M322 0 V440M388 0 V440M454 0 V440M520 0 V440"/>
+        </g>
+        <circle cx="504" cy="72" r="36" fill="#fee440"/>
+        <circle cx="523" cy="61" r="35" fill="#151827" opacity="0.78"/>
+        <path d="M48 258 C122 166 214 303 302 210 C382 126 462 190 560 112" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M48 258 C122 166 214 303 302 210 C382 126 462 190 560 112" fill="none" stroke="#fee440" stroke-width="7" stroke-linecap="round" stroke-dasharray="32 14"/>
+        <g>
+          <rect x="42" y="232" width="58" height="120" rx="5" fill="#171827" stroke="rgba(255,255,255,0.09)"/>
+          <rect x="118" y="186" width="76" height="166" rx="5" fill="#222437" stroke="rgba(255,255,255,0.09)"/>
+          <rect x="218" y="242" width="58" height="110" rx="5" fill="#171827" stroke="rgba(255,255,255,0.09)"/>
+          <rect x="302" y="174" width="86" height="178" rx="5" fill="#25263a" stroke="rgba(255,255,255,0.09)"/>
+          <rect x="416" y="218" width="70" height="134" rx="5" fill="#171827" stroke="rgba(255,255,255,0.09)"/>
+          <rect x="510" y="194" width="62" height="158" rx="5" fill="#222437" stroke="rgba(255,255,255,0.09)"/>
+        </g>
+        <g opacity="0.78">
+          <rect x="56" y="250" width="10" height="14" fill="#fee440"/><rect x="78" y="250" width="10" height="14" fill="#00f5d4"/>
+          <rect x="135" y="210" width="12" height="14" fill="#ff2d78"/><rect x="165" y="210" width="12" height="14" fill="#fee440"/>
+          <rect x="324" y="198" width="12" height="14" fill="#00f5d4"/><rect x="356" y="198" width="12" height="14" fill="#fee440"/>
+          <rect x="432" y="244" width="12" height="14" fill="#ff2d78"/><rect x="532" y="218" width="10" height="14" fill="#00f5d4"/>
+        </g>
+        <g transform="translate(312 204)">
+          <ellipse cx="-42" cy="-25" rx="52" ry="28" fill="#d8f7ff" opacity="0.74" stroke="#ffffff" stroke-width="4"/>
+          <ellipse cx="42" cy="-25" rx="52" ry="28" fill="#d8f7ff" opacity="0.74" stroke="#ffffff" stroke-width="4"/>
+          <ellipse cx="0" cy="22" rx="24" ry="50" fill="#c38a35" stroke="#15110b" stroke-width="6"/>
+          <circle cx="0" cy="-20" r="34" fill="#f1bf56" stroke="#15110b" stroke-width="6"/>
+          <circle cx="-14" cy="-26" r="11" fill="#fff8d8" stroke="#15110b" stroke-width="4"/>
+          <circle cx="15" cy="-26" r="11" fill="#fff8d8" stroke="#15110b" stroke-width="4"/>
+          <circle cx="-11" cy="-24" r="4" fill="#15110b"/><circle cx="18" cy="-24" r="4" fill="#15110b"/>
+          <path d="M-13 -5 Q0 5 15 -5" fill="none" stroke="#15110b" stroke-width="4" stroke-linecap="round"/>
+          <path d="M-20 66 L-46 88 M0 70 L0 98 M20 66 L46 88" stroke="#15110b" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <g>
+          <rect x="42" y="44" width="118" height="58" rx="4" fill="#15120d" stroke="#fee440" stroke-width="3"/>
+          <text x="62" y="70" fill="#fee440" font-size="18" font-family="monospace">24H</text>
+          <text x="62" y="91" fill="#f0f0e8" font-size="13" font-family="sans-serif">剩余人生</text>
+          <rect x="434" y="278" width="126" height="64" rx="4" fill="#fff3b0" stroke="#15120d" stroke-width="4" transform="rotate(-5 497 310)"/>
+          <text x="496" y="304" text-anchor="middle" fill="#15120d" font-size="16" font-family="sans-serif">今日目标</text>
+          <text x="496" y="326" text-anchor="middle" fill="#15120d" font-size="14" font-family="sans-serif">活得像自己</text>
+          <rect x="76" y="320" width="134" height="48" rx="4" fill="#15120d" stroke="#ff2d78" stroke-width="3"/>
+          <text x="143" y="350" text-anchor="middle" fill="#ff2d78" font-size="16" font-family="sans-serif">旧账排队中</text>
+        </g>
+        <rect x="0" y="352" width="620" height="88" fill="url(#titleStreet)"/>
+        <path d="M0 355 H620" stroke="rgba(254,228,64,0.32)" stroke-width="4" stroke-dasharray="18 16"/>
+      </svg>
+    </div>
+    <div class="title-copy">
+      <div class="title-main" id="title-text">蜉蝣哲学</div>
+      <div class="title-sub" id="title-sub">活不过一天也要搅局</div>
+      <div class="title-slogan">"刚出生就下班，死前才开始摸鱼。"</div>
+      <div class="title-playbook">
+        <div class="title-chip"><span>目标</span><strong>选一种活法</strong></div>
+        <div class="title-chip"><span>行动</span><strong>点卡推进路线</strong></div>
+        <div class="title-chip"><span>结局</span><strong>收集荒诞死法</strong></div>
+      </div>
+      <div class="title-actions">
+        <button class="btn-neon" id="btn-start">开始搅局</button>
+        <button class="btn-neon pink" id="btn-collection-title">结局收藏册</button>
+      </div>
+    </div>
   </div>
-  <div style="margin-top: 60px; opacity: 0.2; font-size: 0.7rem; font-family: var(--font-pixel);">
-    MAYFLY PHILOSOPHY v0.1
+  <div class="title-version">
+    MAYFLY PHILOSOPHY v0.2 VISUAL BUILD
   </div>
 </section>
 
@@ -2909,11 +3185,14 @@ body.first-run-mode .activity-btn .act-tag {
 
 <!-- ========== 角色选择 ========== -->
 <section id="screen-select" class="screen">
-  <div style="font-family: var(--font-title); font-size: 1.5rem; color: var(--neon-cyan); margin-bottom: 24px;">
-    选择你的蜉蝣
-  </div>
-  <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;" id="char-cards">
-    <!-- JS生成 -->
+  <div class="select-shell">
+    <div class="select-head">
+      <div class="select-title">选择你的短命主角</div>
+      <div class="select-sub">不同角色不是皮肤，是一套不同的寿命压力和死法倾向。</div>
+    </div>
+    <div class="select-grid" id="char-cards">
+      <!-- JS生成 -->
+    </div>
   </div>
 </section>
 
@@ -3590,9 +3869,11 @@ function setupTitleScreen() {
   }, 4000);
 
   // 入场动画
+  gsap.fromTo('.title-visual', { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
   gsap.fromTo('#title-text', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.5)' });
   gsap.fromTo('#title-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.4 });
   gsap.fromTo('.title-slogan', { opacity: 0 }, { opacity: 0.5, duration: 0.6, delay: 0.8 });
+  gsap.fromTo('.title-chip', { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.06, delay: 0.95 });
   gsap.fromTo('#btn-start', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, delay: 1.2, ease: 'back.out(2)' });
 
   document.getElementById('btn-start').addEventListener('click', () => {
@@ -3670,6 +3951,55 @@ function setCollectionTarget(kind, target) {
 
 // ========== 角色选择 ==========
 
+function buildCharacterPortrait(char, locked) {
+  const isMosquito = char.id === 'mosquito';
+  const accent = isMosquito ? '#ff2d78' : '#00f5d4';
+  const body = isMosquito ? '#a06c48' : '#c38a35';
+  const face = isMosquito ? '#d0995e' : '#f1bf56';
+  const label = isMosquito ? '12H' : '24H';
+  const warning = locked ? 'LOCKED' : (isMosquito ? 'BITE ROUTE' : 'MAYFLY ROUTE');
+  const skyline = isMosquito
+    ? '<rect x="18" y="82" width="36" height="38" fill="#241525"/><rect x="72" y="70" width="44" height="50" fill="#2a172b"/><rect x="196" y="78" width="42" height="42" fill="#241525"/>'
+    : '<rect x="18" y="78" width="44" height="42" fill="#171827"/><rect x="88" y="62" width="52" height="58" fill="#222437"/><rect x="204" y="74" width="48" height="46" fill="#171827"/>';
+  const insect = isMosquito
+    ? `<g transform="translate(142 62)">
+        <ellipse cx="-30" cy="-14" rx="32" ry="14" fill="#d8f7ff" opacity="0.7" stroke="#fff" stroke-width="3"/>
+        <ellipse cx="29" cy="-13" rx="31" ry="14" fill="#d8f7ff" opacity="0.7" stroke="#fff" stroke-width="3"/>
+        <ellipse cx="0" cy="9" rx="15" ry="34" fill="${body}" stroke="#15110b" stroke-width="5"/>
+        <circle cx="0" cy="-21" r="24" fill="${face}" stroke="#15110b" stroke-width="5"/>
+        <path d="M21 -18 L64 -30" stroke="#15110b" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="-9" cy="-25" r="8" fill="#fff8d8" stroke="#15110b" stroke-width="3"/><circle cx="9" cy="-25" r="8" fill="#fff8d8" stroke="#15110b" stroke-width="3"/>
+        <circle cx="-7" cy="-24" r="3" fill="#15110b"/><circle cx="12" cy="-24" r="3" fill="#15110b"/>
+      </g>`
+    : `<g transform="translate(140 64)">
+        <ellipse cx="-34" cy="-18" rx="40" ry="19" fill="#d8f7ff" opacity="0.72" stroke="#fff" stroke-width="3"/>
+        <ellipse cx="34" cy="-18" rx="40" ry="19" fill="#d8f7ff" opacity="0.72" stroke="#fff" stroke-width="3"/>
+        <ellipse cx="0" cy="14" rx="18" ry="38" fill="${body}" stroke="#15110b" stroke-width="5"/>
+        <circle cx="0" cy="-20" r="27" fill="${face}" stroke="#15110b" stroke-width="5"/>
+        <circle cx="-11" cy="-25" r="9" fill="#fff8d8" stroke="#15110b" stroke-width="3"/><circle cx="12" cy="-25" r="9" fill="#fff8d8" stroke="#15110b" stroke-width="3"/>
+        <circle cx="-8" cy="-24" r="3" fill="#15110b"/><circle cx="15" cy="-24" r="3" fill="#15110b"/>
+        <path d="M-9 -6 Q0 1 11 -6" fill="none" stroke="#15110b" stroke-width="3" stroke-linecap="round"/>
+      </g>`;
+  return `
+    <svg viewBox="0 0 280 138" role="img" aria-label="${char.name}角色肖像">
+      <rect width="280" height="138" fill="${isMosquito ? '#2a1220' : '#101722'}"/>
+      <g opacity="0.26" stroke="${accent}" stroke-width="1">
+        <path d="M0 28 H280M0 56 H280M0 84 H280"/>
+        <path d="M38 0 V138M86 0 V138M134 0 V138M182 0 V138M230 0 V138"/>
+      </g>
+      <circle cx="230" cy="30" r="18" fill="${accent}" opacity="0.36"/>
+      ${skyline}
+      <rect x="0" y="120" width="280" height="18" fill="#0a0a0f"/>
+      <path d="M20 103 C62 70 88 111 124 82 C166 49 203 73 252 42" fill="none" stroke="${accent}" stroke-width="4" stroke-linecap="round" stroke-dasharray="11 8" opacity="0.88"/>
+      ${insect}
+      <rect x="14" y="12" width="58" height="24" fill="#15120d" stroke="${accent}" stroke-width="2"/>
+      <text x="43" y="29" text-anchor="middle" fill="${accent}" font-size="14" font-family="monospace">${label}</text>
+      <rect x="174" y="98" width="82" height="22" fill="#15120d" stroke="${accent}" stroke-width="2"/>
+      <text x="215" y="113" text-anchor="middle" fill="${accent}" font-size="9" font-family="monospace">${warning}</text>
+    </svg>
+  `;
+}
+
 function setupSelectScreen() {
   const container = document.getElementById('char-cards');
   container.innerHTML = '';
@@ -3681,16 +4011,23 @@ function setupSelectScreen() {
     card.className = 'char-card' + (locked ? ' locked' : '');
     card.disabled = locked;
     card.setAttribute('aria-label', locked ? `${char.name}暂未解锁` : `选择${char.name}`);
+    const stats = [
+      ['精神', char.baseStats.spirit],
+      ['社交', char.baseStats.social],
+      ['健康', char.baseStats.health],
+      ['焦虑', char.baseStats.anxiety]
+    ].map(([label, value]) => `
+      <span>${label}<i><b style="width:${Math.max(0, Math.min(100, value))}%"></b></i><em>${value}</em></span>
+    `).join('');
     card.innerHTML = `
-      <div class="emoji">${char.emoji}</div>
-      <div class="name">${char.name}</div>
-      <div class="subtitle">${char.subtitle}</div>
-      <div class="desc">${char.description}</div>
-      <div class="stats-preview">
-        <span>精神${char.baseStats.spirit}</span>
-        <span>社交${char.baseStats.social}</span>
-        <span>健康${char.baseStats.health}</span>
-        <span>焦虑${char.baseStats.anxiety}</span>
+      <div class="char-portrait">${buildCharacterPortrait(char, locked)}</div>
+      <div class="char-body">
+        <div class="name">${char.name}</div>
+        <div class="subtitle">${char.subtitle}</div>
+        <div class="desc">${char.description}</div>
+        <div class="stats-preview">
+          ${stats}
+        </div>
       </div>
     `;
     if (!locked) {
@@ -3731,7 +4068,7 @@ function setupIntentScreen() {
 
   container.innerHTML = CORE.RUN_INTENTS.map((intent) => `
     <button class="intent-card ${intent.id === suggestedId ? 'recommended' : ''}" data-intent="${intent.id}" aria-label="选择${intent.title}">
-      <div class="intent-emoji">${intent.emoji}</div>
+      ${buildIntentScene(intent)}
       <div class="intent-name">${intent.title}</div>
       <div class="intent-hook">${intent.hook}</div>
       <div class="intent-risk">${intent.risk}</div>
@@ -3743,6 +4080,41 @@ function setupIntentScreen() {
     button.addEventListener('click', () => startRunWithIntent(button.dataset.intent));
   });
   gsap.fromTo('.intent-card', { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, stagger: 0.06 });
+}
+
+function buildIntentScene(intent) {
+  const scenes = {
+    work: { bg: '#9bc7d9', floor: '#34425a', accent: '#ff2d78', icon: '📊', label: 'KPI', prop: 'PPT' },
+    slack: { bg: '#baffc9', floor: '#153b32', accent: '#00f5d4', icon: '🐟', label: '偷回时间', prop: 'WC' },
+    social: { bg: '#ffd3d8', floor: '#5b3041', accent: '#fee440', icon: '🧋', label: '人情过热', prop: 'LIKE' },
+    ai: { bg: '#101722', floor: '#050912', accent: '#00f5d4', icon: '🤖', label: '外包本人', prop: 'AI' },
+    disrupt: { bg: '#fee9a8', floor: '#4b3328', accent: '#ff2d78', icon: '⚡', label: '现实卡顿', prop: 'TRUTH' }
+  };
+  const scene = scenes[intent.id] || scenes.work;
+  const dark = scene.bg === '#101722';
+  const text = dark ? '#f0f0e8' : '#15120d';
+  return `
+    <div class="intent-scene" aria-hidden="true">
+      <svg viewBox="0 0 220 82" role="img" aria-label="${intent.title}路线图">
+        <rect width="220" height="82" fill="${scene.bg}"/>
+        <g opacity="${dark ? '0.32' : '0.24'}" stroke="${scene.accent}" stroke-width="1">
+          ${Array.from({ length: 7 }).map((_, i) => `<path d="M${i * 36 - 10} 0 V82"/>`).join('')}
+          ${Array.from({ length: 4 }).map((_, i) => `<path d="M0 ${i * 20 + 8} H220"/>`).join('')}
+        </g>
+        <path d="M21 58 C62 33 91 65 121 43 C148 25 174 39 199 25" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M21 58 C62 33 91 65 121 43 C148 25 174 39 199 25" fill="none" stroke="${scene.accent}" stroke-width="4" stroke-linecap="round"/>
+        <rect x="0" y="62" width="220" height="20" fill="${scene.floor}"/>
+        <g transform="translate(64 43)">
+          <circle r="24" fill="${dark ? '#111827' : '#fff3b0'}" stroke="${scene.accent}" stroke-width="4"/>
+          <text x="0" y="9" text-anchor="middle" font-size="27">${scene.icon}</text>
+        </g>
+        <rect x="126" y="17" width="58" height="28" fill="rgba(255,255,255,0.18)" stroke="${text}" stroke-width="2" transform="rotate(5 155 31)"/>
+        <text x="155" y="35" fill="${text}" text-anchor="middle" font-size="10" font-family="monospace">${scene.prop}</text>
+        <rect x="10" y="9" width="82" height="18" fill="#15120d"/>
+        <text x="18" y="22" fill="${scene.accent}" font-size="10" font-family="monospace">${shortText(scene.label, 10)}</text>
+      </svg>
+    </div>
+  `;
 }
 
 function startRunWithIntent(intentId) {
@@ -3908,13 +4280,83 @@ function shortText(text, maxLength) {
 function buildCardVisual(card, causalPreview) {
   const category = card.category || 'think';
   const danger = causalPreview.callback || ['danger', 'lethal'].includes(causalPreview.risk.level);
+  const scene = getActionScene(card);
   return `
     <div class="act-visual ${category} ${danger ? 'danger' : ''}" aria-hidden="true">
-      <div class="visual-prop a"></div>
-      <div class="visual-prop b"></div>
-      <div class="visual-main">${card.icon}</div>
-      <div class="visual-floor"></div>
+      ${buildActionSceneSvg(scene, card, danger)}
     </div>
+  `;
+}
+
+function getActionScene(card) {
+  const byId = {
+    'voluntary-overtime': { bg: '#9bc7d9', floor: '#34425a', accent: '#ff2d78', center: '💻', left: '📎', right: '☕', label: 'OVERTIME' },
+    'final-ppt': { bg: '#b9d7ef', floor: '#34425a', accent: '#fee440', center: '📊', left: '🗂', right: '🔥', label: 'FINAL_v17' },
+    'meeting-silence': { bg: '#bdd2df', floor: '#30394d', accent: '#b537f2', center: '🗣', left: '👥', right: '📋', label: 'MEETING' },
+    'write-minutes': { bg: '#d8d4c7', floor: '#3a3545', accent: '#00f5d4', center: '📝', left: '💬', right: '🔁', label: 'MINUTES' },
+    'toilet-slack': { bg: '#baffc9', floor: '#2f6957', accent: '#00f5d4', center: '🚽', left: '🐟', right: '🚪', label: 'SAFE ROOM' },
+    'fake-ide': { bg: '#173047', floor: '#101722', accent: '#39ff14', center: '⌨️', left: '{}', right: '🍱', label: 'FAKE IDE' },
+    'milk-tea-social': { bg: '#ffd3d8', floor: '#7a4154', accent: '#fee440', center: '🧋', left: '❤', right: '💬', label: 'SOCIAL' },
+    'like-boss-post': { bg: '#ffd3d8', floor: '#5b3041', accent: '#ff2d78', center: '👍', left: '📱', right: '👔', label: 'BOSS LIKE' },
+    'doom-scroll': { bg: '#baffc9', floor: '#153b32', accent: '#39ff14', center: '📱', left: '5法', right: '▶', label: 'SCROLL' },
+    'notification-dnd': { bg: '#baffc9', floor: '#153b32', accent: '#00f5d4', center: '🔕', left: '99+', right: '🌙', label: 'DND' },
+    'old-post': { bg: '#2a1220', floor: '#100a12', accent: '#ff2d78', center: '🕳', left: '📷', right: '😬', label: 'BLACK HISTORY' },
+    'calculate-wage': { bg: '#fee9a8', floor: '#54452a', accent: '#ff6b35', center: '🧮', left: '¥', right: '？', label: 'MATH HURTS' },
+    'ai-weekly-report': { bg: '#101722', floor: '#050912', accent: '#00f5d4', center: '🤖', left: '周报', right: '⌘', label: 'PROMPT' },
+    'ai-deep-research': { bg: '#101722', floor: '#050912', accent: '#00f5d4', center: '🐋', left: 'PDF', right: '???', label: 'RESEARCH' },
+    'ai-meeting-bot': { bg: '#101722', floor: '#050912', accent: '#00f5d4', center: '🎙️', left: 'BOT', right: '📋', label: 'PROXY' },
+    'ai-comfort-bot': { bg: '#101722', floor: '#050912', accent: '#b537f2', center: '🧸', left: 'OK?', right: '☑', label: 'COMFORT' },
+    'boundary-statement': { bg: '#fee9a8', floor: '#4b3328', accent: '#ff2d78', center: '✋', left: 'NO', right: '👀', label: 'BOUNDARY' },
+    'speak-truth': { bg: '#fee9a8', floor: '#4b3328', accent: '#ff2d78', center: '⚡', left: '🎤', right: '😶', label: 'TRUTH' },
+    'wrong-emoji': { bg: '#fee9a8', floor: '#4b3328', accent: '#b537f2', center: '🙃', left: '群', right: '撤回', label: 'OOPS' },
+    'solo-slack': { bg: '#baffc9', floor: '#153b32', accent: '#00f5d4', center: '🛋', left: '🐟', right: '🫥', label: 'SOLO' },
+    'return-favor': { bg: '#ffd3d8', floor: '#5b3041', accent: '#fee440', center: '🤝', left: '账', right: '🧋', label: 'FAVOR' },
+    'reschedule-meeting': { bg: '#bdd2df', floor: '#30394d', accent: '#fee440', center: '📅', left: '↻', right: '⏰', label: 'MOVE IT' },
+    'window-sunset': { bg: '#29394d', floor: '#15202d', accent: '#fee440', center: '🌇', left: '窗', right: '1s', label: 'SUNSET' }
+  };
+  const byCategory = {
+    work: { bg: '#9bc7d9', floor: '#34425a', accent: '#ff2d78', center: '💻', left: '📎', right: '☕', label: 'WORK' },
+    meeting: { bg: '#bdd2df', floor: '#30394d', accent: '#b537f2', center: '🗣', left: '👥', right: '📋', label: 'MEETING' },
+    slack: { bg: '#baffc9', floor: '#153b32', accent: '#00f5d4', center: '🐟', left: '🚪', right: '📱', label: 'SLACK' },
+    social: { bg: '#ffd3d8', floor: '#5b3041', accent: '#fee440', center: '🧋', left: '❤', right: '💬', label: 'SOCIAL' },
+    phone: { bg: '#baffc9', floor: '#153b32', accent: '#39ff14', center: '📱', left: '▶', right: '99+', label: 'PHONE' },
+    think: { bg: '#fee9a8', floor: '#54452a', accent: '#ff6b35', center: '🧠', left: '？', right: '!', label: 'THINK' },
+    ai: { bg: '#101722', floor: '#050912', accent: '#00f5d4', center: '🤖', left: 'AI', right: '⌘', label: 'AI' },
+    disrupt: { bg: '#fee9a8', floor: '#4b3328', accent: '#ff2d78', center: '⚡', left: '🎤', right: '!', label: 'DISRUPT' }
+  };
+  return byId[card.id] || byCategory[card.category] || byCategory.think;
+}
+
+function buildActionSceneSvg(scene, card, danger) {
+  const isDark = ['#101722', '#2a1220'].includes(scene.bg);
+  const panel = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.46)';
+  const text = isDark ? '#f0f0e8' : '#15120d';
+  return `
+    <svg class="act-scene-svg" viewBox="0 0 320 88" role="img" aria-label="${card.name}小场景">
+      <rect width="320" height="88" fill="${scene.bg}"/>
+      <g opacity="${isDark ? '0.34' : '0.28'}" stroke="${scene.accent}" stroke-width="1">
+        ${Array.from({ length: 9 }).map((_, i) => `<path d="M${i * 40 - 12} 0 V88"/>`).join('')}
+        ${Array.from({ length: 4 }).map((_, i) => `<path d="M0 ${i * 22 + 10} H320"/>`).join('')}
+      </g>
+      <circle cx="272" cy="20" r="13" fill="${scene.accent}" opacity="0.55"/>
+      <rect x="0" y="63" width="320" height="25" fill="${scene.floor}"/>
+      <path d="M0 64 H320" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-dasharray="8 7"/>
+      <g transform="translate(36 47)">
+        <rect x="-20" y="-18" width="40" height="31" fill="${panel}" stroke="${text}" stroke-width="2" transform="rotate(-6)"/>
+        <text x="0" y="4" text-anchor="middle" font-size="${String(scene.left).length > 2 ? '10' : '18'}" fill="${text}" font-family="sans-serif">${scene.left}</text>
+      </g>
+      <g transform="translate(282 47)">
+        <rect x="-20" y="-22" width="40" height="36" fill="${panel}" stroke="${text}" stroke-width="2" transform="rotate(6)"/>
+        <text x="0" y="4" text-anchor="middle" font-size="${String(scene.right).length > 2 ? '10' : '18'}" fill="${text}" font-family="sans-serif">${scene.right}</text>
+      </g>
+      <g transform="translate(160 42)">
+        <circle r="29" fill="${isDark ? '#111827' : '#fff3b0'}" stroke="${scene.accent}" stroke-width="4"/>
+        <text x="0" y="10" text-anchor="middle" font-size="30" font-family="sans-serif">${scene.center}</text>
+        ${danger ? `<path d="M-29 -29 L29 29 M29 -29 L-29 29" stroke="#ff2d78" stroke-width="4" stroke-linecap="round" opacity="0.42"/>` : ''}
+      </g>
+      <rect x="10" y="9" width="86" height="20" fill="#15120d"/>
+      <text x="19" y="23" fill="${scene.accent}" font-size="10" font-family="monospace">${shortText(scene.label, 12)}</text>
+    </svg>
   `;
 }
 
